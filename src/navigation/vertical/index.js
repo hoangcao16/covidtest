@@ -11,16 +11,16 @@ export default [
         id: 'covid19',
         title: 'Xét nghiệm Covid-19',
         icon: <Command size={20}/>,
-        navLink: '/test-form',
+        navLink: '/covid19',
         children: [
             {
                 id: 'test-form',
-                title: 'Phiếu XN',
+                title: 'Phiếu Xét Nghiệm',
                 icon: <Circle size={12}/>,
                 navLink: '/covid19/test-form'
             },
             {
-                id: 'invoicePreview',
+                id: 'money-form',
                 title: 'Phiếu Thu',
                 icon: <Circle size={12}/>,
                 navLink: '/covid19/money-form'

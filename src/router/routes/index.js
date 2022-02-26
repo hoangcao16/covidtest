@@ -4,7 +4,7 @@ import { lazy } from 'react'
 const TemplateTitle = '%s - Hospital'
 
 // ** Default Route
-const DefaultRoute = '/home'
+const DefaultRoute = '/patients'
 
 // ** Merge Routes
 const Routes = [
@@ -15,6 +15,10 @@ const Routes = [
   {
     path: '/covid19',
     component: lazy(() => import('../../views/covid19/Covid19'))
+  },
+  {
+    path: '/covid19/test-form',
+    component: lazy(() => import('../../views/covid19/TestForm'))
   },
   {
     path: '/login',
