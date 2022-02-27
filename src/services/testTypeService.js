@@ -1,10 +1,10 @@
 import apiClient from './apiService'
 
-export const sampleTypeService = {
+export const testTypeService = {
     list(params) {
         return apiClient.request({
             method: 'GET',
-            url: '/api/v0/sample_types',
+            url: '/api/v0/test_types',
             params: {
                 page: params.page - 1,
                 size: params.perPage,
@@ -15,14 +15,14 @@ export const sampleTypeService = {
     create(record) {
         return apiClient.request({
             method: 'POST',
-            url: '/api/v0/sample_types',
+            url: '/api/v0/test_types',
             data: record
         })
     },
     delete(uuid) {
         return apiClient.request({
             method: 'DELETE',
-            url: `/api/v0/sample_types/${uuid}`
+            url: `/api/v0/test_types/${uuid}`
         })
     }
 }

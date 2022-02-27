@@ -1,11 +1,11 @@
 // ** Redux Imports
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 
-import {sampleTypeService} from "../services/sampleTypeService"
+import {testTypeService} from "../services/testTypeService"
 
-export const getData = createAsyncThunk('sampleType/getData', async params => {
-    const response = await sampleTypeService.list(params)
-    console.log('sampleType:getData:response:', response)
+export const getData = createAsyncThunk('testType/getData', async params => {
+    const response = await testTypeService.list(params)
+    console.log('testType:getData:response:', response)
     return {
         allData: response.data.payload,
         data: response.data.payload,
@@ -14,22 +14,22 @@ export const getData = createAsyncThunk('sampleType/getData', async params => {
     }
 })
 
-export const createData = createAsyncThunk('sampleType/createData', async params => {
-    const response = await sampleTypeService.create(params)
-    console.log('sampleType:createData:response:', response)
+export const createData = createAsyncThunk('testType/createData', async params => {
+    const response = await testTypeService.create(params)
+    console.log('testType:createData:response:', response)
     return {
         lastCreateData: params
     }
 })
 
-export const deleteData = createAsyncThunk('sampleType/deleteData', async uuid => {
-    const response = await sampleTypeService.delete(uuid)
-    console.log('sampleType:deleteData:response:', response)
+export const deleteData = createAsyncThunk('testType/deleteData', async uuid => {
+    const response = await testTypeService.delete(uuid)
+    console.log('testType:deleteData:response:', response)
     return {}
 })
 
-export const sampleTypeSlice = createSlice({
-    name: 'sampleTypeSlice',
+export const newslice = createSlice({
+    name: 'testType',
     initialState: {
         data: [],
         total: 0,
@@ -41,7 +41,7 @@ export const sampleTypeSlice = createSlice({
     reducers: {},
     extraReducers: builder => {
         builder.addCase(getData.fulfilled, (state, action) => {
-            console.log('sampleTypeSlice:extraReducers:action')
+            console.log('testType:extraReducers:action')
             state.data = action.payload.data
             state.params = action.payload.params
             state.allData = action.payload.allData
@@ -55,4 +55,4 @@ export const sampleTypeSlice = createSlice({
 })
 
 
-export default sampleTypeSlice.reducer
+export default newslice.reducer

@@ -10,18 +10,16 @@ import {Modal, Input, Label, Button, ModalHeader, ModalBody, InputGroup, InputGr
 
 // ** Styles
 import '@styles/react/libs/flatpickr/flatpickr.scss'
-import {technicalTypeService} from "../../../services/technicalTypeService"
+import {sampleTypeService} from "../../../services/sampleTypeService"
 
 const AddNewModal = ({open, handleModal, setRefreshTable}) => {
     // ** State
-    const [code, setCode] = useState()
     const [description, setDescription] = useState()
     // ** Custom close btn
     const CloseBtn = <X className='cursor-pointer' size={15} onClick={handleModal}/>
     const handleSubmit = () => {
-        console.log('handleSubmit:', code, description)
-        technicalTypeService.create({
-            code,
+        console.log('handleSubmit:', description)
+        sampleTypeService.create({
             name: description
         }).then(r => {
             console.log('handleSubmit:response:', r)
@@ -42,17 +40,6 @@ const AddNewModal = ({open, handleModal, setRefreshTable}) => {
             </ModalHeader>
             <ModalBody className='flex-grow-1'>
                 <div className='mb-1'>
-                    <Label className='form-label' for='code'>
-                        Mã code
-                    </Label>
-                    <InputGroup>
-                        <InputGroupText>
-                            <User size={15}/>
-                        </InputGroupText>
-                        <Input id='full-name' placeholder='PCR' onChange={e => setCode(e.target.value)}/>
-                    </InputGroup>
-                </div>
-                <div className='mb-1'>
                     <Label className='form-label' for='description'>
                         Mô tả
                     </Label>
@@ -60,7 +47,7 @@ const AddNewModal = ({open, handleModal, setRefreshTable}) => {
                         <InputGroupText>
                             <Briefcase size={15}/>
                         </InputGroupText>
-                        <Input id='description' placeholder='Realtime PCR'
+                        <Input id='description' placeholder='Dịch tỵ Hầu'
                                onChange={e => setDescription(e.target.value)}/>
                     </InputGroup>
                 </div>
