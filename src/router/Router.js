@@ -42,6 +42,7 @@ const Router = () => {
       Routes.filter(route => {
         // ** Checks if Route layout or Default layout matches current layout
         if (route.layout === layout || (route.layout === undefined && DefaultLayout === layout)) {
+          console.log('route:', route)
           LayoutRoutes.push(route)
           LayoutPaths.push(route.path)
         }

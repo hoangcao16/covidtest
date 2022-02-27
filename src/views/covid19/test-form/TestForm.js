@@ -5,7 +5,7 @@ import { Fragment, useState, useEffect, memo } from 'react'
 import { serverSideColumns } from './data'
 
 // ** Store & Actions
-import { getData } from '../../redux/table'
+import { getData } from '../../../redux/testForm'
 import { useSelector, useDispatch } from 'react-redux'
 
 // ** Third Party Components
@@ -17,11 +17,11 @@ import DataTable from 'react-data-table-component'
 import { Card, CardHeader, CardTitle, Input, Label, Row, Col } from 'reactstrap'
 
 const TestForm = () => {
-  console.log('TestForm')
+
   // ** Store Vars
   const dispatch = useDispatch()
-  const store = useSelector(state => state.dataTables)
-
+  const store = useSelector(state => state.testForm)
+  console.log('TestForm:', store)
   // ** States
   const [currentPage, setCurrentPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(7)
@@ -129,7 +129,7 @@ const TestForm = () => {
     <Fragment>
       <Card>
         <CardHeader className='border-bottom'>
-          <CardTitle tag='h4'>Server Side</CardTitle>
+          <CardTitle tag='h4'>Danh sách</CardTitle>
         </CardHeader>
         <Row className='mx-0 mt-1 mb-50'>
           <Col sm='6'>
