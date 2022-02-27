@@ -62,6 +62,12 @@ export default [
                 title: 'Đơn vị',
                 icon: <Circle size={12}/>,
                 navLink: '/entities/agency'
+            },
+            {
+                id: 'lab-result-type',
+                title: 'Loai Kết quả',
+                icon: <Circle size={12}/>,
+                navLink: '/entities/lab-result-type'
             }
         ]
     },

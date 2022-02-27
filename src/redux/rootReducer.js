@@ -8,6 +8,7 @@ import technicalType from './technicalType'
 import sampleType from './sampleType'
 import testType from './testType'
 import account from './account'
+import labResultType from './labResultType'
 
 const rootReducer = {
     auth,
@@ -18,7 +19,8 @@ const rootReducer = {
     technicalType,
     sampleType,
     testType,
-    account
+    account,
+    labResultType
 }
 
 export default rootReducer
