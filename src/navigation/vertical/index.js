@@ -41,6 +41,12 @@ export default [
         navLink: '/entities',
         children: [
             {
+                id: 'test-type',
+                title: 'Loại xét nghiệm',
+                icon: <Circle size={12}/>,
+                navLink: '/entities/test-type'
+            },
+            {
                 id: 'technical-type',
                 title: 'Loại kỹ thuật',
                 icon: <Circle size={12}/>,

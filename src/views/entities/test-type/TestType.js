@@ -4,7 +4,7 @@ import {Fragment, useState, useEffect, memo} from 'react'
 // ** Table Columns
 
 // ** Store & Actions
-import {getData} from '../../../redux/agency'
+import {getData} from '../../../redux/testType'
 import {useSelector, useDispatch} from 'react-redux'
 
 // ** Third Party Components
@@ -24,15 +24,14 @@ import {
     Button
 } from 'reactstrap'
 import AddNewModal from "./AddNewModal"
-import {agencyService} from "../../../services/agencyService"
+import {testTypeService} from "../../../services/testTypeService"
 import {customizeColumns} from "./data"
 
-const Agency = () => {
-
+const TestType = () => {
     // ** Store Vars
     const dispatch = useDispatch()
-    const store = useSelector(state => state.agency)
-    console.log('Agency:', store)
+    const store = useSelector(state => state.testType)
+    console.log('testType:', store)
     // ** States
     const [modal, setModal] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
@@ -40,8 +39,8 @@ const Agency = () => {
     const [searchValue, setSearchValue] = useState('')
     const [refreshTable, setRefreshTable] = useState(false)
     const handleDelete = (item) => {
-        console.log('delete agency:item', item)
-        agencyService.delete(item.uuid).then(() => {
+        console.log('delete testType:item', item)
+        testTypeService.delete(item.uuid).then(() => {
             setRefreshTable(!refreshTable)
         })
     }
@@ -50,7 +49,7 @@ const Agency = () => {
         setModal(!modal)
         console.log('submit')
     }
-// ** Table data to render
+   // ** Table data to render
     const dataToRender = () => {
         const filters = {
             q: searchValue
@@ -60,7 +59,7 @@ const Agency = () => {
             return filters[k].length > 0
         })
 
-        console.log('Agency:dataToRender:', store.data)
+        console.log('testTypeService:dataToRender:', store.data)
         if (store && store.allData?.length > 0) {
             return store.allData.slice(currentPage - 1, rowsPerPage)
         } else if (store.allData?.length === 0 && isFiltered) {
@@ -213,4 +212,4 @@ const Agency = () => {
     )
 }
 
-export default memo(Agency)
+export default memo(TestType)

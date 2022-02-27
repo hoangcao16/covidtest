@@ -2,9 +2,8 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-confusing-arrow */
 /* eslint-disable comma-dangle */
-import { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 // ** Custom Components
-import Sidebar from '../../components/sidebar'
 import { StyledSidebar } from './style'
 // ** Utils
 import { selectThemeColors } from '@utils'
@@ -12,14 +11,28 @@ import { selectThemeColors } from '@utils'
 import Select from 'react-select'
 import classnames from 'classnames'
 import { useForm, Controller } from 'react-hook-form'
-import DateTimePicker from 'react-datetime-picker'
+import Datetime from 'react-datetime'
 // ** Reactstrap Imports
-import { Button, Label, FormText, Form, Input, Row, Col } from 'reactstrap'
+import {
+  Button,
+  Label,
+  FormText,
+  Form,
+  Input,
+  Row,
+  Col,
+  FormGroup,
+} from 'reactstrap'
 import moment from 'moment'
 // ** Store & Actions
 // import { addUser } from '../store'
 import { useDispatch } from 'react-redux'
-
+//Service
+import { agencyService } from '../../../services/agencyService'
+import { sampleTypeService } from '../../../services/sampleTypeService'
+import { testTypeService } from '../../../services/testTypeService'
+import { technicalTypeService } from '../../../services/technicalTypeService'
+import { labResultTypesService } from '../../../services/labResultTypesService'
 const defaultValues = {
   email: '',
   contact: '',
@@ -108,6 +121,11 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
   const [receiveSampleTime, setReceiveSampleTime] = useState(moment())
   const [returnTime, setReturnTime] = useState(moment())
   const [takeSampleTime, setTakeSampleTime] = useState(moment())
+  const [agencyOptions, setAgencyOptions] = useState([])
+  const [sampleTypeOptions, setSampleTypeOptions] = useState([])
+  const [testTypeOptions, setTestTypeOptions] = useState([])
+  const [technicalTypeOptions, setTechnicalTypeOptions] = useState([])
+  const [labResultTypeOptions, setLabResultTypeOptions] = useState([])
   // ** Store Vars
   const dispatch = useDispatch()
 
@@ -117,9 +135,56 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
     setValue,
     setError,
     handleSubmit,
+    register,
     formState: { errors },
-  } = useForm({ defaultValues })
-
+  } = useForm()
+  useEffect(() => {
+    agencyService.list({ page: 1, perPage: 40, q: '' }).then((res) => {
+      if (res.data.payload !== null) {
+        const options = res.data.payload?.map((agency) => ({
+          label: agency.name,
+          value: agency.uuid,
+        }))
+        setAgencyOptions(options)
+      }
+    })
+    sampleTypeService.list({ page: 1, perPage: 40, q: '' }).then((res) => {
+      if (res.data.payload !== null) {
+        const options = res.data.payload?.map((sampleType) => ({
+          label: sampleType.name,
+          value: sampleType.uuid,
+        }))
+        setSampleTypeOptions(options)
+      }
+    })
+    testTypeService.list({ page: 1, perPage: 40, q: '' }).then((res) => {
+      if (res.data.payload !== null) {
+        const options = res.data.payload?.map((testType) => ({
+          label: testType.name,
+          value: testType.uuid,
+        }))
+        setTestTypeOptions(options)
+      }
+    })
+    technicalTypeService.list({ page: 1, perPage: 40, q: '' }).then((res) => {
+      if (res.data.payload !== null) {
+        const options = res.data.payload?.map((technicalType) => ({
+          label: technicalType.name,
+          value: technicalType.uuid,
+        }))
+        setTechnicalTypeOptions(options)
+      }
+    })
+    labResultTypesService.list({ page: 1, perPage: 40, q: '' }).then((res) => {
+      if (res.data.payload !== null) {
+        const options = res.data.payload?.map((labResultType) => ({
+          label: labResultType.name,
+          value: labResultType.uuid,
+        }))
+        setLabResultTypeOptions(options)
+      }
+    })
+  }, [])
   // ** Function to handle form submit
   const onSubmit = (data) => {
     console.log(data)
@@ -132,7 +197,9 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
     setRole('subscriber')
     setPlan('basic')
   }
-
+  const Formcheckbox = () => {
+    return <></>
+  }
   return (
     <StyledSidebar
       size='lg'
@@ -149,13 +216,18 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
             Yêu cầu xét nghiệm <span className='text-danger'>*</span>
           </Label>
           <Controller
+            rules={
+              {
+                // required: true,
+              }
+            }
             name='testtype'
             control={control}
             render={({ field }) => (
               <Select
                 isClearable={false}
                 classNamePrefix='select'
-                options={countryOptions}
+                options={testTypeOptions}
                 theme={selectThemeColors}
                 className={classnames('react-select', {
                   'is-invalid': data !== null && data.country === null,
@@ -170,6 +242,11 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
             Chọn khách hàng <span className='text-danger'>*</span>
           </Label>
           <Controller
+            rules={
+              {
+                // required: true,
+              }
+            }
             name='patient'
             control={control}
             render={({ field }) => (
@@ -194,6 +271,11 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                 Giá tiền <span className='text-danger'>*</span>
               </Label>
               <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
                 name='amount'
                 control={control}
                 render={({ field }) => (
@@ -213,13 +295,18 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                 Kỹ thuật xét nghiệm <span className='text-danger'>*</span>
               </Label>
               <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
                 name='technicaltype'
                 control={control}
                 render={({ field }) => (
                   <Select
                     isClearable={false}
                     classNamePrefix='select'
-                    options={countryOptions}
+                    options={technicalTypeOptions}
                     theme={selectThemeColors}
                     className={classnames('react-select', {
                       'is-invalid': data !== null && data.country === null,
@@ -234,17 +321,22 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
         <Row>
           <Col md='6'>
             <div className='mb-1'>
-              <Label className='form-label' for='company'>
+              <Label className='form-label' for='agencyUuid1'>
                 Đơn vị gửi mẫu <span className='text-danger'>*</span>
               </Label>
               <Controller
-                name='company'
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
+                name='agencyUuid1'
                 control={control}
                 render={({ field }) => (
                   <Select
                     isClearable={false}
                     classNamePrefix='select'
-                    options={countryOptions}
+                    options={agencyOptions}
                     theme={selectThemeColors}
                     className={classnames('react-select', {
                       'is-invalid': data !== null && data.country === null,
@@ -261,15 +353,22 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                 Ca <span className='text-danger'>*</span>
               </Label>
               <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
                 name='shift'
                 control={control}
                 render={({ field }) => (
-                  <Input
-                    id='shift'
-                    placeholder='John Doe'
-                    invalid={errors.shift && true}
-                    {...field}
-                  />
+                  <FormGroup {...field}>
+                    <Input type='radio' name='chooseshift' value='Ca 1' />
+                    <Label className='shiftRadio'>Ca 1</Label>
+                    <Input type='radio' name='chooseshift' value='Ca 2' />
+                    <Label className='shiftRadio'>Ca 2 </Label>
+                    <Input type='radio' name='chooseshift' value='Ca 3' />
+                    <Label className='shiftRadio'>Ca 3 </Label>
+                  </FormGroup>
                 )}
               />
             </div>
@@ -281,18 +380,23 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
               <Label className='form-label' for='sampletype'>
                 Mẫu bệnh phẩm <span className='text-danger'>*</span>
               </Label>
-              <Controller
-                name='sampletype'
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    id='sampletype'
-                    placeholder='John Doe'
-                    invalid={errors.sampletype && true}
-                    {...field}
-                  />
-                )}
-              />
+              <fieldset>
+                {sampleTypeOptions?.map((sampleType, index) => {
+                  return (
+                    <React.Fragment key={index}>
+                      <Input
+                        type='checkbox'
+                        name={sampleType.uuid}
+                        value={sampleType.uuid}
+                        {...register('sampletype')}
+                      />
+                      <Label className='sampletypeRadio'>
+                        {sampleType.label}
+                      </Label>
+                    </React.Fragment>
+                  )
+                })}
+              </fieldset>
             </div>
           </Col>
           <Col md='6'>
@@ -301,13 +405,18 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                 Kết quả <span className='text-danger'>*</span>
               </Label>
               <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
                 name='result'
                 control={control}
                 render={({ field }) => (
                   <Select
                     isClearable={false}
                     classNamePrefix='select'
-                    options={countryOptions}
+                    options={labResultTypeOptions}
                     theme={selectThemeColors}
                     className={classnames('react-select', {
                       'is-invalid': data !== null && data.country === null,
@@ -326,12 +435,18 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                 Số lần lấy mẫu <span className='text-danger'>*</span>
               </Label>
               <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
                 name='sampleNumber'
                 control={control}
                 render={({ field }) => (
                   <Input
                     id='sampleNumber'
                     placeholder='1'
+                    defaultValue='1'
                     invalid={errors.sampleNumber && true}
                     {...field}
                   />
@@ -345,6 +460,11 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                 Kết luận <span className='text-danger'>*</span>
               </Label>
               <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
                 name='diagnosis'
                 control={control}
                 render={({ field }) => (
@@ -352,6 +472,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                     id='diagnosis'
                     placeholder='John Doe'
                     invalid={errors.diagnosis && true}
+                    defaultValue='Âm tính'
                     {...field}
                   />
                 )}
@@ -366,16 +487,20 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                 Thời gian lấy mẫu <span className='text-danger'>*</span>
               </Label>
               <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
                 name='takeSampleTime'
                 control={control}
                 render={({ field }) => (
-                  <DateTimePicker
+                  <input
+                    type='datetime-local'
                     className='date-picker'
-                    dayPlaceholder='DD'
-                    hourPlaceholder='hh'
-                    minutePlaceholder='mm'
-                    monthPlaceholder='MM'
-                    yearPlaceholder='YYYY'
+                    id='takeSampleTime'
+                    name='takeSampleTime'
+                    placeholder='Chọn thời gian'
                     {...field}
                   />
                 )}
@@ -388,6 +513,11 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                 Kết luận tiếng anh <span className='text-danger'>*</span>
               </Label>
               <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
                 name='diagnosisEng'
                 control={control}
                 render={({ field }) => (
@@ -395,6 +525,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                     id='diagnosisEng'
                     placeholder='Negative'
                     invalid={errors.diagnosisEng && true}
+                    defaultValue='Negative'
                     {...field}
                   />
                 )}
@@ -409,16 +540,20 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                 Thời gian nhận mẫu <span className='text-danger'>*</span>
               </Label>
               <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
                 name='receiveSampleTime'
                 control={control}
                 render={({ field }) => (
-                  <DateTimePicker
+                  <input
+                    type='datetime-local'
                     className='date-picker'
-                    dayPlaceholder='DD'
-                    hourPlaceholder='hh'
-                    minutePlaceholder='mm'
-                    monthPlaceholder='MM'
-                    yearPlaceholder='YYYY'
+                    id='receiveSampleTime'
+                    name='receiveSampleTime'
+                    placeholder='Chọn thời gian'
                     {...field}
                   />
                 )}
@@ -431,16 +566,20 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                 Thời gian thực hiện <span className='text-danger'>*</span>
               </Label>
               <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
                 name='performTime'
                 control={control}
                 render={({ field }) => (
-                  <DateTimePicker
+                  <input
+                    type='datetime-local'
                     className='date-picker'
-                    dayPlaceholder='DD'
-                    hourPlaceholder='hh'
-                    minutePlaceholder='mm'
-                    monthPlaceholder='MM'
-                    yearPlaceholder='YYYY'
+                    id='performTime'
+                    name='performTime'
+                    placeholder='Chọn thời gian'
                     {...field}
                   />
                 )}
@@ -455,6 +594,11 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                 Tình trạng mẫu<span className='text-danger'>*</span>
               </Label>
               <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
                 name='sampleState'
                 control={control}
                 render={({ field }) => (
@@ -479,6 +623,11 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                 Trạng thái <span className='text-danger'>*</span>
               </Label>
               <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
                 name='state'
                 control={control}
                 render={({ field }) => (
@@ -505,6 +654,11 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                 Người lấy mẫu<span className='text-danger'>*</span>
               </Label>
               <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
                 name='staffUuid1'
                 control={control}
                 render={({ field }) => (
@@ -529,18 +683,20 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                 Ngày trả kết quả <span className='text-danger'>*</span>
               </Label>
               <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
                 name='returnTime'
                 control={control}
                 render={({ field }) => (
-                  // <Input id='country' placeholder='Australia' invalid={errors.country && true} {...field} />
-                  <DateTimePicker
-                    {...field}
+                  <input
+                    type='datetime-local'
                     className='date-picker'
-                    dayPlaceholder='DD'
-                    hourPlaceholder='hh'
-                    minutePlaceholder='mm'
-                    monthPlaceholder='MM'
-                    yearPlaceholder='YYYY'
+                    id='returnTime'
+                    name='returnTime'
+                    placeholder='Chọn thời gian'
                     {...field}
                   />
                 )}
@@ -555,6 +711,11 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                 Người ký phiếu<span className='text-danger'>*</span>
               </Label>
               <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
                 name='staffUuid3'
                 control={control}
                 render={({ field }) => (
@@ -578,6 +739,11 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                 Người thực hiện <span className='text-danger'>*</span>
               </Label>
               <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
                 name='staffUuid2'
                 control={control}
                 render={({ field }) => (
@@ -604,6 +770,11 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                 Người nộp tiền<span className='text-danger'>*</span>
               </Label>
               <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
                 name='payerUuid'
                 control={control}
                 render={({ field }) => (
@@ -627,6 +798,11 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                 Người lập phiếu <span className='text-danger'>*</span>
               </Label>
               <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
                 name='staffUuid4'
                 control={control}
                 render={({ field }) => (

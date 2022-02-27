@@ -6,6 +6,9 @@ import auth from './authentication'
 import testForm from './testForm'
 import agency from './agency'
 import technicalType from './technicalType'
+import sampleType from './sampleType'
+import testType from './testType'
+import analysisCertificate from './analysisCertificate'
 
 const rootReducer = {
   auth,
@@ -14,6 +17,9 @@ const rootReducer = {
   testForm,
   agency,
   technicalType,
+  sampleType,
+  testType,
+  analysisCertificate,
 }
 
 export default rootReducer

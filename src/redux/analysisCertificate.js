@@ -1,3 +1,4 @@
+/* eslint-disable comma-dangle */
 import { createSlice } from '@reduxjs/toolkit'
 const initialState = { tasks: [], status: 'idle' }
 export const AnalysisCertificateSlice = createSlice({

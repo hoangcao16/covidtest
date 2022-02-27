@@ -336,12 +336,6 @@ export const customizeColumns = (deleteCallback) => {
     return [
         {
             sortable: true,
-            name: 'Mã',
-            minWidth: '225px',
-            selector: row => row.code
-        },
-        {
-            sortable: true,
             name: 'Tên',
             minWidth: '250px',
             selector: row => row.name

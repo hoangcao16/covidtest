@@ -32,7 +32,7 @@ import {
 const TestForm = () => {
   // ** Store Vars
   const dispatch = useDispatch()
-  const { dataTable, setDataTable } = useState([])
+  const [dataTable, setDataTable] = useState([])
   const store = useSelector((state) => state.testForm)
   console.log('TestForm:', store)
   // ** States
@@ -125,6 +125,9 @@ const TestForm = () => {
     analysisCertificateService.list(currentPage, rowsPerPage).then((res) => {
       console.log('res:', res)
       // setDataTable(res.data.payload)
+      if (res.data.payload !== null) {
+        setDataTable(res.data.payload)
+      }
     })
   }, [])
   // ** Table data to render

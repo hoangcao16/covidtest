@@ -4,7 +4,7 @@ import {Fragment, useState, useEffect, memo} from 'react'
 // ** Table Columns
 
 // ** Store & Actions
-import {getData} from '../../../redux/agency'
+import {getData} from '../../../redux/technicalType'
 import {useSelector, useDispatch} from 'react-redux'
 
 // ** Third Party Components
@@ -24,15 +24,15 @@ import {
     Button
 } from 'reactstrap'
 import AddNewModal from "./AddNewModal"
-import {agencyService} from "../../../services/agencyService"
+import {technicalTypeService} from "../../../services/technicalTypeService"
 import {customizeColumns} from "./data"
 
-const Agency = () => {
+const TechincalType = () => {
 
     // ** Store Vars
     const dispatch = useDispatch()
-    const store = useSelector(state => state.agency)
-    console.log('Agency:', store)
+    const store = useSelector(state => state.technicalType)
+    console.log('technicalType:', store)
     // ** States
     const [modal, setModal] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
@@ -41,7 +41,7 @@ const Agency = () => {
     const [refreshTable, setRefreshTable] = useState(false)
     const handleDelete = (item) => {
         console.log('delete agency:item', item)
-        agencyService.delete(item.uuid).then(() => {
+        technicalTypeService.delete(item.uuid).then(() => {
             setRefreshTable(!refreshTable)
         })
     }
@@ -60,7 +60,7 @@ const Agency = () => {
             return filters[k].length > 0
         })
 
-        console.log('Agency:dataToRender:', store.data)
+        console.log('TechnicalType:dataToRender:', store.data)
         if (store && store.allData?.length > 0) {
             return store.allData.slice(currentPage - 1, rowsPerPage)
         } else if (store.allData?.length === 0 && isFiltered) {
@@ -213,4 +213,4 @@ const Agency = () => {
     )
 }
 
-export default memo(Agency)
+export default memo(TechincalType)
