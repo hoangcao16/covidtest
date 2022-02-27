@@ -5,7 +5,11 @@ const TemplateTitle = '%s - Hospital'
 const DefaultRoute = '/patients'
 
 import PagesRoutes from './Pages'
+import EntitiesRoutes from './Entities'
 // ** Merge Routes
-const Routes = [...PagesRoutes]
+const Routes = [
+    ...PagesRoutes,
+    ...EntitiesRoutes
+]
 
 export {DefaultRoute, TemplateTitle, Routes}

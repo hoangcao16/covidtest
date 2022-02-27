@@ -11,7 +11,7 @@ export const getList = createAsyncThunk('datatables/getData', async params => {
 
 
 export const datatablesSlice = createSlice({
-    name: 'entities',
+    name: 'agency',
     initialState: {
         data: [],
         total: 1,
@@ -20,7 +20,7 @@ export const datatablesSlice = createSlice({
     },
     reducers: {},
     extraReducers: builder => {
-        console.log('datatablesSlice:extraReducers')
+        console.log('technicalType:extraReducers')
         builder.addCase(getList.fulfilled, (state, action) => {
             state.data = action.payload.data
             state.params = action.payload.params

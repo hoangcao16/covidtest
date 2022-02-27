@@ -35,28 +35,28 @@ export default [
     },
 
     {
-        id: 'introductions',
+        id: 'entities',
         title: 'Danh mục',
         icon: <Dribbble size={20}/>,
-        navLink: '/introductions',
+        navLink: '/entities',
         children: [
             {
                 id: 'technical-type',
                 title: 'Loại kỹ thuật',
                 icon: <Circle size={12}/>,
-                navLink: '/introductions/technical-type'
+                navLink: '/entities/technical-type'
             },
             {
                 id: 'sample-type',
                 title: 'Mẫu bệnh phẩm',
                 icon: <Circle size={12}/>,
-                navLink: '/introductions/sample-type'
+                navLink: '/entities/sample-type'
             },
             {
                 id: 'agency',
                 title: 'Đơn vị',
                 icon: <Circle size={12}/>,
-                navLink: '/introductions/agency'
+                navLink: '/entities/agency'
             }
         ]
     },

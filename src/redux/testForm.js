@@ -1,12 +1,19 @@
 // ** Redux Imports
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 
 // ** Axios Imports
-import axios from 'axios'
+// import axios from 'axios'
+import {testFormService} from "../services/testFormService"
 
-export const getData = createAsyncThunk('datatables/getData', async params => {
-    const response = await axios.get('/api/datatables/data', params)
-    return { allData: response.data.allData, data: response.data.invoices, totalPages: response.data.total, params }
+export const getData = createAsyncThunk('testForm/getData', async params => {
+    const response = await testFormService.list()
+    console.log('testForm:response:', response)
+    return {
+        allData: response.data.payload,
+        data: response.data.payload,
+        totalPages: response.data.metadata.total,
+        params
+    }
 })
 
 export const datatablesSlice = createSlice({
@@ -21,6 +28,7 @@ export const datatablesSlice = createSlice({
     extraReducers: builder => {
         console.log('testForm:extraReducers')
         builder.addCase(getData.fulfilled, (state, action) => {
+            console.log('testForm:response:action:', action)
             state.data = action.payload.data
             state.params = action.payload.params
             state.allData = action.payload.allData

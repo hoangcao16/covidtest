@@ -3,7 +3,6 @@ import {createSlice} from '@reduxjs/toolkit'
 
 // ** UseJWT import to get config
 import useJwt from '@src/auth/jwt/useJwt'
-import {getData} from "./testForm"
 
 const config = useJwt.jwtConfig
 
@@ -41,15 +40,6 @@ export const authSlice = createSlice({
             localStorage.removeItem(config.storageTokenKeyName)
             localStorage.removeItem(config.storageRefreshTokenKeyName)
         }
-    },
-    extraReducers: builder => {
-        console.log('authentication:extraReducers')
-        builder.addCase(getData.fulfilled, (state, action) => {
-            state.data = action.payload.data
-            state.params = action.payload.params
-            state.allData = action.payload.allData
-            state.total = action.payload.totalPages
-        })
     }
 })
 

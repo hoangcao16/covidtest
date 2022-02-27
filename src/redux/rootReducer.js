@@ -3,14 +3,16 @@ import navbar from './navbar'
 import layout from './layout'
 import auth from './authentication'
 import testForm from './testForm'
-import entities from './entities'
+import agency from './agency'
+import technicalType from './technicalType'
 
 const rootReducer = {
     auth,
     navbar,
     layout,
     testForm,
-    entities
+    agency,
+    technicalType
 }
 
 export default rootReducer
