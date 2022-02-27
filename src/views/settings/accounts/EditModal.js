@@ -23,7 +23,7 @@ const EditModal = ({open, item, handleModal, setRefreshTable}) => {
     const CloseBtn = <X className='cursor-pointer' size={15} onClick={handleModal}/>
     const handleSubmit = () => {
         console.log('handleSubmit:', name, email, password, phone)
-        accountService.update({
+        accountService.update(item.uuid, {
             name,
             email,
             password,
