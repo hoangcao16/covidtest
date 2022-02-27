@@ -8,7 +8,12 @@ import {UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Input}
 // ** Table Server Side Column
 export const customizeColumns = (editCallback, deleteCallback) => {
     return [
-
+        {
+            sortable: true,
+            name: 'Mã code',
+            minWidth: '250px',
+            selector: row => row.code
+        },
         {
             sortable: true,
             name: 'name',
@@ -31,6 +36,7 @@ export const customizeColumns = (editCallback, deleteCallback) => {
             sortable: true,
             name: 'email',
             minWidth: '225px',
+
             selector: row => row.email
         },
         {
@@ -42,6 +48,7 @@ export const customizeColumns = (editCallback, deleteCallback) => {
         {
             name: 'Actions',
             minWidth: '100px',
+            sticky: true,
             cell: row => (
                 <div className='column-action'>
                     <a onClick={(e) => {

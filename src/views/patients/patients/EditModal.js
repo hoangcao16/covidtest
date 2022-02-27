@@ -16,23 +16,24 @@ import moment from "moment"
 const EditModal = ({open, item, handleModal, setRefreshTable}) => {
     console.log('item:', item)
     // ** State
-    const [name, setName] = useState()
-    const [phone, setPhone] = useState()
-    const [address, setAddress] = useState()
-    const [email, setEmail] = useState()
-    const [identityNumber, setIdentityNumber] = useState()
-    const [picker, setPicker] = useState(new Date())
+    const [name, setName] = useState(item?.name)
+    const [phone, setPhone] = useState(item?.phone)
+    const [address, setAddress] = useState(item?.address)
+    const [email, setEmail] = useState(item?.email)
+    const [identityNumber, setIdentityNumber] = useState(item?.identityNumber)
+    const [picker, setPicker] = useState(item?.dateOfBirth)
     // ** Custom close btn
     const CloseBtn = <X className='cursor-pointer' size={15} onClick={handleModal}/>
     const handleSubmit = () => {
-        console.log('handleSubmit:', name, email, address, phone, identityNumber)
+        console.log('handleSubmit:', name, email, address, phone, identityNumber, picker)
         patientService.update(item?.uuid, {
+            code: item.code,
             name,
             email,
             phone,
             identityNumber,
             address,
-            dateOfBirth: moment(picker, 'DD-MM-YYYY')
+            dateOfBirth: picker ? moment(Date(picker)).format('DD-MM-YYYY') : null
         }).then(r => {
             console.log('handleSubmit:response:', r)
             handleModal()
@@ -59,7 +60,7 @@ const EditModal = ({open, item, handleModal, setRefreshTable}) => {
                         <InputGroupText>
                             <User size={15}/>
                         </InputGroupText>
-                        <Input id='name' placeholder='Phùng Anh Tú'
+                        <Input id='name'
                                defaultValue={item?.name}
                                onChange={e => setName(e.target.value)}/>
                     </InputGroup>
@@ -132,7 +133,8 @@ const EditModal = ({open, item, handleModal, setRefreshTable}) => {
                             options={{
                                 altInput: true,
                                 altFormat: 'F j, Y',
-                                dateFormat: 'Y-m-d'
+                                dateFormat: 'Y-m-d',
+                                defaultDate: [item?.dateOfBirth]
                             }}
                         />
                     </InputGroup>

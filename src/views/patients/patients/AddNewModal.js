@@ -11,7 +11,7 @@ import {Modal, Input, Label, Button, ModalHeader, ModalBody, InputGroup, InputGr
 // ** Styles
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 import {patientService} from "../../../services/patientService"
-import  moment from 'moment'
+import moment from 'moment'
 
 const AddNewModal = ({open, handleModal, setRefreshTable}) => {
     // ** State
@@ -123,8 +123,8 @@ const AddNewModal = ({open, handleModal, setRefreshTable}) => {
                             onChange={date => setPicker(date)}
                             options={{
                                 altInput: true,
-                                altFormat: 'F j, Y',
-                                dateFormat: 'Y-m-d'
+                                dateFormat: 'd-m-Y'
+
                             }}
                         />
                     </InputGroup>
