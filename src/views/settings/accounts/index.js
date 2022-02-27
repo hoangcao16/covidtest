@@ -8,19 +8,19 @@ import Breadcrumbs from '@components/breadcrumbs'
 import {Row, Col} from 'reactstrap'
 
 // ** Demo Components
-import TestForm from './TestForm'
+import Account from './Account'
 
 // ** Styles
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 
 const index = () => {
-    console.log('index')
     return (
         <Fragment>
-            <Breadcrumbs breadCrumbTitle='Phiếu Xét Nghiệm' breadCrumbParent='Xét nghiệm Covid19' breadCrumbActive='Phiếu xét nghiệm'/>
+            <Breadcrumbs breadCrumbTitle='Tài khoản' breadCrumbParent='Cấu hình'
+                         breadCrumbActive='Tài khoản'/>
             <Row>
                 <Col sm='12'>
-                    <TestForm/>
+                    <Account/>
                 </Col>
             </Row>
         </Fragment>

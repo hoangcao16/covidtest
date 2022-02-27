@@ -7,6 +7,7 @@ import agency from './agency'
 import technicalType from './technicalType'
 import sampleType from './sampleType'
 import testType from './testType'
+import account from './account'
 
 const rootReducer = {
     auth,
@@ -16,7 +17,8 @@ const rootReducer = {
     agency,
     technicalType,
     sampleType,
-    testType
+    testType,
+    account
 }
 
 export default rootReducer

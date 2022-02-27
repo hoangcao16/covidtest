@@ -6,10 +6,12 @@ const DefaultRoute = '/patients'
 
 import PagesRoutes from './Pages'
 import EntitiesRoutes from './Entities'
+import SettingsRoutes from './Settings'
 // ** Merge Routes
 const Routes = [
     ...PagesRoutes,
-    ...EntitiesRoutes
+    ...EntitiesRoutes,
+    ...SettingsRoutes
 ]
 
 export {DefaultRoute, TemplateTitle, Routes}
