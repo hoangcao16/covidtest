@@ -1,20 +1,33 @@
-import {lazy} from 'react'
-import {Redirect} from 'react-router-dom'
+/* eslint-disable comma-dangle */
+import { lazy } from 'react'
+import { Redirect } from 'react-router-dom'
 
 const PagesRoutes = [
-    {
-        path: '/login',
-        component: lazy(() => import('../../views/Login')),
-        layout: 'BlankLayout',
-        meta: {
-            authRoute: true
-        }
+  {
+    path: '/patients',
+    component: lazy(() => import('../../views/patients/patients')),
+  },
+  {
+    path: '/covid19/test-form',
+    component: lazy(() => import('../../views/covid19/test-form')),
+  },
+  {
+    path: '/login',
+    component: lazy(() => import('../../views/Login')),
+    layout: 'BlankLayout',
+    meta: {
+      authRoute: true,
     },
-    {
-        path: '/error',
-        component: lazy(() => import('../../views/Error')),
-        layout: 'BlankLayout'
-    }
+  },
+  {
+    path: '/error',
+    component: lazy(() => import('../../views/Error')),
+    layout: 'BlankLayout',
+  },
+  // {
+  //     path: '/covid19/test-form',
+  //     component: lazy(() => import('../../views/covid19/test-form'))
+  // },
 ]
 
 export default PagesRoutes

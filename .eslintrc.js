@@ -1,8 +1,9 @@
+/* eslint-disable comma-dangle */
 module.exports = {
   env: {
     node: true,
     es6: true,
-    browser: true
+    browser: true,
   },
 
   parserOptions: {
@@ -11,8 +12,8 @@ module.exports = {
     ecmaFeatures: {
       jsx: true,
       modules: true,
-      experimentalObjectRestSpread: true
-    }
+      experimentalObjectRestSpread: true,
+    },
   },
   rules: {
     'no-console': 'off',
@@ -54,7 +55,7 @@ module.exports = {
     'nonblock-statement-body-position': 'error',
     'object-property-newline': [
       'error',
-      { allowAllPropertiesOnSameLine: true }
+      { allowAllPropertiesOnSameLine: true },
     ],
     'quote-props': ['error', 'as-needed'],
     // quotes: ['error', 'prefer-single'],
@@ -73,8 +74,8 @@ module.exports = {
     'no-var': 'error',
     'object-shorthand': 'error',
     'prefer-const': 'error',
-    'prefer-template': 'error'
-  }
+    'prefer-template': 'error',
+  },
 
   // rules: {
   //   'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
