@@ -1,3 +1,4 @@
+/* eslint-disable comma-dangle */
 // ** Reducers Imports
 import navbar from './navbar'
 import layout from './layout'
@@ -7,12 +8,12 @@ import agency from './agency'
 import technicalType from './technicalType'
 
 const rootReducer = {
-    auth,
-    navbar,
-    layout,
-    testForm,
-    agency,
-    technicalType
+  auth,
+  navbar,
+  layout,
+  testForm,
+  agency,
+  technicalType,
 }
 
 export default rootReducer
