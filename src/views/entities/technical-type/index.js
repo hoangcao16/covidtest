@@ -8,7 +8,7 @@ import Breadcrumbs from '@components/breadcrumbs'
 import {Row, Col} from 'reactstrap'
 
 // ** Demo Components
-import TechnicalType from './TechnicalType'
+import TechincalType from './TechincalType'
 
 // ** Styles
 import '@styles/react/libs/tables/react-dataTable-component.scss'
@@ -16,11 +16,11 @@ import '@styles/react/libs/tables/react-dataTable-component.scss'
 const index = () => {
     return (
         <Fragment>
-            <Breadcrumbs breadCrumbTitle='Loại kỹ thuật' breadCrumbParent='Danh mục'
-                         breadCrumbActive='Loại kỹ thuật'/>
+            <Breadcrumbs breadCrumbTitle='Kỹ thuật xét nghiệm' breadCrumbParent='Danh mục'
+                         breadCrumbActive='Kỹ thuật xét nghiệm'/>
             <Row>
                 <Col sm='12'>
-                    <TechnicalType/>
+                    <TechincalType/>
                 </Col>
             </Row>
         </Fragment>

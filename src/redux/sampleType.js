@@ -1,11 +1,11 @@
 // ** Redux Imports
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 
-import {technicalTypeService} from "../services/technicalTypeService"
+import {sampleTypeService} from "../services/sampleTypeService"
 
-export const getData = createAsyncThunk('technicalType/getData', async params => {
-    const response = await technicalTypeService.list(params)
-    console.log('technicalType:getData:response:', response)
+export const getData = createAsyncThunk('sampleType/getData', async params => {
+    const response = await sampleTypeService.list(params)
+    console.log('sampleType:response:', response)
     return {
         allData: response.data.payload,
         data: response.data.payload,
@@ -14,22 +14,22 @@ export const getData = createAsyncThunk('technicalType/getData', async params =>
     }
 })
 
-export const createData = createAsyncThunk('technicalType/createData', async params => {
-    const response = await technicalTypeService.create(params)
-    console.log('technicalType:createData:response:', response)
+export const createData = createAsyncThunk('sampleType/createData', async params => {
+    const response = await sampleTypeService.create(params)
+    console.log('sampleType:createData:response:', response)
     return {
         lastCreateData: params
     }
 })
 
-export const deleteData = createAsyncThunk('technicalType/deleteData', async uuid => {
-    const response = await technicalTypeService.delete(uuid)
-    console.log('technicalType:deleteData:response:', response)
+export const deleteData = createAsyncThunk('sampleType/deleteData', async uuid => {
+    const response = await sampleTypeService.delete(uuid)
+    console.log('sampleType:deleteData:response:', response)
     return {}
 })
 
-export const technicalTypeSlice = createSlice({
-    name: 'technicalType',
+export const sampleTypeSlice = createSlice({
+    name: 'sampleTypeSlice',
     initialState: {
         data: [],
         total: 1,
@@ -40,8 +40,8 @@ export const technicalTypeSlice = createSlice({
     },
     reducers: {},
     extraReducers: builder => {
+        console.log('sampleTypeSlice:extraReducers')
         builder.addCase(getData.fulfilled, (state, action) => {
-            console.log('technicalType:extraReducers:action', action)
             state.data = action.payload.data
             state.params = action.payload.params
             state.allData = action.payload.allData
@@ -55,4 +55,4 @@ export const technicalTypeSlice = createSlice({
 })
 
 
-export default technicalTypeSlice.reducer
+export default sampleTypeSlice.reducer

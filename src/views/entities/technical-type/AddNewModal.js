@@ -10,7 +10,7 @@ import {Modal, Input, Label, Button, ModalHeader, ModalBody, InputGroup, InputGr
 
 // ** Styles
 import '@styles/react/libs/flatpickr/flatpickr.scss'
-import {agencyService} from "../../../services/agencyService"
+import {technicalTypeService} from "../../../services/technicalTypeService"
 
 const AddNewModal = ({open, handleModal, setRefreshTable}) => {
     // ** State
@@ -20,7 +20,7 @@ const AddNewModal = ({open, handleModal, setRefreshTable}) => {
     const CloseBtn = <X className='cursor-pointer' size={15} onClick={handleModal}/>
     const handleSubmit = () => {
         console.log('handleSubmit:', code, description)
-        agencyService.create({
+        technicalTypeService.create({
             code,
             name: description
         }).then(r => {
