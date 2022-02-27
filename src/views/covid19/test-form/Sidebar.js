@@ -12,6 +12,7 @@ import Select from 'react-select'
 import classnames from 'classnames'
 import { useForm, Controller } from 'react-hook-form'
 import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes'
+import toVND from '../../components/common/toVND'
 // ** Reactstrap Imports
 import {
   Button,
@@ -33,6 +34,9 @@ import { sampleTypeService } from '../../../services/sampleTypeService'
 import { testTypeService } from '../../../services/testTypeService'
 import { technicalTypeService } from '../../../services/technicalTypeService'
 import { labResultTypesService } from '../../../services/labResultTypesService'
+import { patientService } from '../../../services/patientService'
+import { staffService } from '../../../services/staffService'
+import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
 const defaultValues = {
   email: '',
   contact: '',
@@ -42,32 +46,6 @@ const defaultValues = {
   country: null,
 }
 
-const countryOptions = [
-  { label: 'Australia', value: 'Australia' },
-  { label: 'Bangladesh', value: 'Bangladesh' },
-  { label: 'Belarus', value: 'Belarus' },
-  { label: 'Brazil', value: 'Brazil' },
-  { label: 'Canada', value: 'Canada' },
-  { label: 'China', value: 'China' },
-  { label: 'France', value: 'France' },
-  { label: 'Germany', value: 'Germany' },
-  { label: 'India', value: 'India' },
-  { label: 'Indonesia', value: 'Indonesia' },
-  { label: 'Israel', value: 'Israel' },
-  { label: 'Italy', value: 'Italy' },
-  { label: 'Japan', value: 'Japan' },
-  { label: 'Korea', value: 'Korea' },
-  { label: 'Mexico', value: 'Mexico' },
-  { label: 'Philippines', value: 'Philippines' },
-  { label: 'Russia', value: 'Russia' },
-  { label: 'South', value: 'South' },
-  { label: 'Thailand', value: 'Thailand' },
-  { label: 'Turkey', value: 'Turkey' },
-  { label: 'Ukraine', value: 'Ukraine' },
-  { label: 'United Arab Emirates', value: 'United Arab Emirates' },
-  { label: 'United Kingdom', value: 'United Kingdom' },
-  { label: 'United States', value: 'United States' },
-]
 const statusOptions = [
   {
     label: 'Chưa đóng tiền',
@@ -106,6 +84,16 @@ const statusOptions = [
     value: 'COMPLETED',
   },
 ]
+const samplestateOptions = [
+  {
+    label: 'Đủ mẫu',
+    value: true,
+  },
+  {
+    label: 'Không đủ mẫu',
+    value: false,
+  },
+]
 const checkIsValid = (data) => {
   return Object.values(data).every((field) =>
     typeof field === 'object' ? field !== null : field.length > 0
@@ -126,6 +114,8 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
   const [testTypeOptions, setTestTypeOptions] = useState([])
   const [technicalTypeOptions, setTechnicalTypeOptions] = useState([])
   const [labResultTypeOptions, setLabResultTypeOptions] = useState([])
+  const [patientsOptions, setPatientsOptions] = useState([])
+  const [staffOptions, setStaffOptions] = useState([])
   // ** Store Vars
   const dispatch = useDispatch()
   const customStyles = {
@@ -201,21 +191,72 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
         setLabResultTypeOptions(options)
       }
     })
+    staffService.list({ page: 1, perPage: 40, q: '' }).then((res) => {
+      if (res.data.payload !== null) {
+        const options = res.data.payload?.map((staff) => ({
+          label: staff.name,
+          value: staff.uuid,
+        }))
+        setStaffOptions(options)
+      }
+    })
   }, [])
   // ** Function to handle form submit
   const onSubmit = (data) => {
     console.log(data)
+    const newData = {
+      agencyUuid1: data.agencyUuid1.value,
+      agencyUuid2: data.agencyUuid1.value,
+      amount: Number(data.amount),
+      diagnosis: data.diagnosis,
+      diagnosisEng: data.diagnosisEng,
+      inWords: to_vietnamese(data.amount),
+      labResultUuid: data.labResultUuid.value,
+      patientUuids: data?.patient?.map((p) => p.value),
+      payFor: data.testtype.label,
+      payerUuid: data.payerUuid.value,
+      performTime: moment(data.performTime).valueOf(),
+      receiveSampleTime: moment(data.receiveSampleTime).valueOf(),
+      returnTime: moment(data.returnTime).valueOf(),
+      sampleNumber: Number(data.sampleNumber),
+      sampleState: data.sampleState.value,
+      sampleTypeUuid: data.sampletype[0].value,
+      staffUuid1: data?.staffUuid1?.value,
+      staffUuid2: data?.staffUuid2?.value,
+      staffUuid3: data?.staffUuid3?.value,
+      staffUuid4: data?.staffUuid4?.value,
+      state: data.state.value,
+      takeSampleTime: moment(data.takeSampleTime).valueOf(),
+      technicalUuid: data.technicaltype.value,
+      testNumber: 1,
+      testTypeUuid: data.testtype.value,
+      shift: data.shift,
+      note: data.note,
+    }
+    console.log(newData)
+    analysisCertificateService.add(newData).then((res) => {
+      if (res.data.code === 600) {
+        alert('Thêm mới thành công')
+      }
+    })
   }
-
+  const searchPatients = (query) => {
+    patientService.list({ page: 1, perPage: 40, q: query }).then((res) => {
+      if (res.data.payload !== null) {
+        const options = res.data.payload?.map((patient) => ({
+          label: patient.name,
+          value: patient.uuid,
+        }))
+        setPatientsOptions(options)
+      }
+    })
+  }
   const handleSidebarClosed = () => {
     for (const key in defaultValues) {
       setValue(key, '')
     }
     setRole('subscriber')
     setPlan('basic')
-  }
-  const Formcheckbox = () => {
-    return <></>
   }
   return (
     <StyledSidebar
@@ -247,7 +288,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                 options={testTypeOptions}
                 theme={selectThemeColors}
                 className={classnames('react-select', {
-                  'is-invalid': data !== null && data.country === null,
+                  'is-invalid': data !== null && data.value === null,
                 })}
                 {...field}
               />
@@ -270,11 +311,13 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
               // <Input id='country' placeholder='Australia' invalid={errors.country && true} {...field} />
               <Select
                 isClearable={false}
+                isMulti
+                onInputChange={(value) => searchPatients(value)}
                 classNamePrefix='select'
-                options={countryOptions}
+                options={patientsOptions}
                 theme={selectThemeColors}
                 className={classnames('react-select', {
-                  'is-invalid': data !== null && data.country === null,
+                  'is-invalid': data !== null && data.value === null,
                 })}
                 {...field}
               />
@@ -298,8 +341,8 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                 render={({ field }) => (
                   <Input
                     id='amount'
-                    placeholder='John Doe'
-                    invalid={errors.amount && true}
+                    placeholder='50000'
+                    // invalid={errors.amount && true}
                     {...field}
                   />
                 )}
@@ -326,7 +369,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                     options={technicalTypeOptions}
                     theme={selectThemeColors}
                     className={classnames('react-select', {
-                      'is-invalid': data !== null && data.country === null,
+                      'is-invalid': data !== null && data.value === null,
                     })}
                     {...field}
                   />
@@ -356,7 +399,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                     options={agencyOptions}
                     theme={selectThemeColors}
                     className={classnames('react-select', {
-                      'is-invalid': data !== null && data.country === null,
+                      'is-invalid': data !== null && data.value === null,
                     })}
                     {...field}
                   />
@@ -416,7 +459,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
           </Col>
           <Col md='6'>
             <div className='mb-1'>
-              <Label className='form-label' for='result'>
+              <Label className='form-label' for='labResultUuid'>
                 Kết quả <span className='text-danger'>*</span>
               </Label>
               <Controller
@@ -425,7 +468,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                     // required: true,
                   }
                 }
-                name='result'
+                name='labResultUuid'
                 control={control}
                 render={({ field }) => (
                   <Select
@@ -434,7 +477,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                     options={labResultTypeOptions}
                     theme={selectThemeColors}
                     className={classnames('react-select', {
-                      'is-invalid': data !== null && data.country === null,
+                      'is-invalid': data !== null && data.value === null,
                     })}
                     {...field}
                   />
@@ -461,7 +504,6 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                   <Input
                     id='sampleNumber'
                     placeholder='1'
-                    defaultValue='1'
                     invalid={errors.sampleNumber && true}
                     {...field}
                   />
@@ -487,7 +529,6 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                     id='diagnosis'
                     placeholder='John Doe'
                     invalid={errors.diagnosis && true}
-                    defaultValue='Âm tính'
                     {...field}
                   />
                 )}
@@ -540,7 +581,6 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                     id='diagnosisEng'
                     placeholder='Negative'
                     invalid={errors.diagnosisEng && true}
-                    defaultValue='Negative'
                     {...field}
                   />
                 )}
@@ -621,10 +661,10 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                   <Select
                     isClearable={false}
                     classNamePrefix='select'
-                    options={countryOptions}
+                    options={samplestateOptions}
                     theme={selectThemeColors}
                     className={classnames('react-select', {
-                      'is-invalid': data !== null && data.country === null,
+                      'is-invalid': data !== null && data.value === null,
                     })}
                     {...field}
                   />
@@ -681,10 +721,10 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                   <Select
                     isClearable={false}
                     classNamePrefix='select'
-                    options={countryOptions}
+                    options={staffOptions}
                     theme={selectThemeColors}
                     className={classnames('react-select', {
-                      'is-invalid': data !== null && data.country === null,
+                      'is-invalid': data !== null && data.value === null,
                     })}
                     {...field}
                   />
@@ -737,10 +777,10 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                   <Select
                     isClearable={false}
                     classNamePrefix='select'
-                    options={countryOptions}
+                    options={staffOptions}
                     theme={selectThemeColors}
                     className={classnames('react-select', {
-                      'is-invalid': data !== null && data.country === null,
+                      'is-invalid': data !== null && data.value === null,
                     })}
                     {...field}
                   />
@@ -766,10 +806,10 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                   <Select
                     isClearable={false}
                     classNamePrefix='select'
-                    options={countryOptions}
+                    options={staffOptions}
                     theme={selectThemeColors}
                     className={classnames('react-select', {
-                      'is-invalid': data !== null && data.country === null,
+                      'is-invalid': data !== null && data.value === null,
                     })}
                     {...field}
                   />
@@ -795,11 +835,12 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                 render={({ field }) => (
                   <Select
                     isClearable={false}
+                    onInputChange={(value) => searchPatients(value)}
                     classNamePrefix='select'
-                    options={countryOptions}
+                    options={patientsOptions}
                     theme={selectThemeColors}
                     className={classnames('react-select', {
-                      'is-invalid': data !== null && data.country === null,
+                      'is-invalid': data !== null && data.value === null,
                     })}
                     {...field}
                   />
@@ -825,13 +866,34 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                   <Select
                     isClearable={false}
                     classNamePrefix='select'
-                    options={countryOptions}
+                    options={staffOptions}
                     theme={selectThemeColors}
                     className={classnames('react-select', {
-                      'is-invalid': data !== null && data.country === null,
+                      'is-invalid': data !== null && data.value === null,
                     })}
                     {...field}
                   />
+                )}
+              />
+            </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col md='6'>
+            <div className='mb-1'>
+              <Label className='form-label' for='note'>
+                Ghi chú <span className='text-danger'>*</span>
+              </Label>
+              <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
+                name='note'
+                control={control}
+                render={({ field }) => (
+                  <Input id='note' invalid={errors.note && true} {...field} />
                 )}
               />
             </div>
