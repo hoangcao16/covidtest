@@ -12,10 +12,6 @@ export const StyledSidebar = styled(Sidebar)`
     border-radius: 4px;
     color: #666;
   }
-  .form-control-shift {
-    display: flex;
-    align-items: center;
-  }
   .shiftRadio {
     margin-left: 4px;
     margin-right: 1rem;
