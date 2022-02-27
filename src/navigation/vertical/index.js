@@ -33,7 +33,6 @@ export default [
             }
         ]
     },
-
     {
         id: 'entities',
         title: 'Danh mục',
@@ -63,6 +62,12 @@ export default [
                 title: 'Đơn vị',
                 icon: <Circle size={12}/>,
                 navLink: '/entities/agency'
+            },
+            {
+                id: 'lab-result-type',
+                title: 'Loai Kết quả',
+                icon: <Circle size={12}/>,
+                navLink: '/entities/lab-result-type'
             }
         ]
     },
@@ -102,21 +107,27 @@ export default [
         children: [
             {
                 id: 'accounts',
-                title: 'Người dùng',
+                title: 'Tài khoản',
                 icon: <Circle size={12}/>,
                 navLink: '/settings/accounts'
+            },
+            {
+                id: 'permissions',
+                title: 'Phân quyền',
+                icon: <Circle size={12}/>,
+                navLink: '/settings/permissions'
             },
             {
                 id: 'language',
                 title: 'Ngôn ngữ',
                 icon: <Circle size={12}/>,
-                navLink: '/settings/accounts'
+                navLink: '/settings/language'
             },
             {
-                id: 'invoicePreview',
+                id: 'invoices',
                 title: 'Nội dung phiếu thu',
                 icon: <Circle size={12}/>,
-                navLink: '/settings/fdfd'
+                navLink: '/settings/invoices'
             }
         ]
     }

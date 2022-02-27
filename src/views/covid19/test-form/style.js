@@ -17,4 +17,13 @@ export const StyledSidebar = styled(Sidebar)`
     margin-right: 1rem;
     padding-top: 6px;
   }
+  .sampletype {
+    div {
+      button {
+        width: 100%;
+        background-color: transparent;
+        border: 1px solid #404656;
+      }
+    }
+  }
 `

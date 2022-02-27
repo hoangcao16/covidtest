@@ -11,7 +11,7 @@ import { selectThemeColors } from '@utils'
 import Select from 'react-select'
 import classnames from 'classnames'
 import { useForm, Controller } from 'react-hook-form'
-import Datetime from 'react-datetime'
+import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes'
 // ** Reactstrap Imports
 import {
   Button,
@@ -128,7 +128,24 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
   const [labResultTypeOptions, setLabResultTypeOptions] = useState([])
   // ** Store Vars
   const dispatch = useDispatch()
+  const customStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      borderBottom: '1px dotted pink',
+      color: state.isSelected ? 'red' : 'blue',
+      padding: 20,
+    }),
+    control: () => ({
+      // none of react-select's styles are passed to <Control />
+      width: 200,
+    }),
+    singleValue: (provided, state) => {
+      const opacity = state.isDisabled ? 0.5 : 1
+      const transition = 'opacity 300ms'
 
+      return { ...provided, opacity, transition }
+    },
+  }
   // ** Vars
   const {
     control,
@@ -376,27 +393,25 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
         </Row>
         <Row>
           <Col md='6'>
-            <div className='mb-1'>
-              <Label className='form-label' for='sampletype'>
+            <div className='mb-1 sampletype'>
+              <Label className='form-label ' for='sampletype'>
                 Mẫu bệnh phẩm <span className='text-danger'>*</span>
               </Label>
-              <fieldset>
-                {sampleTypeOptions?.map((sampleType, index) => {
-                  return (
-                    <React.Fragment key={index}>
-                      <Input
-                        type='checkbox'
-                        name={sampleType.uuid}
-                        value={sampleType.uuid}
-                        {...register('sampletype')}
-                      />
-                      <Label className='sampletypeRadio'>
-                        {sampleType.label}
-                      </Label>
-                    </React.Fragment>
-                  )
-                })}
-              </fieldset>
+              <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
+                name='sampletype'
+                control={control}
+                render={({ field }) => (
+                  <ReactMultiSelectCheckboxes
+                    options={sampleTypeOptions}
+                    {...field}
+                  />
+                )}
+              />
             </div>
           </Col>
           <Col md='6'>

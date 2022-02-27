@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom'
 const PagesRoutes = [
   {
     path: '/patients',
-    component: lazy(() => import('../../views/patients/Patients')),
+    component: lazy(() => import('../../views/patients/patients')),
   },
   {
     path: '/covid19/test-form',

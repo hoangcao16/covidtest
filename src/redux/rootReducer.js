@@ -9,6 +9,9 @@ import technicalType from './technicalType'
 import sampleType from './sampleType'
 import testType from './testType'
 import analysisCertificate from './analysisCertificate'
+import account from './account'
+import labResultType from './labResultType'
+import patient from './patient'
 
 const rootReducer = {
   auth,
@@ -19,6 +22,9 @@ const rootReducer = {
   technicalType,
   sampleType,
   testType,
+  account,
+  labResultType,
+  patient,
   analysisCertificate,
 }
 
