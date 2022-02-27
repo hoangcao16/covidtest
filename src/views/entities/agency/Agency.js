@@ -2,7 +2,6 @@
 import {Fragment, useState, useEffect, memo} from 'react'
 
 // ** Table Columns
-import {serverSideColumns} from './data'
 
 // ** Store & Actions
 import {getData} from '../../../redux/agency'
@@ -10,11 +9,23 @@ import {useSelector, useDispatch} from 'react-redux'
 
 // ** Third Party Components
 import ReactPaginate from 'react-paginate'
-import {ChevronDown} from 'react-feather'
+import {ChevronDown, Plus} from 'react-feather'
 import DataTable from 'react-data-table-component'
 
 // ** Reactstrap Imports
-import {Card, CardHeader, CardTitle, Input, Label, Row, Col} from 'reactstrap'
+import {
+    Card,
+    CardHeader,
+    CardTitle,
+    Input,
+    Label,
+    Row,
+    Col,
+    Button
+} from 'reactstrap'
+import AddNewModal from "./AddNewModal"
+import {agencyService} from "../../../services/agencyService"
+import {customizeColumns} from "./data"
 
 const Agency = () => {
 
@@ -23,12 +34,24 @@ const Agency = () => {
     const store = useSelector(state => state.agency)
     console.log('Agency:', store)
     // ** States
+    const [modal, setModal] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState(7)
     const [searchValue, setSearchValue] = useState('')
-    // ** Table data to render
-    const dataToRender = () => {
+    const [refreshTable, setRereshTable] = useState(false)
+    const handleDelete = (item) => {
+        console.log('delete agency:item', item)
+        agencyService.delete(item.uuid).then(() => {
+            setRereshTable(!refreshTable)
+        })
+    }
 
+    const handleModal = () => {
+        setModal(!modal)
+        console.log('submit')
+    }
+// ** Table data to render
+    const dataToRender = () => {
         const filters = {
             q: searchValue
         }
@@ -38,15 +61,16 @@ const Agency = () => {
         })
 
         console.log('Agency:dataToRender:', store.data)
-        if (store.data.length > 0) {
-            return store.data
-        } else if (store.data.length === 0 && isFiltered) {
+        if (store && store.allData?.length > 0) {
+            return store.allData.slice(currentPage - 1, rowsPerPage)
+        } else if (store.allData?.length === 0 && isFiltered) {
             return []
         } else {
-            return store.allData.slice(0, rowsPerPage)
+            return store.allData?.slice(0, rowsPerPage)
         }
     }
-    // ** Get data on mount
+
+// ** Get data on mount
     useEffect(() => {
         dispatch(
             getData({
@@ -55,22 +79,22 @@ const Agency = () => {
                 q: searchValue
             })
         )
-    }, [dispatch])
+    }, [dispatch, refreshTable])
 
-    // ** Function to handle filter
+// ** Function to handle filter
     const handleFilter = e => {
         setSearchValue(e.target.value)
-
+        setCurrentPage(1)
         dispatch(
             getData({
-                page: currentPage,
+                page: 0,
                 perPage: rowsPerPage,
                 q: e.target.value
             })
         )
     }
 
-    // ** Function to handle Pagination and get data
+// ** Function to handle Pagination and get data
     const handlePagination = page => {
         dispatch(
             getData({
@@ -82,7 +106,7 @@ const Agency = () => {
         setCurrentPage(page.selected + 1)
     }
 
-    // ** Function to handle per page
+// ** Function to handle per page
     const handlePerPage = e => {
         dispatch(
             getData({
@@ -94,7 +118,7 @@ const Agency = () => {
         setRowsPerPage(parseInt(e.target.value))
     }
 
-    // ** Custom Pagination
+// ** Custom Pagination
     const CustomPagination = () => {
         const count = Math.ceil(store.total / rowsPerPage)
 
@@ -131,6 +155,10 @@ const Agency = () => {
             <Card>
                 <CardHeader className='border-bottom'>
                     <CardTitle tag='h4'>Danh sách</CardTitle>
+                    <Button className='ms-2' color='primary' onClick={handleModal}>
+                        <Plus size={15}/>
+                        <span className='align-middle ms-50'>Add Record</span>
+                    </Button>
                 </CardHeader>
                 <Row className='mx-0 mt-1 mb-50'>
                     <Col sm='6'>
@@ -173,13 +201,14 @@ const Agency = () => {
                         pagination
                         paginationServer
                         className='react-dataTable'
-                        columns={serverSideColumns}
+                        columns={customizeColumns(handleDelete)}
                         sortIcon={<ChevronDown size={10}/>}
                         paginationComponent={CustomPagination}
                         data={dataToRender()}
                     />
                 </div>
             </Card>
+            <AddNewModal open={modal} handleModal={handleModal} refreshTable={refreshTable}/>
         </Fragment>
     )
 }
