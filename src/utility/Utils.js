@@ -48,7 +48,7 @@ export const formatDateToMonthShort = (value, toTimeForCurrentDay = true) => {
  ** This is completely up to you and how you want to store the token in your frontend application
  *  ? e.g. If you are using cookies to store the application please update this function
  */
-export const isUserLoggedIn = () => localStorage.getItem('userData')
+export const isUserLoggedIn = () => localStorage.getItem('userData') && localStorage.getItem('accessToken')
 export const getUserData = () => JSON.parse(localStorage.getItem('userData'))
 
 /**
@@ -77,3 +77,22 @@ export const selectThemeColors = theme => ({
     neutral30: '#ededed' // for input hover border-color
   }
 })
+
+
+import {Fragment} from "react"
+import {Coffee} from "react-feather"
+import Avatar from '@components/avatar'
+
+export const ToastContent = ({name, description}) => (
+    <Fragment>
+      <div className='toastify-header'>
+        <div className='title-wrapper'>
+          <h6 className='toast-title fw-bold'>{name}</h6>
+        </div>
+      </div>
+      <div className='toastify-body'>
+        <span>{description}</span>
+      </div>
+    </Fragment>
+)
+

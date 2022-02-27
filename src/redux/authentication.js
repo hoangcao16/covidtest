@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 // ** UseJWT import to get config
 import useJwt from '@src/auth/jwt/useJwt'
+import {getData} from "./testForm"
 
 const config = useJwt.jwtConfig
 
@@ -19,12 +20,17 @@ export const authSlice = createSlice({
   },
   reducers: {
     handleLogin: (state, action) => {
-      state.userData = action.payload
+      console.log('state:', state, action.payload)
+      // state.userData = action.payload.userData
       state[config.storageTokenKeyName] = action.payload[config.storageTokenKeyName]
       state[config.storageRefreshTokenKeyName] = action.payload[config.storageRefreshTokenKeyName]
+      // localStorage.setItem('userData', JSON.stringify(action.payload.userData))
+      localStorage.setItem(config.storageTokenKeyName, action.payload.accessToken)
+      localStorage.setItem(config.storageRefreshTokenKeyName, action.payload.refreshToken)
+    },
+    handleMe: (state, action) => {
+      state.userData = action.payload.userData
       localStorage.setItem('userData', JSON.stringify(action.payload))
-      localStorage.setItem(config.storageTokenKeyName, JSON.stringify(action.payload.accessToken))
-      localStorage.setItem(config.storageRefreshTokenKeyName, JSON.stringify(action.payload.refreshToken))
     },
     handleLogout: state => {
       state.userData = {}
@@ -35,9 +41,18 @@ export const authSlice = createSlice({
       localStorage.removeItem(config.storageTokenKeyName)
       localStorage.removeItem(config.storageRefreshTokenKeyName)
     }
+  },
+  extraReducers: builder => {
+    console.log('authentication:extraReducers')
+    builder.addCase(getData.fulfilled, (state, action) => {
+      state.data = action.payload.data
+      state.params = action.payload.params
+      state.allData = action.payload.allData
+      state.total = action.payload.totalPages
+    })
   }
 })
 
-export const { handleLogin, handleLogout } = authSlice.actions
+export const { handleLogin, handleLogout, handleMe } = authSlice.actions
 
 export default authSlice.reducer
