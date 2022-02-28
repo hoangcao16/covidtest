@@ -10,7 +10,7 @@ import Sidebar from './Sidebar'
 // ** Store & Actions
 import { getData } from '../../../redux/testForm'
 import { useSelector, useDispatch } from 'react-redux'
-
+import { StyledCard } from './style'
 // ** Third Party Components
 import ReactPaginate from 'react-paginate'
 import { ChevronDown } from 'react-feather'
@@ -19,7 +19,6 @@ import { analysisCertificateService } from '../../../services/analysisCertificat
 
 // ** Reactstrap Imports
 import {
-  Card,
   CardHeader,
   CardTitle,
   Input,
@@ -106,7 +105,6 @@ const TestForm = () => {
         activeClassName='active'
         forcePage={currentPage !== 0 ? currentPage - 1 : 0}
         onPageChange={(page) => handlePagination(page)}
-        activeClassName='active'
         pageClassName='page-item'
         breakClassName='page-item'
         nextLinkClassName='page-link'
@@ -151,7 +149,7 @@ const TestForm = () => {
 
   return (
     <Fragment>
-      <Card>
+      <StyledCard>
         <CardHeader className='border-bottom'>
           <CardTitle tag='h4'>Danh sách</CardTitle>
         </CardHeader>
@@ -192,11 +190,11 @@ const TestForm = () => {
               onChange={handleFilter}
             />
             <Button
-              className='add-new-user'
+              className='add-new-test-form'
               color='primary'
               onClick={toggleSidebar}
             >
-              Add New User
+              Thêm mới
             </Button>
           </Col>
         </Row>
@@ -204,15 +202,18 @@ const TestForm = () => {
           <DataTable
             noHeader
             pagination
+            selectableRows
+            selectableRowsHighlight
             paginationServer
+            responsive
             className='react-dataTable'
             columns={serverSideColumns}
             sortIcon={<ChevronDown size={10} />}
             paginationComponent={CustomPagination}
-            data={dataToRender()}
+            data={dataTable}
           />
         </div>
-      </Card>
+      </StyledCard>
       <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} />
     </Fragment>
   )

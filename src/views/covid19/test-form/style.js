@@ -1,8 +1,9 @@
 import styled from 'styled-components'
 import Sidebar from '../../components/sidebar'
+import { Card } from 'reactstrap'
 export const StyledSidebar = styled(Sidebar)`
   @media (min-width: 768px) {
-    width: 50vw !important;
+    width: 70vw !important;
   }
   .date-picker {
     width: 100%;
@@ -12,10 +13,10 @@ export const StyledSidebar = styled(Sidebar)`
     border-radius: 4px;
     color: #666;
   }
-  .shiftRadio {
+  .shiftRadio,
+  .sampletypecheckbox {
     margin-left: 4px;
     margin-right: 1rem;
-    padding-top: 6px;
   }
   .sampletype {
     div {
@@ -25,5 +26,17 @@ export const StyledSidebar = styled(Sidebar)`
         border: 1px solid #404656;
       }
     }
+  }
+`
+export const StyledCard = styled(Card)`
+  .add-new-test-form {
+    margin-left: 1rem;
+  }
+  .react-dataTable {
+    div {
+    }
+  }
+  .react-select {
+    width: 100%;
   }
 `

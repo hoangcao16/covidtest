@@ -1,12 +1,15 @@
+/* eslint-disable semi */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-confusing-arrow */
 /* eslint-disable comma-dangle */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 // ** Custom Components
 import { StyledSidebar } from './style'
+import { debounce } from 'lodash'
 // ** Utils
 import { selectThemeColors } from '@utils'
+import { samplestateOptions, statusOptions } from './data'
 // ** Third Party Components
 import Select from 'react-select'
 import classnames from 'classnames'
@@ -66,55 +69,6 @@ const defaultValues = {
   shift: 'Ca 1',
   note: '',
 }
-
-const statusOptions = [
-  {
-    label: 'Chưa đóng tiền',
-    value: 'NOT_PAID',
-  },
-  {
-    label: 'Đã đóng tiền',
-    value: 'PAID',
-  },
-  {
-    label: 'Treo công nợ',
-    value: 'DEBT',
-  },
-  {
-    label: 'Chờ lấy mẫu',
-    value: 'WAITING_TAKEN_SAMPLE',
-  },
-  {
-    label: 'Đã lấy mẫu',
-    value: 'TAKEN_SAMPLE',
-  },
-  {
-    label: 'Đủ mẫu',
-    value: 'ENOUGH_SAMPLE',
-  },
-  {
-    label: 'Không đủ mẫu',
-    value: 'NOT_ENOUGH_SAMPLE',
-  },
-  {
-    label: 'Có kết quả',
-    value: 'RETURN_RESULT',
-  },
-  {
-    label: 'Đã trả kết quả',
-    value: 'COMPLETED',
-  },
-]
-const samplestateOptions = [
-  {
-    label: 'Đủ mẫu',
-    value: true,
-  },
-  {
-    label: 'Không đủ mẫu',
-    value: false,
-  },
-]
 
 const SidebarNewTestForm = ({ open, toggleSidebar }) => {
   // ** States
@@ -199,6 +153,17 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
       }
     })
   }, [])
+  const filterOption = (option, inputValue) => {
+    const { label, value, data } = option
+    // looking if other options with same label are matching inputValue
+    const otherKey = patientsOptions.filter(
+      (opt) =>
+        (opt.label === label && opt.value.includes(inputValue)) ||
+        opt.phone.includes(inputValue) ||
+        opt.nationality.includes(inputValue)
+    )
+    return otherKey
+  }
   // ** Function to handle form submit
   const onSubmit = (data) => {
     console.log(data)
@@ -241,16 +206,25 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
       setValue(key, defaultValues[key])
     }
   }
-  const searchPatients = (query) => {
+  const fetchPatientsDropdown = (query) => {
     patientService.list({ page: 1, perPage: 40, q: query }).then((res) => {
       if (res.data.payload !== null) {
         const options = res.data.payload?.map((patient) => ({
           label: patient.name,
           value: patient.uuid,
+          phone: patient.phone,
+          nationality: patient.nationality,
         }))
         setPatientsOptions(options)
       }
     })
+  }
+  const debounceDropDown = useCallback(
+    debounce((query) => fetchPatientsDropdown(query), 500),
+    []
+  )
+  const searchPatients = (query) => {
+    debounceDropDown(query)
   }
   const handleSidebarClosed = () => {
     for (const key in defaultValues) {
@@ -317,6 +291,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                 classNamePrefix='select'
                 options={patientsOptions}
                 theme={selectThemeColors}
+                filterOption={filterOption}
                 className={classnames('react-select', {
                   'is-invalid': data !== null && data.value === null,
                 })}
@@ -343,7 +318,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                   <Input
                     id='amount'
                     placeholder='50000'
-                    // invalid={errors.amount && true}
+                    invalid={errors.amount && true}
                     {...field}
                   />
                 )}
@@ -422,14 +397,14 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                 name='shift'
                 control={control}
                 render={({ field }) => (
-                  <FormGroup {...field}>
+                  <fieldset {...field}>
                     <Input type='radio' name='chooseshift' value='Ca 1' />
                     <Label className='shiftRadio'>Ca 1</Label>
                     <Input type='radio' name='chooseshift' value='Ca 2' />
                     <Label className='shiftRadio'>Ca 2 </Label>
                     <Input type='radio' name='chooseshift' value='Ca 3' />
                     <Label className='shiftRadio'>Ca 3 </Label>
-                  </FormGroup>
+                  </fieldset>
                 )}
               />
             </div>
@@ -840,6 +815,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                     classNamePrefix='select'
                     options={patientsOptions}
                     theme={selectThemeColors}
+                    filterOption={filterOption}
                     className={classnames('react-select', {
                       'is-invalid': data !== null && data.value === null,
                     })}
