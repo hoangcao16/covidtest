@@ -34,6 +34,12 @@ export const createData = createAsyncThunk('account/createData', async params =>
     }
 })
 
+export const getItem = createAsyncThunk('account/getItem', async uuid => {
+    const response = await accountService.get(uuid)
+    console.log('account:getItem:response:', response)
+    return {}
+})
+
 export const updateData = createAsyncThunk('account/updateData', async uuid => {
     const response = await accountService.delete(uuid)
     console.log('account:updateData:response:', response)
@@ -63,7 +69,6 @@ export const newSlice = createSlice({
         }
     },
     extraReducers: builder => {
-        console.log('agency:extraReducers')
         builder.addCase(getList.fulfilled, (state, action) => {
             state.data = action.payload.data
             state.params = action.payload.params

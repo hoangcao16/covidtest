@@ -35,13 +35,13 @@ export const authService = {
     })
   },
   setAccessToken(token) {
-    return localStorage.setItem('access_token', token)
+    return localStorage.setItem('accessToken', token)
   },
   getAccessToken() {
-    return localStorage.getItem('access_token')
+    return localStorage.getItem('accessToken')
   },
   removeAccessToken() {
-    return localStorage.removeItem('access_token')
+    return localStorage.removeItem('accessToken')
   },
   setUserId(id) {
     return localStorage.setItem('userId', id)

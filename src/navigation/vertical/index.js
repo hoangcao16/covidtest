@@ -112,6 +112,12 @@ export default [
                 navLink: '/settings/accounts'
             },
             {
+                id: 'roles',
+                title: 'Vai trò',
+                icon: <Circle size={12}/>,
+                navLink: '/settings/roles'
+            },
+            {
                 id: 'permissions',
                 title: 'Phân quyền',
                 icon: <Circle size={12}/>,

@@ -12,6 +12,8 @@ import analysisCertificate from './analysisCertificate'
 import account from './account'
 import labResultType from './labResultType'
 import patient from './patient'
+import role from './role'
+import permission from './permission'
 
 const rootReducer = {
   auth,
@@ -26,6 +28,8 @@ const rootReducer = {
   labResultType,
   patient,
   analysisCertificate,
+  role,
+  permission
 }
 
 export default rootReducer
