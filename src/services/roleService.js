@@ -6,7 +6,7 @@ export const roleService = {
             method: 'GET',
             url: '/api/v0/roles',
             params: {
-                page: params.page - 1,
+                page: params.page,
                 size: params.perPage,
                 filter: params.q
             }

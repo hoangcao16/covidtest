@@ -8,10 +8,9 @@ import RoleCards from './RoleCards'
 const Roles = () => {
   return (
     <Fragment>
-      <h3>Roles List</h3>
+      <h3>Danh sách vai trò</h3>
       <p className='mb-2'>
-        A role provides access to predefined menus and features depending on the assigned role to an administrator that
-        can have access to what he needs.
+          Một role cung cấp sự truy xuất đến tính năng phụ thuộc vào vai trò được gán tới
       </p>
       <RoleCards />
       <h3 className='mt-50'>Total users with their roles</h3>

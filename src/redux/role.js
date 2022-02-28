@@ -3,7 +3,7 @@ import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 
 import {roleService} from "../services/roleService"
 
-export const getList = createAsyncThunk('role/getList', async params => {
+export const getListRoles = createAsyncThunk('role/getList', async params => {
     const response = await roleService.list(params)
     console.log('role:getList:response:', response)
     return {
@@ -14,7 +14,7 @@ export const getList = createAsyncThunk('role/getList', async params => {
     }
 })
 
-export const getData = createAsyncThunk('role/getData', async params => {
+export const getDataRoles = createAsyncThunk('role/getData', async params => {
     const response = await roleService.list(params)
     console.log('role:getData:response:', response)
     return {
@@ -63,8 +63,8 @@ export const newSlice = createSlice({
         }
     },
     extraReducers: builder => {
-        console.log('role:extraReducers')
-        builder.addCase(getList.fulfilled, (state, action) => {
+        builder.addCase(getListRoles.fulfilled, (state, action) => {
+            console.log('set:data', action)
             state.data = action.payload.data
             state.params = action.payload.params
             state.allData = action.payload.allData
