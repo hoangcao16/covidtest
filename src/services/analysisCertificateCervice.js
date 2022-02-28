@@ -5,7 +5,7 @@ export const analysisCertificateService = {
     return apiClient.request({
       method: 'POST',
       url: '/api/v0/analysis_certificate',
-      data: { data },
+      data,
     })
   },
   list(page, size) {

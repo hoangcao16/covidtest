@@ -38,12 +38,33 @@ import { patientService } from '../../../services/patientService'
 import { staffService } from '../../../services/staffService'
 import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
 const defaultValues = {
-  email: '',
-  contact: '',
-  company: '',
-  fullName: '',
-  username: '',
-  country: null,
+  agencyUuid1: '',
+  agencyUuid2: '',
+  amount: '',
+  diagnosis: 'Âm tính',
+  diagnosisEng: 'Negative',
+  inWords: '',
+  labResultUuid: '',
+  patient: [],
+  payFor: '',
+  payerUuid: '',
+  performTime: moment(),
+  receiveSampleTime: moment(),
+  returnTime: moment(),
+  sampleNumber: 1,
+  sampleState: true,
+  sampletype: [],
+  staffUuid1: '',
+  staffUuid2: '',
+  staffUuid3: '',
+  staffUuid4: '',
+  state: 'NOT_PAID',
+  takeSampleTime: moment(),
+  technicaltype: {},
+  testNumber: 1,
+  testtype: {},
+  shift: 'Ca 1',
+  note: '',
 }
 
 const statusOptions = [
@@ -94,11 +115,6 @@ const samplestateOptions = [
     value: false,
   },
 ]
-const checkIsValid = (data) => {
-  return Object.values(data).every((field) =>
-    typeof field === 'object' ? field !== null : field.length > 0
-  )
-}
 
 const SidebarNewTestForm = ({ open, toggleSidebar }) => {
   // ** States
@@ -118,24 +134,6 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
   const [staffOptions, setStaffOptions] = useState([])
   // ** Store Vars
   const dispatch = useDispatch()
-  const customStyles = {
-    option: (provided, state) => ({
-      ...provided,
-      borderBottom: '1px dotted pink',
-      color: state.isSelected ? 'red' : 'blue',
-      padding: 20,
-    }),
-    control: () => ({
-      // none of react-select's styles are passed to <Control />
-      width: 200,
-    }),
-    singleValue: (provided, state) => {
-      const opacity = state.isDisabled ? 0.5 : 1
-      const transition = 'opacity 300ms'
-
-      return { ...provided, opacity, transition }
-    },
-  }
   // ** Vars
   const {
     control,
@@ -239,6 +237,9 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
         alert('Thêm mới thành công')
       }
     })
+    for (const key in defaultValues) {
+      setValue(key, defaultValues[key])
+    }
   }
   const searchPatients = (query) => {
     patientService.list({ page: 1, perPage: 40, q: query }).then((res) => {
@@ -253,7 +254,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
   }
   const handleSidebarClosed = () => {
     for (const key in defaultValues) {
-      setValue(key, '')
+      setValue(key, defaultValues[key])
     }
     setRole('subscriber')
     setPlan('basic')
