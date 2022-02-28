@@ -30,7 +30,7 @@ import AvatarGroup from '@components/avatar-group'
 import illustration from '@src/assets/images/illustration/faq-illustrations.svg'
 
 // import {roles} from './data'
-import {getListRoles, deleteData, createData} from "../../../../redux/role"
+import {getListRoles, deleteData, createData, assignedTo} from "../../../../redux/role"
 import {useDispatch, useSelector} from "react-redux"
 
 const rolesArr = [
@@ -95,6 +95,13 @@ const RoleCards = () => {
         }))
 
     }
+
+    const handleAddNew = (uuid) => {
+        dispatch(assignedTo(uuid, '123')).then((() => {
+            setRefreshData(!refreshData)
+        }))
+
+    }
     const onReset = () => {
         setShow(false)
         reset({roleName: ''})
@@ -139,6 +146,10 @@ const RoleCards = () => {
                                         <Button type='reset' color='secondary' outline
                                                 onClick={() => handleDelete(item.uuid)}>
                                             Xóa
+                                        </Button>
+                                        <Button type='submit' color='primary' outline
+                                                onClick={() => handleAddNew(item.uuid)}>
+                                            Thêm tài khoản
                                         </Button>
                                     </div>
                                 </CardBody>
