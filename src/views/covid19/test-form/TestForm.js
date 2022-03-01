@@ -14,6 +14,8 @@ import {
   refetchList,
   selectUuid,
   editCertificate,
+  closeSidebar,
+  addNewCertificate,
 } from '../../../redux/analysisCertificate'
 // ** Third Party Components
 import { MoreVertical, Edit, FileText, Trash } from 'react-feather'
@@ -46,7 +48,10 @@ const TestForm = () => {
   const [searchValue, setSearchValue] = useState('')
 
   // ** Function to toggle sidebar
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen)
+    dispatch(closeSidebar())
+  }
   const handleUpdateState = (value, record) => {
     const dataUpdate = {
       patientUuids: record.patientUuids,
@@ -244,7 +249,10 @@ const TestForm = () => {
             <Button
               className='add-new-test-form'
               color='primary'
-              onClick={toggleSidebar}
+              onClick={() => {
+                toggleSidebar()
+                dispatch(addNewCertificate(true))
+              }}
             >
               Thêm mới
             </Button>

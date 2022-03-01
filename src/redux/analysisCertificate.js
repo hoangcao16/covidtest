@@ -22,9 +22,19 @@ export const AnalysisCertificateSlice = createSlice({
     selectUuid: (state, payload) => {
       state.selectedUuid = payload.payload
     },
+    closeSidebar: (state) => {
+      state.isAddNew = false
+      state.isEdit = false
+      state.selectedUuid = ''
+    },
   },
 })
-export const { refetchList, addNewCertificate, editCertificate, selectUuid } =
-  AnalysisCertificateSlice.actions
+export const {
+  refetchList,
+  addNewCertificate,
+  editCertificate,
+  selectUuid,
+  closeSidebar,
+} = AnalysisCertificateSlice.actions
 export const selectAnalysisCertificate = (state) => state.task
 export default AnalysisCertificateSlice.reducer

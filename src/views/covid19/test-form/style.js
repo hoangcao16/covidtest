@@ -31,6 +31,21 @@ export const StyledSidebar = styled(Sidebar)`
     padding-top: 1rem;
     text-align: center;
   }
+  .groupshift {
+    width: 100%;
+  }
+  .select__control .select__multi-value .select__multi-value__label {
+    color: #f0f0f0;
+  }
+  .select__control .select__multi-value__remove svg {
+    fill: #f06767;
+  }
+  #takeSampleTime,
+  #receiveSampleTime,
+  #performTime,
+  #returnTime {
+    color: #b4b7bd;
+  }
 `
 export const StyledCard = styled(Card)`
   .add-new-test-form {
@@ -98,6 +113,9 @@ export const StyledCard = styled(Card)`
         td.ant-table-column-sort {
           background: #283046;
         }
+      }
+      .ant-table-tbody > tr.ant-table-row-selected > td {
+        background: #3b4253;
       }
     }
   }
