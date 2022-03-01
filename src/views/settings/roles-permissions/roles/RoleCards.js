@@ -30,8 +30,12 @@ import AvatarGroup from '@components/avatar-group'
 import illustration from '@src/assets/images/illustration/faq-illustrations.svg'
 
 // import {roles} from './data'
-import {getListRoles, deleteData, createData, assignedTo} from "../../../../redux/role"
+import {getListRoles, deleteData, createData} from "../../../../redux/role"
 import {useDispatch, useSelector} from "react-redux"
+import Select from "react-select"
+import classnames from "classnames"
+import {selectThemeColors} from '@utils'
+import {accountService} from "../../../../services/accountService"
 
 const rolesArr = [
     'QL_THONG_TIN_BN',
@@ -50,7 +54,15 @@ const RoleCards = () => {
     // ** States
     const [show, setShow] = useState(false)
     const [modalType, setModalType] = useState('Thêm mới')
+
     const [refreshData, setRefreshData] = useState(false)
+
+    //modal add new user
+    const [data] = useState(null)
+    const [showAddUserToRole, setShowAddUserToRole] = useState(false)
+    const [modalAddUserToRoleType] = useState('Gán user')
+    const [accountOptions, setAccountOptions] = useState([])
+
     const storeRoles = useSelector(state => state.role)
     console.log('storeRoles:', storeRoles)
     useEffect(() => {
@@ -96,12 +108,6 @@ const RoleCards = () => {
 
     }
 
-    const handleAddNew = (uuid) => {
-        dispatch(assignedTo(uuid, '123')).then((() => {
-            setRefreshData(!refreshData)
-        }))
-
-    }
     const onReset = () => {
         setShow(false)
         reset({roleName: ''})
@@ -112,6 +118,94 @@ const RoleCards = () => {
         setValue('roleName')
     }
 
+    //
+    const onResetAddNewToRole = () => {
+        setShowAddUserToRole(false)
+        reset({roleName: ''})
+    }
+    const handleModalAddNewToRoleClosed = () => {
+    }
+
+    const searchUsers = (query) => {
+        console.log('searchUsers:user:', query)
+        accountService.list({page: 1, perPage: 40, q: query}).then((res) => {
+            if (res.data.payload !== null) {
+                const options = res.data.payload?.map((account) => ({
+                    label: account.name,
+                    value: account.uuid
+                }))
+                setAccountOptions(options)
+            }
+        })
+    }
+
+    const renderModalAssignUserToRole = (role) => {
+        return (
+            <Modal
+                isOpen={showAddUserToRole}
+                onClosed={handleModalAddNewToRoleClosed}
+                toggle={() => setShowAddUserToRole(!showAddUserToRole)}
+                className='modal-dialog-centered modal-lg'
+            >
+                <ModalHeader className='bg-transparent'
+                             toggle={() => setShowAddUserToRole(!showAddUserToRole)}></ModalHeader>
+                <ModalBody className='px-5 pb-5'>
+                    <div className='text-center mb-4'>
+                        <h1>{modalAddUserToRoleType} tới {role?.name ? role.name : ''}</h1>
+                        <p>Thêm users tới vai trò</p>
+                    </div>
+                    <Row tag='form' onSubmit={handleSubmit(onSubmit)}>
+                        <Col xs={12}>
+                            <div className='mb-1'>
+                                <Label className='form-label' for='patient'>
+                                    Chọn khách hàng <span className='text-danger'>*</span>
+                                </Label>
+                                <Controller
+                                    rules={
+                                        {
+                                            // required: true,
+                                        }
+                                    }
+                                    name='patient'
+                                    control={control}
+                                    render={({field}) => (
+                                        // <Input id='country' placeholder='Australia' invalid={errors.country && true} {...field} />
+                                        <Select
+                                            isClearable={false}
+                                            isMulti
+                                            onInputChange={(value) => searchUsers(value)}
+                                            classNamePrefix='select'
+                                            options={accountOptions}
+                                            theme={selectThemeColors}
+                                            className={classnames('react-select', {
+                                                'is-invalid': data !== null && data.value === null
+                                            })}
+                                            {...field}
+                                        />
+                                    )}
+                                />
+                            </div>
+                        </Col>
+
+                        <Col className='text-center mt-2' xs={12}>
+                            <Button type='submit' color='primary' className='me-1'>
+                                Submit
+                            </Button>
+                            <Button type='reset' outline onClick={onResetAddNewToRole}>
+                                Discard
+                            </Button>
+                        </Col>
+                    </Row>
+                </ModalBody>
+            </Modal>
+        )
+    }
+
+    const handleAddUserToRole = (role) => {
+        console.log('role:', role)
+        renderModalAssignUserToRole(role)
+        setShowAddUserToRole(true)
+    }
     return (
         <Fragment>
             <Row>
@@ -148,8 +242,8 @@ const RoleCards = () => {
                                             Xóa
                                         </Button>
                                         <Button type='submit' color='primary' outline
-                                                onClick={() => handleAddNew(item.uuid)}>
-                                            Thêm tài khoản
+                                                onClick={() => handleAddUserToRole(item)}>
+                                            Thêm tài khoản tới vài trò
                                         </Button>
                                     </div>
                                 </CardBody>
@@ -263,6 +357,7 @@ const RoleCards = () => {
                     </Row>
                 </ModalBody>
             </Modal>
+            {renderModalAssignUserToRole()}
         </Fragment>
     )
 }
