@@ -1,5 +1,5 @@
 // ** React Imports
-import React, {Fragment, useEffect, useState} from 'react'
+import React, {Fragment, useEffect, useRef, useState} from 'react'
 import {Link} from 'react-router-dom'
 
 // ** Reactstrap Imports
@@ -58,6 +58,7 @@ const RoleCards = () => {
 
     //modal add new user
     const [showAddUserToRole, setShowAddUserToRole] = useState(false)
+    const actions = useRef([])
 
     const storeRoles = useSelector(state => state.role)
     console.log('storeRoles:', storeRoles)
@@ -83,10 +84,13 @@ const RoleCards = () => {
             return storeRoles.data
         }
     const onSubmit = data => {
+        console.log('onsubmit:', data)
         if (data.roleName.length) {
             setShow(false)
+            const actionsTemp = JSON.stringify(actions)
             dispatch(createData({
-                name: data.roleName
+                name: data.roleName,
+                actions: actionsTemp
             })).then(() => {
                 setRefreshData(!refreshData)
             })
@@ -112,11 +116,36 @@ const RoleCards = () => {
     const handleModalClosed = () => {
         setModalType('Thêm mới')
         setValue('roleName')
+        console.log(' actions.current:', actions)
+        actions.current.splice(0, actions.current.length)
     }
 
     const handleAddUserToRole = (role) => {
         console.log('role:', role)
         setShowAddUserToRole(true)
+    }
+
+    const handleCheckboxChange = (role, checked) => {
+        console.log('handleCheckboxChange:', role, checked, actions)
+        if (checked) {
+            const idx = actions.current.findIndex((item) => {
+                console.log('item:', item)
+                return item === role
+            })
+            if (idx === -1) {
+                actions.current.push(role)
+            }
+
+        } else {
+            const idx = actions.current.findIndex((item) => {
+                console.log('item:', item)
+                return item === role
+            })
+            if (idx !== -1) {
+                actions.current.splice(idx, 1)
+            }
+        }
+        console.log('handleCheckboxChange:1', role, checked, actions)
     }
     return (
         <Fragment>
@@ -231,7 +260,8 @@ const RoleCards = () => {
                                     </td>
                                     <td>
                                         <div className='form-check'>
-                                            <Input type='checkbox' id='select-all'/>
+                                            <Input type='checkbox' id='select-all'
+                                                   onChange={(e) => handleCheckboxChange("QUAN_TRI_VIEN", e.target.checked)}/>
                                             <Label className='form-check-label' for='select-all'>
                                                 Tất cả
                                             </Label>
@@ -245,7 +275,9 @@ const RoleCards = () => {
                                             <td>
                                                 <div className='d-flex'>
                                                     <div className='form-check me-3 me-lg-5'>
-                                                        <Input type='checkbox' id={`read-${role}`}/>
+
+                                                        <Input type='checkbox' id={`read-${role}`}
+                                                               onChange={(e) => handleCheckboxChange(role, e.target.checked)}/>
                                                         <Label className='form-check-label' for={`read-${role}`}>
                                                             Cho phép
                                                         </Label>
@@ -269,7 +301,7 @@ const RoleCards = () => {
                     </Row>
                 </ModalBody>
             </Modal>
-            <AssignUserToRoleModal show={showAddUserToRole} />
+            <AssignUserToRoleModal show={showAddUserToRole}/>
         </Fragment>
     )
 }
