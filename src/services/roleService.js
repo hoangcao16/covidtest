@@ -37,5 +37,11 @@ export const roleService = {
             method: 'DELETE',
             url: `/api/v0/roles/${uuid}`
         })
+    },
+    assignedTo(roleUuid, userUuid) {
+        return apiClient.request({
+            method: 'POST',
+            url: `/api/v0/roles/${roleUuid}/users/${userUuid}`
+        })
     }
 }

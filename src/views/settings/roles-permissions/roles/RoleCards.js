@@ -32,6 +32,9 @@ import illustration from '@src/assets/images/illustration/faq-illustrations.svg'
 // import {roles} from './data'
 import {getListRoles, deleteData, createData} from "../../../../redux/role"
 import {useDispatch, useSelector} from "react-redux"
+import Select from "react-select"
+
+import AssignUserToRoleModal from './AssignUserToRoleModal'
 
 const rolesArr = [
     'QL_THONG_TIN_BN',
@@ -50,7 +53,12 @@ const RoleCards = () => {
     // ** States
     const [show, setShow] = useState(false)
     const [modalType, setModalType] = useState('Thêm mới')
+
     const [refreshData, setRefreshData] = useState(false)
+
+    //modal add new user
+    const [showAddUserToRole, setShowAddUserToRole] = useState(false)
+
     const storeRoles = useSelector(state => state.role)
     console.log('storeRoles:', storeRoles)
     useEffect(() => {
@@ -95,6 +103,7 @@ const RoleCards = () => {
         }))
 
     }
+
     const onReset = () => {
         setShow(false)
         reset({roleName: ''})
@@ -105,6 +114,10 @@ const RoleCards = () => {
         setValue('roleName')
     }
 
+    const handleAddUserToRole = (role) => {
+        console.log('role:', role)
+        setShowAddUserToRole(true)
+    }
     return (
         <Fragment>
             <Row>
@@ -139,6 +152,10 @@ const RoleCards = () => {
                                         <Button type='reset' color='secondary' outline
                                                 onClick={() => handleDelete(item.uuid)}>
                                             Xóa
+                                        </Button>
+                                        <Button type='submit' color='primary' outline
+                                                onClick={() => handleAddUserToRole(item)}>
+                                            Thêm tài khoản tới vài trò
                                         </Button>
                                     </div>
                                 </CardBody>
@@ -252,6 +269,7 @@ const RoleCards = () => {
                     </Row>
                 </ModalBody>
             </Modal>
+            <AssignUserToRoleModal show={showAddUserToRole} />
         </Fragment>
     )
 }

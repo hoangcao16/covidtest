@@ -40,6 +40,13 @@ export const updateData = createAsyncThunk('role/updateData', async uuid => {
     return {}
 })
 
+export const assignedTo = createAsyncThunk('role/assignedTo', async params => {
+    const {roleUuid, userUuid} = params
+    const response = await roleService.assignedTo(roleUuid, userUuid)
+    console.log('role:assignedTo:response:', response)
+    return {}
+})
+
 export const deleteData = createAsyncThunk('role/deleteData', async uuid => {
     const response = await roleService.delete(uuid)
     console.log('role:deleteData:response:', response)
