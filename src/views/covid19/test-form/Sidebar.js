@@ -1,3 +1,5 @@
+/* eslint-disable multiline-ternary */
+/* eslint-disable no-unneeded-ternary */
 /* eslint-disable semi */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable no-unused-vars */
@@ -27,10 +29,11 @@ import {
   Col,
   FormGroup,
 } from 'reactstrap'
+import { refetchList } from '../../../redux/analysisCertificate'
 import moment from 'moment'
 // ** Store & Actions
 // import { addUser } from '../store'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 //Service
 import { agencyService } from '../../../services/agencyService'
 import { sampleTypeService } from '../../../services/sampleTypeService'
@@ -40,6 +43,7 @@ import { labResultTypesService } from '../../../services/labResultTypesService'
 import { patientService } from '../../../services/patientService'
 import { staffService } from '../../../services/staffService'
 import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
+const hourNow = moment().hour()
 const defaultValues = {
   agencyUuid1: '',
   agencyUuid2: '',
@@ -51,9 +55,20 @@ const defaultValues = {
   patient: [],
   payFor: '',
   payerUuid: '',
-  performTime: moment(),
-  receiveSampleTime: moment(),
-  returnTime: moment(),
+  performTime: moment().format('YYYY-DD-MMTHH:mm'),
+  receiveSampleTime: moment().format('YYYY-DD-MMTHH:mm'),
+  returnTime:
+    hourNow >= 0 && hourNow <= 7
+      ? moment().set('hours', 15).set('minute', 0).format('YYYY-DD-MMTHH:mm')
+      : hourNow > 7 && hourNow <= 15
+      ? moment().set('hours', 21).set('minute', 0).format('YYYY-DD-MMTHH:mm')
+      : hourNow > 15 && hourNow <= 24
+      ? moment()
+          .add(1, 'd')
+          .set('hours', 7)
+          .set('minute', 0)
+          .format('YYYY-DD-MMTHH:mm')
+      : '',
   sampleNumber: 1,
   sampleState: true,
   sampletype: [],
@@ -62,23 +77,23 @@ const defaultValues = {
   staffUuid3: '',
   staffUuid4: '',
   state: 'NOT_PAID',
-  takeSampleTime: moment(),
+  takeSampleTime: moment().format('YYYY-DD-MMTHH:mm'),
   technicaltype: {},
   testNumber: 1,
   testtype: {},
-  shift: 'Ca 1',
+  shift:
+    hourNow >= 0 && hourNow <= 7
+      ? 'Ca 1'
+      : hourNow > 7 && hourNow <= 15
+      ? 'Ca 2'
+      : hourNow > 15 && hourNow <= 24
+      ? 'Ca 3'
+      : '',
   note: '',
 }
 
 const SidebarNewTestForm = ({ open, toggleSidebar }) => {
   // ** States
-  const [data, setData] = useState(null)
-  const [plan, setPlan] = useState('basic')
-  const [role, setRole] = useState('subscriber')
-  const [performTime, setPerformTime] = useState(moment())
-  const [receiveSampleTime, setReceiveSampleTime] = useState(moment())
-  const [returnTime, setReturnTime] = useState(moment())
-  const [takeSampleTime, setTakeSampleTime] = useState(moment())
   const [agencyOptions, setAgencyOptions] = useState([])
   const [sampleTypeOptions, setSampleTypeOptions] = useState([])
   const [testTypeOptions, setTestTypeOptions] = useState([])
@@ -86,6 +101,9 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
   const [labResultTypeOptions, setLabResultTypeOptions] = useState([])
   const [patientsOptions, setPatientsOptions] = useState([])
   const [staffOptions, setStaffOptions] = useState([])
+  const analysisCertificateState = useSelector(
+    (state) => state.analysisCertificate
+  )
   // ** Store Vars
   const dispatch = useDispatch()
   // ** Vars
@@ -96,7 +114,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
     handleSubmit,
     register,
     formState: { errors },
-  } = useForm()
+  } = useForm({ defaultValues })
   useEffect(() => {
     agencyService.list({ page: 1, perPage: 40, q: '' }).then((res) => {
       if (res.data.payload !== null) {
@@ -164,47 +182,190 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
     )
     return otherKey
   }
+  const handleSidebarClosed = () => {
+    for (const key in defaultValues) {
+      setValue(key, defaultValues[key])
+    }
+  }
+  useEffect(() => {
+    if (analysisCertificateState.isEdit === true) {
+      analysisCertificateService
+        .get(analysisCertificateState.selectedUuid)
+        .then((res) => {
+          if (res.data.code === 600) {
+            const payload = res?.data?.payload
+            const dataForm = {
+              ...payload,
+              agencyUuid1: {
+                ...payload?.agency1,
+                value: payload?.agency1?.uuid,
+                label: payload?.agency1?.name,
+              },
+              agencyUuid2: '',
+              amount: payload?.amount,
+              diagnosis: payload?.diagnosis,
+              diagnosisEng: payload?.diagnosisEng,
+              labResultUuid: {
+                ...payload?.labResultType,
+                value: payload?.labResultType?.uuid,
+                label: payload?.labResultType?.name,
+              },
+              patient: payload?.patients?.map((i) => ({
+                ...i,
+                label: i?.name,
+                value: i?.uuid,
+              })),
+              payFor: payload?.payFor,
+              payerUuid: {
+                ...payload?.payer,
+                label: payload?.payer?.name,
+                value: payload?.payer?.uuid,
+              },
+              performTime: moment(payload?.performTime).format(
+                'YYYY-DD-MMTHH:mm'
+              ),
+              receiveSampleTime: moment(payload?.receiveSampleTime).format(
+                'YYYY-DD-MMTHH:mm'
+              ),
+              returnTime: moment(payload?.returnTime).format(
+                'YYYY-DD-MMTHH:mm'
+              ),
+              sampleNumber: payload?.sampleNumber,
+              sampleState: {
+                label:
+                  payload?.sampleState === true ? 'Đủ mẫu' : 'Không đủ mẫu',
+                value: payload?.sampleState,
+              },
+              sampletype: {
+                ...payload?.sampleType,
+                label: payload?.sampleType?.name,
+                value: payload?.sampleType?.uuid,
+              },
+              staffUuid1: {
+                ...payload?.staff1,
+                label: payload?.staff1?.name,
+                value: payload?.staff1?.uuid,
+              },
+              staffUuid2: {
+                ...payload?.staff2,
+                label: payload?.staff2?.name,
+                value: payload?.staff2?.uuid,
+              },
+              staffUuid3: {
+                ...payload?.staff3,
+                label: payload?.staff3?.name,
+                value: payload?.staff3?.uuid,
+              },
+              staffUuid4: {
+                ...payload?.staff4,
+                label: payload?.staff4?.name,
+                value: payload?.staff4?.uuid,
+              },
+              state: statusOptions.find((i) => i.value === payload?.state),
+              takeSampleTime: moment(payload?.takeSampleTime).format(
+                'YYYY-DD-MMTHH:mm'
+              ),
+              technicaltype: {
+                ...payload?.technicalType,
+                value: payload?.technicalType?.uuid,
+                label: payload?.technicalType?.name,
+              },
+              testNumber: payload?.testNumber,
+              testtype: {
+                ...payload?.testType,
+                label: payload?.testType?.name,
+                value: payload?.testType?.uuid,
+              },
+              shift: payload?.shift,
+              note: payload?.note,
+            }
+            for (const key in dataForm) {
+              setValue(key, dataForm[key])
+            }
+          }
+        })
+    }
+  }, [analysisCertificateState.isEdit])
   // ** Function to handle form submit
   const onSubmit = (data) => {
     console.log(data)
-    const newData = {
-      agencyUuid1: data.agencyUuid1.value,
-      agencyUuid2: data.agencyUuid1.value,
-      amount: Number(data.amount),
-      diagnosis: data.diagnosis,
-      diagnosisEng: data.diagnosisEng,
-      inWords: to_vietnamese(data.amount),
-      labResultUuid: data.labResultUuid.value,
+    const newDataEdit = {
+      agencyUuid1: data?.agencyUuid1?.value,
+      agencyUuid2: data?.agencyUuid1?.value,
+      amount: Number(data?.amount),
+      diagnosis: data?.diagnosis,
+      diagnosisEng: data?.diagnosisEng,
+      inWords: to_vietnamese(data?.amount),
+      labResultUuid: data?.labResultUuid?.value,
       patientUuids: data?.patient?.map((p) => p.value),
-      payFor: data.testtype.label,
-      payerUuid: data.payerUuid.value,
-      performTime: moment(data.performTime).valueOf(),
-      receiveSampleTime: moment(data.receiveSampleTime).valueOf(),
-      returnTime: moment(data.returnTime).valueOf(),
-      sampleNumber: Number(data.sampleNumber),
-      sampleState: data.sampleState.value,
-      sampleTypeUuid: data.sampletype[0].value,
+      payFor: data?.testtype?.label,
+      payerUuid: data?.payerUuid?.value,
+      performTime: moment(data?.performTime).valueOf(),
+      receiveSampleTime: moment(data?.receiveSampleTime).valueOf(),
+      returnTime: moment(data?.returnTime).valueOf(),
+      sampleNumber: Number(data?.sampleNumber),
+      sampleState: data?.sampleState?.value,
+      sampleTypeUuid: data?.sampletype[0]?.value,
       staffUuid1: data?.staffUuid1?.value,
       staffUuid2: data?.staffUuid2?.value,
       staffUuid3: data?.staffUuid3?.value,
       staffUuid4: data?.staffUuid4?.value,
-      state: data.state.value,
-      takeSampleTime: moment(data.takeSampleTime).valueOf(),
-      technicalUuid: data.technicaltype.value,
+      state: data?.state?.value,
+      takeSampleTime: moment(data?.takeSampleTime).valueOf(),
+      technicalUuid: data?.technicaltype?.value,
       testNumber: 1,
-      testTypeUuid: data.testtype.value,
-      shift: data.shift,
-      note: data.note,
+      testTypeUuid: data?.testtype?.value,
+      shift: data?.shift,
+      note: data?.note,
     }
-    console.log(newData)
-    analysisCertificateService.add(newData).then((res) => {
-      if (res.data.code === 600) {
-        alert('Thêm mới thành công')
+    console.log(newDataEdit)
+    if (analysisCertificateState.isEdit === true) {
+      analysisCertificateService.update(data?.uuid, newDataEdit).then((res) => {
+        if (res.data.code === 600) {
+          alert('Thêm mới thành công')
+        }
+      })
+    } else if (analysisCertificateState.isAddNew === true) {
+      const newData = {
+        agencyUuid1: data?.agencyUuid1?.value,
+        agencyUuid2: data?.agencyUuid1?.value,
+        amount: Number(data?.amount),
+        diagnosis: data?.diagnosis,
+        diagnosisEng: data?.diagnosisEng,
+        inWords: to_vietnamese(data?.amount),
+        labResultUuid: data?.labResultUuid?.value,
+        patientUuids: data?.patient?.map((p) => p.value),
+        payFor: data?.testtype?.label,
+        payerUuid: data?.payerUuid?.value,
+        performTime: moment(data?.performTime).valueOf(),
+        receiveSampleTime: moment(data?.receiveSampleTime).valueOf(),
+        returnTime: moment(data?.returnTime).valueOf(),
+        sampleNumber: Number(data?.sampleNumber),
+        sampleState: data?.sampleState?.value,
+        sampleTypeUuid: data?.sampletype[0]?.value,
+        staffUuid1: data?.staffUuid1?.value,
+        staffUuid2: data?.staffUuid2?.value,
+        staffUuid3: data?.staffUuid3?.value,
+        staffUuid4: data?.staffUuid4?.value,
+        state: data?.state?.value,
+        takeSampleTime: moment(data?.takeSampleTime).valueOf(),
+        technicalUuid: data?.technicaltype?.value,
+        testNumber: 1,
+        testTypeUuid: data?.testtype?.value,
+        shift: data?.shift,
+        note: data?.note,
       }
-    })
+      analysisCertificateService.add(newData).then((res) => {
+        if (res.data.code === 600) {
+          alert('Thêm mới thành công')
+        }
+      })
+    }
     for (const key in defaultValues) {
       setValue(key, defaultValues[key])
     }
+    toggleSidebar()
+    dispatch(refetchList())
   }
   const fetchPatientsDropdown = (query) => {
     patientService.list({ page: 1, perPage: 40, q: query }).then((res) => {
@@ -226,13 +387,6 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
   const searchPatients = (query) => {
     debounceDropDown(query)
   }
-  const handleSidebarClosed = () => {
-    for (const key in defaultValues) {
-      setValue(key, defaultValues[key])
-    }
-    setRole('subscriber')
-    setPlan('basic')
-  }
   return (
     <StyledSidebar
       size='lg'
@@ -244,32 +398,6 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
       onClosed={handleSidebarClosed}
     >
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <div className='mb-1'>
-          <Label className='form-label' for='testtype'>
-            Yêu cầu xét nghiệm <span className='text-danger'>*</span>
-          </Label>
-          <Controller
-            rules={
-              {
-                // required: true,
-              }
-            }
-            name='testtype'
-            control={control}
-            render={({ field }) => (
-              <Select
-                isClearable={false}
-                classNamePrefix='select'
-                options={testTypeOptions}
-                theme={selectThemeColors}
-                className={classnames('react-select', {
-                  'is-invalid': data !== null && data.value === null,
-                })}
-                {...field}
-              />
-            )}
-          />
-        </div>
         <div className='mb-1'>
           <Label className='form-label' for='patient'>
             Chọn khách hàng <span className='text-danger'>*</span>
@@ -293,7 +421,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                 theme={selectThemeColors}
                 filterOption={filterOption}
                 className={classnames('react-select', {
-                  'is-invalid': data !== null && data.value === null,
+                  'is-invalid': errors.patient,
                 })}
                 {...field}
               />
@@ -301,7 +429,66 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
           />
         </div>
         <Row>
-          <Col md='6'>
+          <Col md='4'>
+            <div className='mb-1'>
+              <Label className='form-label' for='testtype'>
+                Yêu cầu xét nghiệm <span className='text-danger'>*</span>
+              </Label>
+              <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
+                name='testtype'
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    isClearable={false}
+                    classNamePrefix='select'
+                    options={testTypeOptions}
+                    theme={selectThemeColors}
+                    className={
+                      ('react-select',
+                      {
+                        'is-invalid': errors.testtype,
+                      })
+                    }
+                    {...field}
+                  />
+                )}
+              />
+            </div>
+          </Col>
+          <Col md='4'>
+            <div className='mb-1'>
+              <Label className='form-label' for='technicaltype'>
+                Kỹ thuật xét nghiệm <span className='text-danger'>*</span>
+              </Label>
+              <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
+                name='technicaltype'
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    isClearable={false}
+                    classNamePrefix='select'
+                    options={technicalTypeOptions}
+                    theme={selectThemeColors}
+                    className={classnames('react-select', {
+                      'is-invalid': errors.technicaltype,
+                    })}
+                    {...field}
+                  />
+                )}
+              />
+            </div>
+          </Col>
+          <Col md='4'>
             <div className='mb-1'>
               <Label className='form-label' for='amount'>
                 Giá tiền <span className='text-danger'>*</span>
@@ -325,37 +512,9 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
               />
             </div>
           </Col>
-          <Col md='6'>
-            <div className='mb-1'>
-              <Label className='form-label' for='technicaltype'>
-                Kỹ thuật xét nghiệm <span className='text-danger'>*</span>
-              </Label>
-              <Controller
-                rules={
-                  {
-                    // required: true,
-                  }
-                }
-                name='technicaltype'
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    isClearable={false}
-                    classNamePrefix='select'
-                    options={technicalTypeOptions}
-                    theme={selectThemeColors}
-                    className={classnames('react-select', {
-                      'is-invalid': data !== null && data.value === null,
-                    })}
-                    {...field}
-                  />
-                )}
-              />
-            </div>
-          </Col>
         </Row>
         <Row>
-          <Col md='6'>
+          <Col md='4'>
             <div className='mb-1'>
               <Label className='form-label' for='agencyUuid1'>
                 Đơn vị gửi mẫu <span className='text-danger'>*</span>
@@ -375,7 +534,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                     options={agencyOptions}
                     theme={selectThemeColors}
                     className={classnames('react-select', {
-                      'is-invalid': data !== null && data.value === null,
+                      'is-invalid': errors.agencyUuid1,
                     })}
                     {...field}
                   />
@@ -383,35 +542,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
               />
             </div>
           </Col>
-          <Col md='6'>
-            <div className='mb-1'>
-              <Label className='form-label' for='shift'>
-                Ca <span className='text-danger'>*</span>
-              </Label>
-              <Controller
-                rules={
-                  {
-                    // required: true,
-                  }
-                }
-                name='shift'
-                control={control}
-                render={({ field }) => (
-                  <fieldset {...field}>
-                    <Input type='radio' name='chooseshift' value='Ca 1' />
-                    <Label className='shiftRadio'>Ca 1</Label>
-                    <Input type='radio' name='chooseshift' value='Ca 2' />
-                    <Label className='shiftRadio'>Ca 2 </Label>
-                    <Input type='radio' name='chooseshift' value='Ca 3' />
-                    <Label className='shiftRadio'>Ca 3 </Label>
-                  </fieldset>
-                )}
-              />
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col md='6'>
+          <Col md='4'>
             <div className='mb-1 sampletype'>
               <Label className='form-label ' for='sampletype'>
                 Mẫu bệnh phẩm <span className='text-danger'>*</span>
@@ -433,7 +564,58 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
               />
             </div>
           </Col>
-          <Col md='6'>
+          <Col md='4'>
+            <div className='mb-1'>
+              <Label className='form-label' for='shift'>
+                Ca <span className='text-danger'>*</span>
+              </Label>
+              <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
+                name='shift'
+                control={control}
+                render={({ field }) => {
+                  console.log(field)
+                  return (
+                    <fieldset
+                      {...field}
+                      className={classnames('react-select', {
+                        'is-invalid': errors.shift,
+                      })}
+                    >
+                      <Input
+                        type='radio'
+                        name='shift'
+                        value='Ca 1'
+                        defaultChecked={field.value === 'Ca 1' ? true : false}
+                      />
+                      <Label className='shiftRadio'>Ca 1</Label>
+                      <Input
+                        type='radio'
+                        name='shift'
+                        value='Ca 2'
+                        defaultChecked={field.value === 'Ca 2' ? true : false}
+                      />
+                      <Label className='shiftRadio'>Ca 2 </Label>
+                      <Input
+                        type='radio'
+                        name='shift'
+                        value='Ca 3'
+                        defaultChecked={field.value === 'Ca 3' ? true : false}
+                      />
+                      <Label className='shiftRadio'>Ca 3 </Label>
+                    </fieldset>
+                  )
+                }}
+              />
+            </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col md='4'>
             <div className='mb-1'>
               <Label className='form-label' for='labResultUuid'>
                 Kết quả <span className='text-danger'>*</span>
@@ -453,7 +635,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                     options={labResultTypeOptions}
                     theme={selectThemeColors}
                     className={classnames('react-select', {
-                      'is-invalid': data !== null && data.value === null,
+                      'is-invalid': errors.labResultUuid,
                     })}
                     {...field}
                   />
@@ -461,9 +643,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
               />
             </div>
           </Col>
-        </Row>
-        <Row>
-          <Col md='6'>
+          <Col md='4'>
             <div className='mb-1'>
               <Label className='form-label' for='sampleNumber'>
                 Số lần lấy mẫu <span className='text-danger'>*</span>
@@ -487,7 +667,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
               />
             </div>
           </Col>
-          <Col md='6'>
+          <Col md='4'>
             <div className='mb-1'>
               <Label className='form-label' for='diagnosis'>
                 Kết luận <span className='text-danger'>*</span>
@@ -513,7 +693,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
           </Col>
         </Row>
         <Row>
-          <Col md='6'>
+          <Col md='4'>
             <div className='mb-1'>
               <Label className='form-label' for='takeSampleTime'>
                 Thời gian lấy mẫu <span className='text-danger'>*</span>
@@ -539,59 +719,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
               />
             </div>
           </Col>
-          <Col md='6'>
-            <div className='mb-1'>
-              <Label className='form-label' for='diagnosisEng'>
-                Kết luận tiếng anh <span className='text-danger'>*</span>
-              </Label>
-              <Controller
-                rules={
-                  {
-                    // required: true,
-                  }
-                }
-                name='diagnosisEng'
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    id='diagnosisEng'
-                    placeholder='Negative'
-                    invalid={errors.diagnosisEng && true}
-                    {...field}
-                  />
-                )}
-              />
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col md='6'>
-            <div className='mb-1'>
-              <Label className='form-label' for='receiveSampleTime'>
-                Thời gian nhận mẫu <span className='text-danger'>*</span>
-              </Label>
-              <Controller
-                rules={
-                  {
-                    // required: true,
-                  }
-                }
-                name='receiveSampleTime'
-                control={control}
-                render={({ field }) => (
-                  <input
-                    type='datetime-local'
-                    className='date-picker'
-                    id='receiveSampleTime'
-                    name='receiveSampleTime'
-                    placeholder='Chọn thời gian'
-                    {...field}
-                  />
-                )}
-              />
-            </div>
-          </Col>
-          <Col md='6'>
+          <Col md='4'>
             <div className='mb-1'>
               <Label className='form-label' for='performTime'>
                 Thời gian thực hiện <span className='text-danger'>*</span>
@@ -617,9 +745,59 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
               />
             </div>
           </Col>
+          <Col md='4'>
+            <div className='mb-1'>
+              <Label className='form-label' for='diagnosisEng'>
+                Kết luận tiếng anh <span className='text-danger'>*</span>
+              </Label>
+              <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
+                name='diagnosisEng'
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    id='diagnosisEng'
+                    placeholder='Negative'
+                    invalid={errors.diagnosisEng && true}
+                    {...field}
+                  />
+                )}
+              />
+            </div>
+          </Col>
         </Row>
         <Row>
-          <Col md='6'>
+          <Col md='4'>
+            <div className='mb-1'>
+              <Label className='form-label' for='receiveSampleTime'>
+                Thời gian nhận mẫu <span className='text-danger'>*</span>
+              </Label>
+              <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
+                name='receiveSampleTime'
+                control={control}
+                render={({ field }) => (
+                  <input
+                    type='datetime-local'
+                    className='date-picker'
+                    id='receiveSampleTime'
+                    name='receiveSampleTime'
+                    placeholder='Chọn thời gian'
+                    {...field}
+                  />
+                )}
+              />
+            </div>
+          </Col>
+          <Col md='4'>
             <div className='mb-1'>
               <Label className='form-label' for='sampleState'>
                 Tình trạng mẫu<span className='text-danger'>*</span>
@@ -640,7 +818,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                     options={samplestateOptions}
                     theme={selectThemeColors}
                     className={classnames('react-select', {
-                      'is-invalid': data !== null && data.value === null,
+                      'is-invalid': errors.sampleState,
                     })}
                     {...field}
                   />
@@ -648,7 +826,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
               />
             </div>
           </Col>
-          <Col md='6'>
+          <Col md='4'>
             <div className='mb-1'>
               <Label className='form-label' for='state'>
                 Trạng thái <span className='text-danger'>*</span>
@@ -669,7 +847,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                     options={statusOptions}
                     theme={selectThemeColors}
                     className={classnames('react-select', {
-                      'is-invalid': data !== null,
+                      'is-invalid': errors.state,
                     })}
                     {...field}
                   />
@@ -679,7 +857,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
           </Col>
         </Row>
         <Row>
-          <Col md='6'>
+          <Col md='4'>
             <div className='mb-1'>
               <Label className='form-label' for='staffUuid1'>
                 Người lấy mẫu<span className='text-danger'>*</span>
@@ -700,7 +878,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                     options={staffOptions}
                     theme={selectThemeColors}
                     className={classnames('react-select', {
-                      'is-invalid': data !== null && data.value === null,
+                      'is-invalid': errors.staffUuid1,
                     })}
                     {...field}
                   />
@@ -708,7 +886,35 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
               />
             </div>
           </Col>
-          <Col md='6'>
+          <Col md='4'>
+            <div className='mb-1'>
+              <Label className='form-label' for='staffUuid3'>
+                Người ký phiếu<span className='text-danger'>*</span>
+              </Label>
+              <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
+                name='staffUuid3'
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    isClearable={false}
+                    classNamePrefix='select'
+                    options={staffOptions}
+                    theme={selectThemeColors}
+                    className={classnames('react-select', {
+                      'is-invalid': errors.staffUuid3,
+                    })}
+                    {...field}
+                  />
+                )}
+              />
+            </div>
+          </Col>
+          <Col md='4'>
             <div className='mb-1'>
               <Label className='form-label' for='returnTime'>
                 Ngày trả kết quả <span className='text-danger'>*</span>
@@ -736,35 +942,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
           </Col>
         </Row>
         <Row>
-          <Col md='6'>
-            <div className='mb-1'>
-              <Label className='form-label' for='staffUuid3'>
-                Người ký phiếu<span className='text-danger'>*</span>
-              </Label>
-              <Controller
-                rules={
-                  {
-                    // required: true,
-                  }
-                }
-                name='staffUuid3'
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    isClearable={false}
-                    classNamePrefix='select'
-                    options={staffOptions}
-                    theme={selectThemeColors}
-                    className={classnames('react-select', {
-                      'is-invalid': data !== null && data.value === null,
-                    })}
-                    {...field}
-                  />
-                )}
-              />
-            </div>
-          </Col>
-          <Col md='6'>
+          <Col md='4'>
             <div className='mb-1'>
               <Label className='form-label' for='staffUuid2'>
                 Người thực hiện <span className='text-danger'>*</span>
@@ -785,7 +963,36 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                     options={staffOptions}
                     theme={selectThemeColors}
                     className={classnames('react-select', {
-                      'is-invalid': data !== null && data.value === null,
+                      'is-invalid': errors.staffUuid2,
+                    })}
+                    {...field}
+                  />
+                )}
+              />
+            </div>
+          </Col>
+          <Col md='4'>
+            <div className='mb-1'>
+              <Label className='form-label' for='staffUuid4'>
+                Người lập phiếu <span className='text-danger'>*</span>
+              </Label>
+              <Controller
+                rules={
+                  {
+                    // required: true,
+                  }
+                }
+                name='staffUuid4'
+                control={control}
+                render={({ field }) => (
+                  // <Input id='country' placeholder='Australia' invalid={errors.country && true} {...field} />
+                  <Select
+                    isClearable={false}
+                    classNamePrefix='select'
+                    options={staffOptions}
+                    theme={selectThemeColors}
+                    className={classnames('react-select', {
+                      'is-invalid': errors.staffUuid4,
                     })}
                     {...field}
                   />
@@ -795,7 +1002,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
           </Col>
         </Row>
         <Row>
-          <Col md='6'>
+          <Col md='4'>
             <div className='mb-1'>
               <Label className='form-label' for='payerUuid'>
                 Người nộp tiền<span className='text-danger'>*</span>
@@ -817,7 +1024,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                     theme={selectThemeColors}
                     filterOption={filterOption}
                     className={classnames('react-select', {
-                      'is-invalid': data !== null && data.value === null,
+                      'is-invalid': errors.payerUuid,
                     })}
                     {...field}
                   />
@@ -825,38 +1032,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
               />
             </div>
           </Col>
-          <Col md='6'>
-            <div className='mb-1'>
-              <Label className='form-label' for='staffUuid4'>
-                Người lập phiếu <span className='text-danger'>*</span>
-              </Label>
-              <Controller
-                rules={
-                  {
-                    // required: true,
-                  }
-                }
-                name='staffUuid4'
-                control={control}
-                render={({ field }) => (
-                  // <Input id='country' placeholder='Australia' invalid={errors.country && true} {...field} />
-                  <Select
-                    isClearable={false}
-                    classNamePrefix='select'
-                    options={staffOptions}
-                    theme={selectThemeColors}
-                    className={classnames('react-select', {
-                      'is-invalid': data !== null && data.value === null,
-                    })}
-                    {...field}
-                  />
-                )}
-              />
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col md='6'>
+          <Col md='4'>
             <div className='mb-1'>
               <Label className='form-label' for='note'>
                 Ghi chú <span className='text-danger'>*</span>
@@ -876,12 +1052,19 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
             </div>
           </Col>
         </Row>
-        <Button type='submit' className='me-1' color='primary'>
-          Submit
-        </Button>
-        <Button type='reset' color='secondary' outline onClick={toggleSidebar}>
-          Cancel
-        </Button>
+        <div className='group-button'>
+          <Button type='submit' className='me-1' color='primary'>
+            Submit
+          </Button>
+          <Button
+            type='reset'
+            color='secondary'
+            outline
+            onClick={toggleSidebar}
+          >
+            Cancel
+          </Button>
+        </div>
       </Form>
     </StyledSidebar>
   )

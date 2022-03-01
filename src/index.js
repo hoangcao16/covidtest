@@ -31,6 +31,7 @@ import '@styles/react/libs/toastify/toastify.scss'
 import './@core/assets/fonts/feather/iconfont.css'
 import './@core/scss/core.scss'
 import './assets/scss/style.scss'
+import 'antd/dist/antd.css'
 
 // ** Service Worker
 import * as serviceWorker from './serviceWorker'

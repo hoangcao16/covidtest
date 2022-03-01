@@ -30,7 +30,7 @@ export const analysisCertificateService = {
     return apiClient.request({
       method: 'PUT',
       url: `/api/v0/analysis_certificate/${uuid}`,
-      data: { data },
+      data,
     })
   },
   delete(uuid) {
