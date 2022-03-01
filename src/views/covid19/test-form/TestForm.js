@@ -1,25 +1,28 @@
+/* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable no-unused-vars */
 /* eslint-disable comma-dangle */
 // ** React Imports
 import { Fragment, useState, useEffect, memo } from 'react'
-
 // ** Table Columns
-import { serverSideColumns } from './data'
+import { statusOptions, disableOptions } from './data'
 // ** Invoice List Sidebar
 import Sidebar from './Sidebar'
 // ** Store & Actions
-import { getData } from '../../../redux/testForm'
 import { useSelector, useDispatch } from 'react-redux'
-
+import { StyledCard } from './style'
+import {
+  refetchList,
+  selectUuid,
+  editCertificate,
+} from '../../../redux/analysisCertificate'
 // ** Third Party Components
-import ReactPaginate from 'react-paginate'
-import { ChevronDown } from 'react-feather'
-import DataTable from 'react-data-table-component'
+import { MoreVertical, Edit, FileText, Trash } from 'react-feather'
+import { Table, Menu, Dropdown } from 'antd'
 import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
-
+import moment from 'moment'
+import Select from 'react-select'
 // ** Reactstrap Imports
 import {
-  Card,
   CardHeader,
   CardTitle,
   Input,
@@ -33,8 +36,9 @@ const TestForm = () => {
   // ** Store Vars
   const dispatch = useDispatch()
   const [dataTable, setDataTable] = useState([])
-  const store = useSelector((state) => state.testForm)
-  console.log('TestForm:', store)
+  const analysisCertificateState = useSelector(
+    (state) => state.analysisCertificate
+  )
   // ** States
   const [currentPage, setCurrentPage] = useState(1)
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -43,115 +47,161 @@ const TestForm = () => {
 
   // ** Function to toggle sidebar
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
-  // ** Get data on mount
-  useEffect(() => {
-    dispatch(
-      getData({
-        page: currentPage,
-        perPage: rowsPerPage,
-        q: searchValue,
-      })
+  const handleUpdateState = (value, record) => {
+    const dataUpdate = {
+      patientUuids: record.patientUuids,
+      agencyUuid1: record.agencyUuid1,
+      testTypeUuid: record.testTypeUuid,
+      state: value.value,
+    }
+    analysisCertificateService.update(record.uuid, dataUpdate).then((res) => {
+      if (res.data.code === 600) {
+        dispatch(refetchList())
+      }
+    })
+  }
+  const handleEdit = (uuid) => {
+    toggleSidebar()
+    dispatch(editCertificate(true))
+    dispatch(selectUuid(uuid))
+  }
+  const ActionsMenu = (props) => {
+    return (
+      <Menu>
+        <Menu.Item key='1'>
+          <FileText size={15} />
+          <span className='align-middle ms-50'>In phiếu xét nghiệm</span>
+        </Menu.Item>
+        <Menu.Item key='2'>
+          <FileText size={15} />
+          <span className='align-middle ms-50'>In phiếu thu</span>
+        </Menu.Item>
+        <Menu.Item key='3' onClick={() => handleEdit(props.text.uuid)}>
+          <Edit size={15} />
+          <span className='align-middle ms-50'>Edit</span>
+        </Menu.Item>
+        <Menu.Item key='4'>
+          <Trash size={15} />
+          <span className='align-middle ms-50'>Delete</span>
+        </Menu.Item>
+      </Menu>
     )
-  }, [dispatch])
-
+  }
+  // ** Table Server Side Column
+  const TestFormColumns = [
+    {
+      title: 'Mã',
+      align: 'center',
+      sorter: (a, b) => a.code.localeCompare(b.code),
+      dataIndex: 'code',
+    },
+    {
+      title: 'Ngày tạo',
+      align: 'center',
+      sorter: (a, b) =>
+        moment(a.createdTime).unix() - moment(b.createdTime).unix(),
+      dataIndex: 'createdTime',
+      render: (text) => moment(text).format('DD/MM/YYYY'),
+    },
+    {
+      title: 'Loại xét nghiệm',
+      align: 'center',
+      sorter: (a, b) => a.testTypeName.localeCompare(b.testTypeName),
+      dataIndex: 'testTypeName',
+    },
+    {
+      title: 'Người thực hiện',
+      align: 'center',
+      sorter: (a, b) => a.staffName2.localeCompare(b.staffName2),
+      dataIndex: 'staffName2',
+    },
+    {
+      title: 'Ca',
+      align: 'center',
+      sorter: (a, b) => a.shift.localeCompare(b.shift),
+      dataIndex: 'shift',
+    },
+    {
+      title: 'Kết quả',
+      align: 'center',
+      sorter: (a, b) => a.labResultName.localeCompare(b.labResultName),
+      dataIndex: 'labResultName',
+    },
+    {
+      title: 'Đơn vị',
+      align: 'center',
+      sorter: (a, b) => a.agencyName1.localeCompare(b.agencyName1),
+      dataIndex: 'agencyName1',
+    },
+    {
+      title: 'Trạng thái',
+      align: 'center',
+      sorter: (a, b) => a.state.localeCompare(b.state),
+      dataIndex: 'state',
+      render: (text, record) => {
+        return (
+          <Select
+            isClearable={false}
+            classNamePrefix='select'
+            className='react-select'
+            options={statusOptions}
+            isOptionDisabled={(option, selectValue) =>
+              disableOptions(option, selectValue)
+            }
+            onChange={(value) => handleUpdateState(value, record)}
+            value={statusOptions.find((c) => c.value === text)}
+          ></Select>
+        )
+      },
+    },
+    {
+      title: 'Actions',
+      align: 'center',
+      fixed: 'right',
+      render: (text, record) => {
+        return (
+          <div className='d-flex justify-content-center'>
+            <Dropdown overlay={<ActionsMenu text={text} />} trigger={['click']}>
+              <MoreVertical size={15} />
+            </Dropdown>
+          </div>
+        )
+      },
+    },
+  ]
   // ** Function to handle filter
   const handleFilter = (e) => {
     setSearchValue(e.target.value)
-
-    dispatch(
-      getData({
-        page: currentPage,
-        perPage: rowsPerPage,
-        q: e.target.value,
-      })
-    )
   }
-
-  // ** Function to handle Pagination and get data
-  const handlePagination = (page) => {
-    dispatch(
-      getData({
-        page: page.selected + 1,
-        perPage: rowsPerPage,
-        q: searchValue,
-      })
-    )
-    setCurrentPage(page.selected + 1)
-  }
-
   // ** Function to handle per page
   const handlePerPage = (e) => {
-    dispatch(
-      getData({
-        page: currentPage,
-        perPage: parseInt(e.target.value),
-        q: searchValue,
-      })
-    )
     setRowsPerPage(parseInt(e.target.value))
-  }
-
-  // ** Custom Pagination
-  const CustomPagination = () => {
-    const count = Math.ceil(store.total / rowsPerPage)
-
-    return (
-      <ReactPaginate
-        previousLabel={''}
-        nextLabel={''}
-        breakLabel='...'
-        pageCount={Math.ceil(count) || 1}
-        marginPagesDisplayed={2}
-        pageRangeDisplayed={2}
-        activeClassName='active'
-        forcePage={currentPage !== 0 ? currentPage - 1 : 0}
-        onPageChange={(page) => handlePagination(page)}
-        activeClassName='active'
-        pageClassName='page-item'
-        breakClassName='page-item'
-        nextLinkClassName='page-link'
-        pageLinkClassName='page-link'
-        breakLinkClassName='page-link'
-        previousLinkClassName='page-link'
-        nextClassName='page-item next-item'
-        previousClassName='page-item prev-item'
-        containerClassName={
-          'pagination react-paginate separated-pagination pagination-sm justify-content-end pe-1 mt-1'
-        }
-      />
-    )
   }
   useEffect(() => {
     analysisCertificateService.list(currentPage, rowsPerPage).then((res) => {
-      console.log('res:', res)
       // setDataTable(res.data.payload)
       if (res.data.payload !== null) {
         setDataTable(res.data.payload)
       }
     })
-  }, [])
-  // ** Table data to render
-  const dataToRender = () => {
-    const filters = {
-      q: searchValue,
-    }
-
-    const isFiltered = Object.keys(filters).some(function (k) {
-      return filters[k].length > 0
-    })
-
-    if (store.data.length > 0) {
-      return store.data
-    } else if (store.data.length === 0 && isFiltered) {
-      return []
-    } else {
-      return store.allData.slice(0, rowsPerPage)
-    }
+  }, [analysisCertificateState.refetch])
+  const rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      console.log(
+        `selectedRowKeys: ${selectedRowKeys}`,
+        'selectedRows: ',
+        selectedRows
+      )
+    },
+    getCheckboxProps: (record) => ({
+      disabled: record.name === 'Disabled User', // Column configuration not to be checked
+      name: record.name,
+    }),
   }
 
   return (
     <Fragment>
-      <Card>
+      <StyledCard>
         <CardHeader className='border-bottom'>
           <CardTitle tag='h4'>Danh sách</CardTitle>
         </CardHeader>
@@ -192,27 +242,26 @@ const TestForm = () => {
               onChange={handleFilter}
             />
             <Button
-              className='add-new-user'
+              className='add-new-test-form'
               color='primary'
               onClick={toggleSidebar}
             >
-              Add New User
+              Thêm mới
             </Button>
           </Col>
         </Row>
         <div className='react-dataTable'>
-          <DataTable
-            noHeader
-            pagination
-            paginationServer
-            className='react-dataTable'
-            columns={serverSideColumns}
-            sortIcon={<ChevronDown size={10} />}
-            paginationComponent={CustomPagination}
-            data={dataToRender()}
+          <Table
+            rowSelection={{
+              type: 'checkbox',
+              ...rowSelection,
+            }}
+            rowKey='uuid'
+            columns={TestFormColumns}
+            dataSource={dataTable}
           />
         </div>
-      </Card>
+      </StyledCard>
       <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} />
     </Fragment>
   )

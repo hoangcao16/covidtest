@@ -1,15 +1,30 @@
 /* eslint-disable comma-dangle */
 import { createSlice } from '@reduxjs/toolkit'
-const initialState = { tasks: [], status: 'idle' }
+const initialState = {
+  refetch: false,
+  isAddNew: false,
+  isEdit: false,
+  selectedUuid: '',
+}
 export const AnalysisCertificateSlice = createSlice({
   name: 'analysisCertificate',
   initialState,
   reducers: {
-    addTask: (state, action) => {
-      state.tasks.push(action.payload)
+    refetchList: (state) => {
+      state.refetch = !state.refetch
+    },
+    addNewCertificate: (state, payload) => {
+      state.isAddNew = payload.payload
+    },
+    editCertificate: (state, payload) => {
+      state.isEdit = payload.payload
+    },
+    selectUuid: (state, payload) => {
+      state.selectedUuid = payload.payload
     },
   },
 })
-export const { addTask } = AnalysisCertificateSlice.actions
-export const selectTask = (state) => state.task
+export const { refetchList, addNewCertificate, editCertificate, selectUuid } =
+  AnalysisCertificateSlice.actions
+export const selectAnalysisCertificate = (state) => state.task
 export default AnalysisCertificateSlice.reducer
