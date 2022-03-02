@@ -5,6 +5,7 @@ const initialState = {
   isAddNew: false,
   isEdit: false,
   selectedUuid: '',
+  selectedTestFormList: [],
 }
 export const AnalysisCertificateSlice = createSlice({
   name: 'analysisCertificate',
@@ -27,6 +28,9 @@ export const AnalysisCertificateSlice = createSlice({
       state.isEdit = false
       state.selectedUuid = ''
     },
+    selectTestFormList: (state, payload) => {
+      state.selectedTestFormList = payload.payload
+    },
   },
 })
 export const {
@@ -35,6 +39,7 @@ export const {
   editCertificate,
   selectUuid,
   closeSidebar,
+  selectTestFormList,
 } = AnalysisCertificateSlice.actions
 export const selectAnalysisCertificate = (state) => state.task
 export default AnalysisCertificateSlice.reducer
