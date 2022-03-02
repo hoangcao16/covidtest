@@ -10,6 +10,7 @@ import {Modal, Input, Label, Button, ModalHeader, ModalBody, InputGroup, InputGr
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 import {patientService} from "../../../services/patientService"
 import {Controller, useForm} from "react-hook-form"
+import {useEffect} from 'react'
 import moment from 'moment'
 import Select from "react-select"
 import classnames from "classnames"
@@ -31,9 +32,25 @@ const EditModal = ({open, item, handleModal, setRefreshTable}) => {
 
     const {
         control,
+        setValue,
         handleSubmit,
         formState: {errors}
     } = useForm({defaultValues})
+    useEffect(() => {
+        const dataForm = {
+            name: item?.name,
+            phone: item?.phone,
+            address: item?.address,
+            email: item?.email,
+            identityNumber: item?.identityNumber,
+            dateOfBirth: moment(item?.dateOfBirth).format('DD-MM-YYYY'),
+            sex: item?.sex
+        }
+        for (const key in dataForm) {
+            setValue(key, dataForm[key])
+        }
+    }, [item])
+
     const onHandleSubmit = data => {
         // console.log('handleSubmit:', data, name, email, address, phone, identityNumber, picker)
         patientService.update(item?.uuid, {
