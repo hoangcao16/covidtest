@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable comma-dangle */
 // ** Third Party Components
 import { X } from 'react-feather'
@@ -5,7 +6,7 @@ import Proptypes from 'prop-types'
 import classnames from 'classnames'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 
-import { Modal, ModalHeader, ModalBody } from 'reactstrap'
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 
 const Sidebar = (props) => {
   // ** Props
@@ -22,6 +23,8 @@ const Sidebar = (props) => {
     contentClassName,
     wrapperClassName,
     headerClassName,
+    titleButtonFooter,
+    onClickButtonFooter,
     ...rest
   } = props
 
@@ -80,6 +83,13 @@ const Sidebar = (props) => {
           {children}
         </ModalBody>
       </PerfectScrollbar>
+      {titleButtonFooter && (
+        <ModalFooter>
+          <button onClick={onClickButtonFooter} className='print-button'>
+            {titleButtonFooter}
+          </button>
+        </ModalFooter>
+      )}
     </Modal>
   )
 }
