@@ -1,45 +1,68 @@
 // ** React Imports
-import {useState} from 'react'
-
 // ** Third Party Components
 import Flatpickr from 'react-flatpickr'
 import {User, Mail, Calendar, Lock, X, Compass, Smartphone} from 'react-feather'
 
 // ** Reactstrap Imports
-import {Modal, Input, Label, Button, ModalHeader, ModalBody, InputGroup, InputGroupText} from 'reactstrap'
+import {Modal, Input, Label, Button, ModalHeader, ModalBody, InputGroup, InputGroupText, Form} from 'reactstrap'
 
 // ** Styles
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 import {patientService} from "../../../services/patientService"
-import moment from "moment"
+import {Controller, useForm} from "react-hook-form"
+import moment from 'moment'
+import Select from "react-select"
+import classnames from "classnames"
 
+const defaultValues = {
+    name: '',
+    phone: '',
+    address: '',
+    email: 'tupa@hstc.com',
+    identityNumber: '1334343434',
+    dateOfBirth: moment().format('DD-MM-YYYY'),
+    sex: 0
+}
 const EditModal = ({open, item, handleModal, setRefreshTable}) => {
     console.log('item:', item)
     // ** State
-    const [name, setName] = useState(item?.name)
-    const [phone, setPhone] = useState(item?.phone)
-    const [address, setAddress] = useState(item?.address)
-    const [email, setEmail] = useState(item?.email)
-    const [identityNumber, setIdentityNumber] = useState(item?.identityNumber)
-    const [picker, setPicker] = useState(item?.dateOfBirth)
     // ** Custom close btn
     const CloseBtn = <X className='cursor-pointer' size={15} onClick={handleModal}/>
-    const handleSubmit = () => {
-        console.log('handleSubmit:', name, email, address, phone, identityNumber, picker)
+
+    const {
+        control,
+        setValue,
+        handleSubmit,
+        formState: {errors}
+    } = useForm({defaultValues})
+    const onHandleSubmit = data => {
+        // console.log('handleSubmit:', data, name, email, address, phone, identityNumber, picker)
         patientService.update(item?.uuid, {
-            code: item.code,
-            name,
-            email,
-            phone,
-            identityNumber,
-            address,
-            dateOfBirth: picker ? moment(Date(picker)).format('DD-MM-YYYY') : null
+            code: item?.code,
+            name: data?.name,
+            email: data?.email,
+            phone: data?.phone,
+            identityNumber: data?.identityNumber,
+            address: data?.address,
+            dateOfBirth: moment(data?.dateOfBirth).format('DD-MM-YYYY'),
+            sex: data?.sex?.value
         }).then(r => {
             console.log('handleSubmit:response:', r)
             handleModal()
             setRefreshTable()
         })
     }
+
+    const genderOptions = [
+        {
+            value: 0,
+            label: 'Name'
+        },
+        {
+            value: 1,
+            label: 'Nữ'
+        }
+    ]
     return (
         <Modal
             isOpen={open}
@@ -52,110 +75,209 @@ const EditModal = ({open, item, handleModal, setRefreshTable}) => {
                 <h5 className='modal-title'>Edit Record</h5>
             </ModalHeader>
             <ModalBody className='flex-grow-1'>
-                <div className='mb-1'>
-                    <Label className='form-label' for='name'>
-                        Tên
-                    </Label>
-                    <InputGroup>
-                        <InputGroupText>
-                            <User size={15}/>
-                        </InputGroupText>
-                        <Input id='name'
-                               defaultValue={item?.name}
-                               onChange={e => setName(e.target.value)}/>
-                    </InputGroup>
-                </div>
-                <div className='mb-1'>
-                    <Label className='form-label' for='phone'>
-                        Điện thoại
-                    </Label>
-                    <InputGroup>
-                        <InputGroupText>
-                            <Smartphone size={15}/>
-                        </InputGroupText>
-                        <Input id='number' placeholder=''
-                               defaultValue={item?.phone}
-                               onChange={e => setPhone(e.target.value)}/>
-                    </InputGroup>
-                </div>
-                <div className='mb-1'>
-                    <Label className='form-label' for='address'>
-                        Địa chỉ
-                    </Label>
-                    <InputGroup>
-                        <InputGroupText>
-                            <User size={15}/>
-                        </InputGroupText>
-                        <Input id='address' placeholder='146 Đội Cấn'
-                               defaultValue={item?.address}
-                               onChange={e => setAddress(e.target.value)}/>
-                    </InputGroup>
-                </div>
-                <div className='mb-1'>
-                    <Label className='form-label' for='email'>
-                        Email
-                    </Label>
-                    <InputGroup>
-                        <InputGroupText>
-                            <Mail size={15}/>
-                        </InputGroupText>
-                        <Input id='email' placeholder='tupa@hstc.com.vn'
-                               defaultValue={item?.email}
-                               onChange={e => setEmail(e.target.value)}/>
-                    </InputGroup>
-                </div>
-                <div className='mb-1'>
-                    <Label className='form-label' for='identityNumber'>
-                        CMND/CCCD
-                    </Label>
-                    <InputGroup>
-                        <InputGroupText>
-                            <Mail size={15}/>
-                        </InputGroupText>
-                        <Input id='identityNumber' placeholder='1435434344545'
-                               defaultValue={item?.identityNumber}
-                               onChange={e => setIdentityNumber(e.target.value)}/>
-                    </InputGroup>
-                </div>
-                <div className='mb-1'>
-                    <Label className='form-label' for='dateOfBirth'>
-                        Ngày sinh
-                    </Label>
-                    <InputGroup>
-                        <InputGroupText>
-                            <Lock size={15}/>
-                        </InputGroupText>
-                        <Flatpickr
-                            value={item?.dateOfBirth}
-                            id='hf-picker'
-                            className='form-control'
-                            onChange={date => setPicker(date)}
-                            options={{
-                                altInput: true,
-                                altFormat: 'F j, Y',
-                                dateFormat: 'Y-m-d',
-                                defaultDate: [item?.dateOfBirth]
-                            }}
-                        />
-                    </InputGroup>
-                </div>
-                <div className='mb-1'>
-                    <Label className='form-label' for='gender'>
-                        Giới tính
-                    </Label>
-                    <InputGroup>
-                        <InputGroupText>
-                            <Lock size={15}/>
-                        </InputGroupText>
-
-                    </InputGroup>
-                </div>
-                <Button className='me-1' color='primary' onClick={handleSubmit}>
-                    Submit
-                </Button>
-                <Button color='secondary' onClick={handleModal} outline>
-                    Cancel
-                </Button>
+                <Form onSubmit={handleSubmit(onHandleSubmit)}>
+                    <div className='mb-1'>
+                        <Label className='form-label' for='name'>
+                            Tên
+                        </Label>
+                        <InputGroup>
+                            <InputGroupText>
+                                <User size={15}/>
+                            </InputGroupText>
+                            <Controller
+                                rules={
+                                    {
+                                        // required: true,
+                                    }
+                                }
+                                name='name'
+                                control={control}
+                                render={({field}) => (
+                                    <Input
+                                        id='name'
+                                        placeholder='Phùng Anh Tú'
+                                        invalid={errors.name && true}
+                                        {...field}
+                                    />
+                                )}
+                            />
+                        </InputGroup>
+                    </div>
+                    <div className='mb-1'>
+                        <Label className='form-label' for='phone'>
+                            Điện thoại
+                        </Label>
+                        <InputGroup>
+                            <InputGroupText>
+                                <Smartphone size={15}/>
+                            </InputGroupText>
+                            <Controller
+                                rules={
+                                    {
+                                        // required: true,
+                                    }
+                                }
+                                name='phone'
+                                control={control}
+                                render={({field}) => (
+                                    <Input
+                                        id='phone'
+                                        placeholder='0942225095'
+                                        invalid={errors.phone && true}
+                                        {...field}
+                                    />
+                                )}
+                            />
+                        </InputGroup>
+                    </div>
+                    <div className='mb-1'>
+                        <Label className='form-label' for='address'>
+                            Địa chỉ
+                        </Label>
+                        <InputGroup>
+                            <InputGroupText>
+                                <User size={15}/>
+                            </InputGroupText>
+                            <Controller
+                                rules={
+                                    {
+                                        // required: true,
+                                    }
+                                }
+                                name='address'
+                                control={control}
+                                render={({field}) => (
+                                    <Input
+                                        id='address'
+                                        placeholder='146 Đội Cấn'
+                                        invalid={errors.address && true}
+                                        {...field}
+                                    />
+                                )}
+                            />
+                        </InputGroup>
+                    </div>
+                    <div className='mb-1'>
+                        <Label className='form-label' for='email'>
+                            Email
+                        </Label>
+                        <InputGroup>
+                            <InputGroupText>
+                                <Mail size={15}/>
+                            </InputGroupText>
+                            <Controller
+                                rules={
+                                    {
+                                        // required: true,
+                                    }
+                                }
+                                name='email'
+                                control={control}
+                                render={({field}) => (
+                                    <Input
+                                        id='email'
+                                        placeholder='tupa@hstc.com.vn'
+                                        invalid={errors.email && true}
+                                        {...field}
+                                    />
+                                )}
+                            />
+                        </InputGroup>
+                    </div>
+                    <div className='mb-1'>
+                        <Label className='form-label' for='identityNumber'>
+                            CMND/CCCD
+                        </Label>
+                        <InputGroup>
+                            <InputGroupText>
+                                <Mail size={15}/>
+                            </InputGroupText>
+                            <Controller
+                                rules={
+                                    {
+                                        // required: true,
+                                    }
+                                }
+                                name='identityNumber'
+                                control={control}
+                                render={({field}) => (
+                                    <Input
+                                        id='identityNumber'
+                                        placeholder='1435434344545'
+                                        invalid={errors.identityNumber && true}
+                                        {...field}
+                                    />
+                                )}
+                            />
+                        </InputGroup>
+                    </div>
+                    <div className='mb-1'>
+                        <Label className='form-label' for='dateOfBirth'>
+                            Ngày sinh
+                        </Label>
+                        <InputGroup>
+                            <InputGroupText>
+                                <Lock size={15}/>
+                            </InputGroupText>
+                            <Controller
+                                rules={
+                                    {
+                                        // required: true,
+                                    }
+                                }
+                                name='dateOfBirth'
+                                control={control}
+                                render={({field}) => (
+                                    <input
+                                        type='datetime-local'
+                                        className='date-picker'
+                                        id='performTime'
+                                        name='dateOfBirth'
+                                        placeholder='Ngày sinh'
+                                        {...field}
+                                    />
+                                )}
+                            />
+                        </InputGroup>
+                    </div>
+                    <div className='mb-1'>
+                        <Label className='form-label' for='gender'>
+                            Giới tính
+                        </Label>
+                        <InputGroup>
+                            <InputGroupText>
+                                <Lock size={15}/>
+                            </InputGroupText>
+                            <Controller
+                                rules={
+                                    {
+                                        // required: true,
+                                    }
+                                }
+                                name='sex'
+                                control={control}
+                                render={({field}) => (
+                                    // <Input id='country' placeholder='Australia' invalid={errors.country && true} {...field} />
+                                    <Select
+                                        isClearable={false}
+                                        classNamePrefix='select'
+                                        options={genderOptions}
+                                        className={classnames('react-select', {
+                                            'is-invalid': errors.sex
+                                        })}
+                                        {...field}
+                                    />
+                                )}
+                            />
+                        </InputGroup>
+                    </div>
+                    <Button type='submit' className='me-1' color='primary'>
+                        Submit
+                    </Button>
+                    <Button color='secondary' onClick={handleModal} outline>
+                        Cancel
+                    </Button>
+                </Form>
             </ModalBody>
         </Modal>
     )

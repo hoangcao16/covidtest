@@ -36,14 +36,7 @@ export const customizeColumns = (editCallback, deleteCallback) => {
             sortable: true,
             name: 'email',
             minWidth: '225px',
-
             selector: row => row.email
-        },
-        {
-            sortable: true,
-            name: 'Đơn vị',
-            minWidth: '250px',
-            selector: row => row.unit
         },
         {
             name: 'Actions',
