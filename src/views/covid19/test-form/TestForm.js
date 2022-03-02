@@ -37,7 +37,7 @@ import {
   Col,
 } from 'reactstrap'
 
-const TestForm = () => {
+const TestForm = ({}) => {
   // ** States
   const [dataTable, setDataTable] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
