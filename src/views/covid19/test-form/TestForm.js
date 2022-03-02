@@ -36,7 +36,7 @@ import {
   Col,
 } from 'reactstrap'
 
-const TestForm = () => {
+const TestForm = ({}) => {
   // ** States
   const [dataTable, setDataTable] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
@@ -277,7 +277,7 @@ const TestForm = () => {
               className='add-new-test-form'
               color='primary'
               onClick={() => {
-                toggleSidebar()
+                toggleTestFormSidebar()
                 dispatch(addNewCertificate(true))
               }}
             >
