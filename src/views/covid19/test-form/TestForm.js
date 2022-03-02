@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable no-unused-vars */
 /* eslint-disable comma-dangle */
@@ -221,8 +222,22 @@ const TestForm = () => {
     }),
   }
   const handlePrintMultipleTestForm = () => {
-    dispatch(selectTestFormList(selectedCertificate))
-    toggleTestFormPreview()
+    if (selectedCertificate.length > 0) {
+      let AllTestForm = []
+      selectedCertificate.map((item) => {
+        analysisCertificateService
+          .get(item.uuid)
+          .then((res) => {
+            AllTestForm.push(res.data.payload)
+          })
+          .then(() => {
+            if (AllTestForm.length === selectedCertificate.length) {
+              dispatch(selectTestFormList(AllTestForm))
+              toggleTestFormPreview()
+            }
+          })
+      })
+    }
   }
   return (
     <Fragment>
@@ -277,7 +292,7 @@ const TestForm = () => {
               className='add-new-test-form'
               color='primary'
               onClick={() => {
-                toggleSidebar()
+                toggleTestFormSidebar()
                 dispatch(addNewCertificate(true))
               }}
             >
