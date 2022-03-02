@@ -31,7 +31,6 @@ const EditModal = ({open, item, handleModal, setRefreshTable}) => {
 
     const {
         control,
-        setValue,
         handleSubmit,
         formState: {errors}
     } = useForm({defaultValues})
