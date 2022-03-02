@@ -5,9 +5,9 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-confusing-arrow */
 /* eslint-disable comma-dangle */
-import React, { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 // ** Custom Components
-import { StyledSidebar } from './style'
+import { StyledTestFormSidebar } from './style'
 import { debounce } from 'lodash'
 // ** Utils
 import { selectThemeColors } from '@utils'
@@ -19,9 +19,9 @@ import { useForm, Controller } from 'react-hook-form'
 import toVND from '../../components/common/toVND'
 // ** Reactstrap Imports
 import { Button, Label, Form, Input, Row, Col } from 'reactstrap'
-import { refetchList } from '../../../redux/analysisCertificate'
+import { refetchList, closeSidebar } from '../../../redux/analysisCertificate'
 import moment from 'moment'
-import { Radio, Checkbox } from 'antd'
+import { Radio } from 'antd'
 // ** Store & Actions
 // import { addUser } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
@@ -34,7 +34,7 @@ import { labResultTypesService } from '../../../services/labResultTypesService'
 import { patientService } from '../../../services/patientService'
 import { staffService } from '../../../services/staffService'
 import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
-const hourNow = moment().hour()
+import { toast, Slide } from 'react-toastify'
 const defaultValues = {
   agencyUuid1: '',
   agencyUuid2: '',
@@ -48,18 +48,33 @@ const defaultValues = {
   payerUuid: '',
   performTime: moment().format('YYYY-DD-MMTHH:mm'),
   receiveSampleTime: moment().format('YYYY-DD-MMTHH:mm'),
-  returnTime:
-    hourNow >= 0 && hourNow <= 7
-      ? moment().set('hours', 15).set('minute', 0).format('YYYY-DD-MMTHH:mm')
-      : hourNow > 7 && hourNow <= 15
-      ? moment().set('hours', 21).set('minute', 0).format('YYYY-DD-MMTHH:mm')
-      : hourNow > 15 && hourNow <= 24
-      ? moment()
-          .add(1, 'd')
-          .set('hours', 7)
-          .set('minute', 0)
-          .format('YYYY-DD-MMTHH:mm')
-      : '',
+  returnTime: moment().isBetween(
+    moment().set({ hour: 23, minute: 1, second: 0 }),
+    moment().set({ hour: 23, minute: 59, second: 59 })
+  )
+    ? moment()
+        .add(1, 'd')
+        .set({ hour: 15, minute: 0 })
+        .format('YYYY-DD-MMTHH:mm')
+    : moment().isBetween(
+        moment().set({ hour: 0, minute: 0, second: 0 }),
+        moment().set({ hour: 8, minute: 30, second: 59 })
+      )
+    ? moment().set({ hour: 15, minute: 0 }).format('YYYY-DD-MMTHH:mm')
+    : moment().isBetween(
+        moment().set({ hour: 8, minute: 31, second: 0 }),
+        moment().set({ hour: 15, minute: 30, second: 59 })
+      )
+    ? moment().set({ hour: 21, minute: 0 }).format('YYYY-DD-MMTHH:mm')
+    : moment().isBetween(
+        moment().set({ hour: 15, minute: 31, second: 0 }),
+        moment().set({ hour: 23, minute: 0, second: 59 })
+      )
+    ? moment()
+        .add(1, 'd')
+        .set({ hour: 7, minute: 0 })
+        .format('YYYY-DD-MMTHH:mm')
+    : '',
   sampleNumber: 1,
   sampleState: true,
   sampleType: '',
@@ -73,17 +88,30 @@ const defaultValues = {
   testNumber: 1,
   testtype: '',
   shift:
-    hourNow >= 0 && hourNow <= 7
+    moment().isBetween(
+      moment().set({ hour: 23, minute: 1, second: 0 }),
+      moment().set({ hour: 23, minute: 59, second: 59 })
+    ) ||
+    moment().isBetween(
+      moment().set({ hour: 0, minute: 0, second: 0 }),
+      moment().set({ hour: 8, minute: 30, second: 59 })
+    )
       ? 'Ca 1'
-      : hourNow > 7 && hourNow <= 15
+      : moment().isBetween(
+          moment().set({ hour: 8, minute: 31, second: 0 }),
+          moment().set({ hour: 15, minute: 30, second: 59 })
+        )
       ? 'Ca 2'
-      : hourNow > 15 && hourNow <= 24
+      : moment().isBetween(
+          moment().set({ hour: 15, minute: 31, second: 0 }),
+          moment().set({ hour: 23, minute: 0, second: 59 })
+        )
       ? 'Ca 3'
       : '',
   note: '',
 }
 
-const SidebarNewTestForm = ({ open, toggleSidebar }) => {
+const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
   // ** States
   const [agencyOptions, setAgencyOptions] = useState([])
   const [sampleTypeOptions, setSampleTypeOptions] = useState([])
@@ -174,6 +202,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
     return otherKey
   }
   const handleSidebarClosed = () => {
+    dispatch(closeSidebar())
     for (const key in defaultValues) {
       setValue(key, defaultValues[key])
     }
@@ -309,7 +338,16 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
       }
       analysisCertificateService.update(data?.uuid, newDataEdit).then((res) => {
         if (res.data.code === 600) {
-          alert('Chỉnh sửa thành công')
+          toast.success('Cập nhật thành công !', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            transition: Slide,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          })
         }
       })
     } else if (analysisCertificateState.isAddNew === true) {
@@ -344,14 +382,23 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
       }
       analysisCertificateService.add(newData).then((res) => {
         if (res.data.code === 600) {
-          alert('Thêm mới thành công')
+          toast.success('Thêm mới thành công !', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            transition: Slide,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          })
         }
       })
     }
     for (const key in defaultValues) {
       setValue(key, defaultValues[key])
     }
-    toggleSidebar()
+    toggleTestFormSidebar()
     dispatch(refetchList())
   }
   const fetchPatientsDropdown = (query) => {
@@ -371,17 +418,32 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
     debounce((query) => fetchPatientsDropdown(query), 500),
     []
   )
-  const searchPatients = (query) => {
+  const handleSearchPatients = (query) => {
     debounceDropDown(query)
   }
+  const handldeSelectShift = (value) => {
+    setValue(
+      'returnTime',
+      value === 'Ca 1'
+        ? moment().set({ hour: 15, minute: 0 }).format('YYYY-DD-MMTHH:mm')
+        : value === 'Ca 2'
+        ? moment().set({ hour: 21, minute: 0 }).format('YYYY-DD-MMTHH:mm')
+        : value === 'Ca 3'
+        ? moment()
+            .add(1, 'd')
+            .set({ hour: 7, minute: 0 })
+            .format('YYYY-DD-MMTHH:mm')
+        : ''
+    )
+  }
   return (
-    <StyledSidebar
+    <StyledTestFormSidebar
       size='lg'
-      open={open}
+      open={openSideBar}
       title='Thêm phiếu xét nghiệm'
       headerClassName='mb-1'
       contentClassName='pt-0'
-      toggleSidebar={toggleSidebar}
+      toggleSidebar={toggleTestFormSidebar}
       onClosed={handleSidebarClosed}
     >
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -402,7 +464,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
               <Select
                 isClearable={false}
                 isMulti
-                onInputChange={(value) => searchPatients(value)}
+                onInputChange={(value) => handleSearchPatients(value)}
                 classNamePrefix='select'
                 options={patientsOptions}
                 theme={selectThemeColors}
@@ -1000,7 +1062,7 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
                 render={({ field }) => (
                   <Select
                     isClearable={false}
-                    onInputChange={(value) => searchPatients(value)}
+                    onInputChange={(value) => handleSearchPatients(value)}
                     classNamePrefix='select'
                     options={patientsOptions}
                     theme={selectThemeColors}
@@ -1042,13 +1104,13 @@ const SidebarNewTestForm = ({ open, toggleSidebar }) => {
             type='reset'
             color='secondary'
             outline
-            onClick={toggleSidebar}
+            onClick={toggleTestFormSidebar}
           >
             Cancel
           </Button>
         </div>
       </Form>
-    </StyledSidebar>
+    </StyledTestFormSidebar>
   )
 }
 

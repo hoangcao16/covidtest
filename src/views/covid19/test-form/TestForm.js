@@ -6,7 +6,8 @@ import { Fragment, useState, useEffect, memo } from 'react'
 // ** Table Columns
 import { statusOptions, disableOptions } from './data'
 // ** Invoice List Sidebar
-import Sidebar from './Sidebar'
+import TestFormSidebar from './test-form-sidebar'
+import TestFormPreview from './test-form-preview'
 // ** Store & Actions
 import { useSelector, useDispatch } from 'react-redux'
 import { StyledCard } from './style'
@@ -14,8 +15,8 @@ import {
   refetchList,
   selectUuid,
   editCertificate,
-  closeSidebar,
   addNewCertificate,
+  selectTestFormList,
 } from '../../../redux/analysisCertificate'
 // ** Third Party Components
 import { MoreVertical, Edit, FileText, Trash } from 'react-feather'
@@ -23,6 +24,7 @@ import { Table, Menu, Dropdown } from 'antd'
 import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
 import moment from 'moment'
 import Select from 'react-select'
+import { toast, Slide } from 'react-toastify'
 // ** Reactstrap Imports
 import {
   CardHeader,
@@ -35,22 +37,34 @@ import {
 } from 'reactstrap'
 
 const TestForm = () => {
+  // ** States
+  const [dataTable, setDataTable] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [rowsPerPage, setRowsPerPage] = useState(40)
+  const [searchValue, setSearchValue] = useState('')
+  const [selectedCertificate, setSelectedCertificate] = useState([])
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [openTestFormPreview, setOpenTestFormPreview] = useState(false)
   // ** Store Vars
   const dispatch = useDispatch()
-  const [dataTable, setDataTable] = useState([])
   const analysisCertificateState = useSelector(
     (state) => state.analysisCertificate
   )
-  // ** States
-  const [currentPage, setCurrentPage] = useState(1)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [rowsPerPage, setRowsPerPage] = useState(40)
-  const [searchValue, setSearchValue] = useState('')
-
+  useEffect(() => {
+    analysisCertificateService.list(currentPage, rowsPerPage).then((res) => {
+      // setDataTable(res.data.payload)
+      if (res.data.payload !== null) {
+        setDataTable(res.data.payload)
+      }
+    })
+  }, [analysisCertificateState.refetch])
   // ** Function to toggle sidebar
-  const toggleSidebar = () => {
+  const toggleTestFormSidebar = () => {
     setSidebarOpen(!sidebarOpen)
-    dispatch(closeSidebar())
+  }
+  const toggleTestFormPreview = () => {
+    setOpenTestFormPreview(!openTestFormPreview)
+    // dispatch(selectTestFormList([]))
   }
   const handleUpdateState = (value, record) => {
     const dataUpdate = {
@@ -62,11 +76,21 @@ const TestForm = () => {
     analysisCertificateService.update(record.uuid, dataUpdate).then((res) => {
       if (res.data.code === 600) {
         dispatch(refetchList())
+        toast.success('Cập nhật thành công !', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          transition: Slide,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
       }
     })
   }
   const handleEdit = (uuid) => {
-    toggleSidebar()
+    toggleTestFormSidebar()
     dispatch(editCertificate(true))
     dispatch(selectUuid(uuid))
   }
@@ -182,14 +206,6 @@ const TestForm = () => {
   const handlePerPage = (e) => {
     setRowsPerPage(parseInt(e.target.value))
   }
-  useEffect(() => {
-    analysisCertificateService.list(currentPage, rowsPerPage).then((res) => {
-      // setDataTable(res.data.payload)
-      if (res.data.payload !== null) {
-        setDataTable(res.data.payload)
-      }
-    })
-  }, [analysisCertificateState.refetch])
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(
@@ -197,20 +213,24 @@ const TestForm = () => {
         'selectedRows: ',
         selectedRows
       )
+      setSelectedCertificate(selectedRows)
     },
     getCheckboxProps: (record) => ({
       disabled: record.name === 'Disabled User', // Column configuration not to be checked
       name: record.name,
     }),
   }
-
+  const handlePrintMultipleTestForm = () => {
+    dispatch(selectTestFormList(selectedCertificate))
+    toggleTestFormPreview()
+  }
   return (
     <Fragment>
       <StyledCard>
         <CardHeader className='border-bottom'>
           <CardTitle tag='h4'>Danh sách</CardTitle>
         </CardHeader>
-        <Row className='mx-0 mt-1 mb-50'>
+        <Row className='mx-0 mt-1 mb-2'>
           <Col sm='6'>
             <div className='d-flex align-items-center'>
               <Label for='sort-select'>show</Label>
@@ -235,6 +255,13 @@ const TestForm = () => {
             className='d-flex align-items-center justify-content-sm-end mt-sm-0 mt-1'
             sm='6'
           >
+            <Button
+              className='print-test-form'
+              color='primary'
+              onClick={() => handlePrintMultipleTestForm()}
+            >
+              In phiếu xét nghiệm
+            </Button>
             <Label className='me-1' for='search-input'>
               Search
             </Label>
@@ -270,7 +297,14 @@ const TestForm = () => {
           />
         </div>
       </StyledCard>
-      <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} />
+      <TestFormSidebar
+        openSideBar={sidebarOpen}
+        toggleTestFormSidebar={toggleTestFormSidebar}
+      />
+      <TestFormPreview
+        openTestFormPreview={openTestFormPreview}
+        toggleTestFormPreview={toggleTestFormPreview}
+      />
     </Fragment>
   )
 }

@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import Sidebar from '../../components/sidebar'
 import { Card } from 'reactstrap'
-export const StyledSidebar = styled(Sidebar)`
+export const StyledTestFormSidebar = styled(Sidebar)`
   @media (min-width: 768px) {
     width: 70vw !important;
   }
@@ -155,5 +155,13 @@ export const StyledCard = styled(Card)`
   }
   .select-action {
     z-index: 9999;
+  }
+  .print-test-form {
+    margin-right: 1rem;
+  }
+`
+export const StyledTestFormPreview = styled(Sidebar)`
+  @media (min-width: 768px) {
+    width: 100vw !important;
   }
 `
