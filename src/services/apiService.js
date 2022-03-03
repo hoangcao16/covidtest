@@ -38,7 +38,7 @@ apiClient.interceptors.response.use(
         // Clear local storage data and redirect to login page if request is 401 - Unauthorized
         // eslint-disable-next-line eqeqeq
 
-        if (error.response.status === 401) {
+        if (error !== nil && error.response?.status === 401) {
             authService.removeAccessToken()
             window.location.href = '/'
         }
