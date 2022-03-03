@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import Sidebar from '../../components/sidebar'
-import {Card} from 'reactstrap'
+import { Card } from 'reactstrap'
 
 export const StyledTestFormSidebar = styled(Sidebar)`
   .card-header {
@@ -196,6 +196,10 @@ export const StyledCard = styled(Card)`
   .print-test-form {
     margin-right: 1rem;
   }
+  .pagination {
+    margin: 2rem 1rem;
+    float: right;
+  }
 `
 export const StyledTestFormPreview = styled(Sidebar)`
   @media (min-width: 768px) {
@@ -240,9 +244,15 @@ export const StyledExpander = styled.table`
     text-align: center;
   }
 `
-
+export const StyledFilterList = styled(Card)`
+  .select-filter {
+    width: 100%;
+    .select__menu {
+      z-index: 2;
+    }
+  }
+`
 export const StyledTestFormUploadCSV = styled(Sidebar)`
-  
   @media (min-width: 768px) {
     width: 70vw !important;
   }
