@@ -1,0 +1,28 @@
+.form-return {
+}
+.print-button {
+  width: 50%;
+  height: 40px;
+  background-color: #7367f0;
+  outline: none;
+  border: none;
+  /* position: fixed; */
+}
+.button-wrapper {
+  position: fixed;
+  bottom: 0;
+  text-align: center;
+  width: 100%;
+  background-color: #ccc;
+}
+.print-button:hover {
+  background-color: #6a5cf0;
+}
+@media print {
+  #print-me {
+    height: 297mm;
+  }
+  @page {
+    size: A4;
+  }
+}

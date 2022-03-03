@@ -1,3 +1,4 @@
+/* eslint-disable object-shorthand */
 /* eslint-disable comma-dangle */
 import apiClient from './apiService'
 export const analysisCertificateService = {
@@ -8,10 +9,11 @@ export const analysisCertificateService = {
       data,
     })
   },
-  list(page, size) {
+  list(params) {
     return apiClient.request({
       method: 'GET',
-      url: `/api/v0/analysis_certificate?page=${page}&size=${size}`,
+      url: `/api/v0/analysis_certificate`,
+      params: params,
     })
   },
   get(uuid) {

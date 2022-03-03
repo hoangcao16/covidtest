@@ -1,3 +1,4 @@
+/* eslint-disable comma-dangle */
 // ** Document title
 
 const TemplateTitle = '%s - Hospital'
@@ -11,10 +12,10 @@ import SettingsRoutes from './Settings'
 import PatientsRoutes from './Patients'
 // ** Merge Routes
 const Routes = [
-    ...PagesRoutes,
-    ...EntitiesRoutes,
-    ...SettingsRoutes,
-    ...PatientsRoutes
+  ...PagesRoutes,
+  ...EntitiesRoutes,
+  ...SettingsRoutes,
+  ...PatientsRoutes,
 ]
 
-export {DefaultRoute, TemplateTitle, Routes}
+export { DefaultRoute, TemplateTitle, Routes }
