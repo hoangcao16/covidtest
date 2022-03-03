@@ -196,6 +196,10 @@ export const StyledCard = styled(Card)`
   .print-test-form {
     margin-right: 1rem;
   }
+  .pagination {
+    margin: 2rem 1rem;
+    float: right;
+  }
 `
 export const StyledTestFormPreview = styled(Sidebar)`
   @media (min-width: 768px) {
@@ -232,5 +236,13 @@ export const StyledExpander = styled.table`
   }
   tbody {
     text-align: center;
+  }
+`
+export const StyledFilterList = styled(Card)`
+  .select-filter {
+    width: 100%;
+    .select__menu {
+      z-index: 2;
+    }
   }
 `

@@ -153,6 +153,8 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
           value: sampleType.uuid,
         }))
         setSampleTypeOptions(options)
+        console.log(options)
+        setValue('sampleType', options[0].value)
       }
     })
     testTypeService.list({ page: 1, perPage: 40, q: '' }).then((res) => {
@@ -306,7 +308,6 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
   }, [analysisCertificateState.isEdit])
   // ** Function to handle form submit
   const onSubmit = (data) => {
-    console.log(data)
     if (analysisCertificateState.isEdit === true) {
       const newDataEdit = {
         agencyUuid1: data?.agencyUuid1?.value,
@@ -340,6 +341,22 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
       analysisCertificateService.update(data?.uuid, newDataEdit).then((res) => {
         if (res.data.code === 600) {
           toast.success('Cập nhật thành công !', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            transition: Slide,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          })
+          for (const key in defaultValues) {
+            setValue(key, defaultValues[key])
+          }
+          toggleTestFormSidebar()
+          dispatch(refetchList())
+        } else {
+          toast.error('Cập nhật thất bại !', {
             position: 'top-right',
             autoClose: 2000,
             hideProgressBar: false,
@@ -393,14 +410,25 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
             draggable: true,
             progress: undefined,
           })
+          for (const key in defaultValues) {
+            setValue(key, defaultValues[key])
+          }
+          toggleTestFormSidebar()
+          dispatch(refetchList())
+        } else {
+          toast.error('Thêm mới thất bại !', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            transition: Slide,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          })
         }
       })
     }
-    for (const key in defaultValues) {
-      setValue(key, defaultValues[key])
-    }
-    toggleTestFormSidebar()
-    dispatch(refetchList())
   }
   const fetchPatientsDropdown = (query) => {
     patientService.list({ page: 1, perPage: 40, q: query }).then((res) => {
@@ -437,6 +465,8 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
         : ''
     )
   }
+  console.log(errors)
+
   return (
     <StyledTestFormSidebar
       size='lg'
@@ -453,15 +483,12 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
             Chọn khách hàng (Thu ngân)<span className='text-danger'>*</span>
           </Label>
           <Controller
-            rules={
-              {
-                // required: true,
-              }
-            }
+            rules={{
+              required: true,
+            }}
             name='patients'
             control={control}
             render={({ field }) => (
-              // <Input id='country' placeholder='Australia' invalid={errors.country && true} {...field} />
               <Select
                 isClearable={false}
                 isMulti
@@ -471,7 +498,7 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
                 theme={selectThemeColors}
                 filterOption={filterOption}
                 className={classnames('react-select', {
-                  'is-invalid': errors.patient,
+                  'is-invalid': errors.patients,
                 })}
                 {...field}
               />
@@ -487,11 +514,9 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
                   <span className='text-danger'>*</span>
                 </Label>
                 <Controller
-                  rules={
-                    {
-                      // required: true,
-                    }
-                  }
+                  rules={{
+                    required: true,
+                  }}
                   name='testtype'
                   control={control}
                   render={({ field }) => (
@@ -500,12 +525,9 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
                       classNamePrefix='select'
                       options={testTypeOptions}
                       theme={selectThemeColors}
-                      className={
-                        ('react-select',
-                        {
-                          'is-invalid': errors.testtype,
-                        })
-                      }
+                      className={classnames('react-select', {
+                        'is-invalid': errors.testtype,
+                      })}
                       {...field}
                     />
                   )}
@@ -576,11 +598,9 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
                   <span className='text-danger'>*</span>
                 </Label>
                 <Controller
-                  rules={
-                    {
-                      // required: true,
-                    }
-                  }
+                  rules={{
+                    required: true,
+                  }}
                   name='agencyUuid1'
                   control={control}
                   render={({ field }) => (

@@ -3,7 +3,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable comma-dangle */
 // ** React Imports
-import { Fragment, useState, useEffect, memo } from 'react'
+import { Fragment, useState, useEffect, memo, useCallback } from 'react'
 // ** Table Columns
 import { statusOptions, disableOptions } from './data'
 // ** Invoice List Sidebar
@@ -22,12 +22,13 @@ import {
 } from '../../../redux/analysisCertificate'
 // ** Third Party Components
 import { MoreVertical, Edit, FileText, Trash } from 'react-feather'
-import { Table, Menu, Dropdown } from 'antd'
+import { Table, Menu, Dropdown, Pagination } from 'antd'
 import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
 import moment from 'moment'
 import Select from 'react-select'
 import { toast, Slide } from 'react-toastify'
 import TestFormFilter from './test-form-filter'
+import { isEmpty, debounce } from 'lodash'
 // ** Reactstrap Imports
 import {
   CardHeader,
@@ -42,7 +43,9 @@ import {
 const TestForm = ({}) => {
   // ** States
   const [currentPage, setCurrentPage] = useState(1)
-  const [rowsPerPage, setRowsPerPage] = useState(40)
+  // const [totalPage, setTotalPage] = useState(1)
+  const [totalItem, setTotalItem] = useState(0)
+  const [rowsPerPage, setRowsPerPage] = useState(7)
   const [searchValue, setSearchValue] = useState('')
   const [selectedCertificate, setSelectedCertificate] = useState([])
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -62,10 +65,16 @@ const TestForm = ({}) => {
     analysisCertificateService.list(params).then((res) => {
       // setDataTable(res.data.payload)
       if (res.data.payload !== null) {
-        dispatch(fetchListTestForm(res.data.payload))
+        dispatch(fetchListTestForm(res.data))
       }
     })
   }, [analysisCertificateState.refetch, currentPage, rowsPerPage])
+  useEffect(() => {
+    if (!isEmpty(analysisCertificateState.dataTable.metadata)) {
+      // setTotalPage(analysisCertificateState.dataTable.metadata.total)
+      setTotalItem(analysisCertificateState.dataTable.metadata.total)
+    }
+  }, [analysisCertificateState.dataTable])
   // ** Function to toggle sidebar
   const toggleTestFormSidebar = () => {
     setSidebarOpen(!sidebarOpen)
@@ -238,13 +247,27 @@ const TestForm = ({}) => {
       },
     },
   ]
+  const fetchList = (params) => {
+    analysisCertificateService.list(params).then((res) => {
+      dispatch(fetchListTestForm(res.data))
+    })
+  }
+  const debounceSearch = useCallback(
+    debounce((query) => fetchList(query), 500),
+    []
+  )
   // ** Function to handle filter
   const handleFilter = (e) => {
-    setSearchValue(e.target.value)
+    console.log(e)
+    setSearchValue(e)
+    debounceSearch({ page: currentPage, size: rowsPerPage, filter: e })
   }
   // ** Function to handle per page
   const handlePerPage = (e) => {
     setRowsPerPage(parseInt(e.target.value))
+  }
+  const handlePageChange = (page) => {
+    setCurrentPage(page)
   }
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
@@ -332,6 +355,11 @@ const TestForm = ({}) => {
       return <h2>Không có dữ liệu</h2>
     }
   }
+  const handleResetPageSize = (page, size) => {
+    setRowsPerPage(page)
+    setCurrentPage(size)
+    console.log('asssssssssss')
+  }
   return (
     <Fragment>
       <TestFormFilter></TestFormFilter>
@@ -380,7 +408,7 @@ const TestForm = ({}) => {
               bsSize='sm'
               id='search-input'
               value={searchValue}
-              onChange={handleFilter}
+              onChange={(e) => handleFilter(e.target.value)}
             />
             <Button
               className='add-new-test-form'
@@ -412,8 +440,16 @@ const TestForm = ({}) => {
             onExpand={(expanded, record) => {
               handleRowClick(expanded, record)
             }}
-            dataSource={analysisCertificateState.dataTable}
+            dataSource={analysisCertificateState.dataTable.payload}
           />
+          <div className='pagination'>
+            <Pagination
+              defaultPageSize={rowsPerPage}
+              current={currentPage}
+              total={totalItem}
+              onChange={(page) => handlePageChange(page)}
+            />
+          </div>
         </div>
       </StyledCard>
       <TestFormSidebar

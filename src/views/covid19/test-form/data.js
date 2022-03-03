@@ -54,6 +54,16 @@ export const samplestateOptions = [
     value: false,
   },
 ]
+export const printStatusOptions = [
+  {
+    label: 'Đã in',
+    value: 1,
+  },
+  {
+    label: 'Chưa in',
+    value: 0,
+  },
+]
 export const disableOptions = (option, selectValue) => {
   switch (selectValue[0].value) {
     case 'NOT_PAID': {
