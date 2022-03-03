@@ -2,69 +2,45 @@
 /* eslint-disable prefer-const */
 /* eslint-disable comma-dangle */
 /* eslint-disable no-unused-vars */
-import { useState, useEffect, useCallback, useRef } from 'react'
-// ** Custom Components
-import { StyledTestFormPreview } from './style'
-// ** Store & Actions
-// import { addUser } from '../store'
-import { useDispatch, useSelector } from 'react-redux'
-import QRCode from 'react-qr-code'
-import { selectTestFormList } from '../../../redux/analysisCertificate'
-import { useReactToPrint } from 'react-to-print'
+import './style.css'
+import { useState, useRef, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { analysisCertificateService } from '../../services/analysisCertificateCervice'
 import moment from 'moment'
-//Service
-const TestFormPreview = ({ openTestFormPreview, toggleTestFormPreview }) => {
-  // ** States
-  const dispatch = useDispatch()
+import QRCode from 'react-qr-code'
+import { useReactToPrint } from 'react-to-print'
+
+const labResultQrcode = () => {
   const [dataView, setDataView] = useState([])
-  const handleSidebarClosed = () => {
-    dispatch(selectTestFormList([]))
-  }
   const componentRef = useRef()
-  const analysisCertificateState = useSelector(
-    (state) => state.analysisCertificate
-  )
+  const { code, password } = useParams()
+  console.log(code, password)
   useEffect(() => {
-    if (analysisCertificateState.selectedTestFormList.length > 0) {
-      console.log(analysisCertificateState.selectedTestFormList)
-      const listDate = analysisCertificateState.selectedTestFormList
-      let selectedItemsFinal = []
-      listDate.forEach((item) => {
-        const fullCustomers = item.patients
-        item.patients.forEach((it) => {
-          const partners = fullCustomers.filter((itx) => itx.uuid !== it.uuid)
-          let isMix = partners.length > 0
+    analysisCertificateService.qrcode(code, password).then((res) => {
+      if (res.data.code === 600) {
+        let selectedItemsFinal = []
+        const fullCustomers = res.data.payload.patients
+        res.data.payload.patients.forEach((item) => {
+          const partners = fullCustomers.filter((i) => i.uuid !== item.uuid)
           selectedItemsFinal.push({
-            ...item,
-            customers: it,
-            qrUrl: `http://localhost:3000/result-test-form/${item.searchCode}/${item.password}`,
+            ...res.data.payload,
+            customers: item,
+            qrUrl: `http://localhost:3000/result-test-form/${res.data.payload.searchCode}/${res.data.payload.password}`,
             partners: partners,
-            isMix: isMix,
           })
         })
-      })
-      console.log(selectedItemsFinal)
-      setDataView(selectedItemsFinal)
-    }
-  }, [analysisCertificateState.selectedTestFormList])
-  // ** Store Vars
+        // console.log(selectedItemsFinal)
+        setDataView(selectedItemsFinal)
+      }
+    })
+  }, [])
   const handlePrintTestForm = useReactToPrint({
     content: () => componentRef.current,
   })
   return (
-    <StyledTestFormPreview
-      size='lg'
-      open={openTestFormPreview}
-      title='Kết quả xét nghiệm'
-      headerClassName='mb-1'
-      contentClassName='pt-0 pt-0'
-      toggleSidebar={toggleTestFormPreview}
-      onClosed={handleSidebarClosed}
-      titleButtonFooter='In kết quả'
-      onClickButtonFooter={() => handlePrintTestForm()}
-    >
+    <>
       <div ref={componentRef} style={{ padding: '2cm 16px' }}>
-        {dataView.length > 0 &&
+        {dataView.length > 0 ? (
           dataView.map((item, index) => {
             return (
               <div key={index}>
@@ -346,6 +322,7 @@ const TestFormPreview = ({ openTestFormPreview, toggleTestFormPreview }) => {
                   ** Kết quả xét nghiệm chỉ có giá trị tại thời điểm lấy mẫu /
                   The test result is only valid from time of sample collection
                 </div>
+                <p></p>
                 <table style={{ width: '100%' }}>
                   <tbody>
                     <tr>
@@ -365,10 +342,17 @@ const TestFormPreview = ({ openTestFormPreview, toggleTestFormPreview }) => {
                 </table>
               </div>
             )
-          })}
+          })
+        ) : (
+          <h1>Chưa có kết quả</h1>
+        )}
       </div>
-    </StyledTestFormPreview>
+      <div className='button-wrapper'>
+        <button onClick={handlePrintTestForm} className='print-button'>
+          In kết quả
+        </button>
+      </div>
+    </>
   )
 }
-
-export default TestFormPreview
+export default labResultQrcode

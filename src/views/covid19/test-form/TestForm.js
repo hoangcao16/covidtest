@@ -11,7 +11,7 @@ import TestFormSidebar from './test-form-sidebar'
 import TestFormPreview from './test-form-preview'
 // ** Store & Actions
 import { useSelector, useDispatch } from 'react-redux'
-import { StyledCard } from './style'
+import { StyledCard, StyledExpander } from './style'
 import {
   refetchList,
   selectUuid,
@@ -26,6 +26,7 @@ import { analysisCertificateService } from '../../../services/analysisCertificat
 import moment from 'moment'
 import Select from 'react-select'
 import { toast, Slide } from 'react-toastify'
+import { isEmpty } from 'lodash'
 // ** Reactstrap Imports
 import {
   CardHeader,
@@ -46,6 +47,8 @@ const TestForm = ({}) => {
   const [selectedCertificate, setSelectedCertificate] = useState([])
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [openTestFormPreview, setOpenTestFormPreview] = useState(false)
+  const [dataExpanded, setDataExpanded] = useState({})
+
   // ** Store Vars
   const dispatch = useDispatch()
   const analysisCertificateState = useSelector(
@@ -95,22 +98,48 @@ const TestForm = ({}) => {
     dispatch(editCertificate(true))
     dispatch(selectUuid(uuid))
   }
+  const handlePrintOne = (uuid) => {
+    let Chosenone = []
+    analysisCertificateService
+      .get(uuid)
+      .then((res) => {
+        Chosenone.push(res.data.payload)
+      })
+      .then(() => {
+        if (Chosenone.length > 0) {
+          dispatch(selectTestFormList(Chosenone))
+          toggleTestFormPreview()
+        }
+      })
+  }
   const ActionsMenu = (props) => {
     return (
       <Menu>
-        <Menu.Item key='1'>
+        <Menu.Item
+          key='1'
+          onClick={(e) => {
+            e.domEvent.stopPropagation()
+            handlePrintOne(props.text.uuid)
+          }}
+        >
           <FileText size={15} />
           <span className='align-middle ms-50'>In phiếu xét nghiệm</span>
         </Menu.Item>
-        <Menu.Item key='2'>
+        <Menu.Item key='2' onClick={(e) => e.domEvent.stopPropagation()}>
           <FileText size={15} />
           <span className='align-middle ms-50'>In phiếu thu</span>
         </Menu.Item>
-        <Menu.Item key='3' onClick={() => handleEdit(props.text.uuid)}>
+        <Menu.Item
+          key='3'
+          onClick={(e) => {
+            e.domEvent.stopPropagation()
+            handleEdit(props.text.uuid)
+          }}
+        >
           <Edit size={15} />
           <span className='align-middle ms-50'>Edit</span>
         </Menu.Item>
-        <Menu.Item key='4'>
+        <Menu.Item key='4' onClick={(e) => e.domEvent.stopPropagation()}>
           <Trash size={15} />
           <span className='align-middle ms-50'>Delete</span>
         </Menu.Item>
@@ -170,17 +199,19 @@ const TestForm = ({}) => {
       dataIndex: 'state',
       render: (text, record) => {
         return (
-          <Select
-            isClearable={false}
-            classNamePrefix='select'
-            className='react-select'
-            options={statusOptions}
-            isOptionDisabled={(option, selectValue) =>
-              disableOptions(option, selectValue)
-            }
-            onChange={(value) => handleUpdateState(value, record)}
-            value={statusOptions.find((c) => c.value === text)}
-          ></Select>
+          <div onClick={(e) => e.stopPropagation()}>
+            <Select
+              isClearable={false}
+              classNamePrefix='select'
+              className='react-select'
+              options={statusOptions}
+              isOptionDisabled={(option, selectValue) =>
+                disableOptions(option, selectValue)
+              }
+              onChange={(value) => handleUpdateState(value, record)}
+              value={statusOptions.find((c) => c.value === text)}
+            ></Select>
+          </div>
         )
       },
     },
@@ -191,7 +222,11 @@ const TestForm = ({}) => {
       render: (text, record) => {
         return (
           <div className='d-flex justify-content-center'>
-            <Dropdown overlay={<ActionsMenu text={text} />} trigger={['click']}>
+            <Dropdown
+              overlay={<ActionsMenu text={text} />}
+              trigger={['click']}
+              onClick={(e) => e.stopPropagation()}
+            >
               <MoreVertical size={15} />
             </Dropdown>
           </div>
@@ -237,6 +272,60 @@ const TestForm = ({}) => {
             }
           })
       })
+    } else {
+      toast.error('Hãy chọn phiếu xét nghiệm !', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        transition: Slide,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    }
+  }
+  const handleRowClick = (expanded, record) => {
+    console.log(expanded, record)
+    if (expanded) {
+      analysisCertificateService.get(record.uuid).then((res) => {
+        if (res.data.code === 600) {
+          setDataExpanded(res.data.payload)
+          console.log(res.data.payload)
+        }
+      })
+    } else {
+      setDataExpanded({})
+    }
+  }
+  const Expander = ({ record, expanded }) => {
+    if (expanded) {
+      return (
+        <StyledExpander>
+          <thead>
+            <tr>
+              <td>Mã bệnh nhân</td>
+              <td>Tên bệnh nhân</td>
+              <td>CCCD/CMT</td>
+              <td>Số điện thoại</td>
+              <td>Địa chỉ</td>
+            </tr>
+          </thead>
+          <tbody>
+            {dataExpanded?.patients?.map((p, i) => (
+              <tr key={i}>
+                <td>{p.code}</td>
+                <td>{p.name}</td>
+                <td>{p.identityNumber}</td>
+                <td>{p.phone}</td>
+                <td>{p.address}</td>
+              </tr>
+            ))}
+          </tbody>
+        </StyledExpander>
+      )
+    } else {
+      return <h2>Không có dữ liệu</h2>
     }
   }
   return (
@@ -306,8 +395,17 @@ const TestForm = ({}) => {
               type: 'checkbox',
               ...rowSelection,
             }}
+            expandIconAsCell={false}
+            expandIconColumnIndex={-1}
+            expandRowByClick
+            expandedRowRender={(record, index, indent, expanded) => (
+              <Expander record={record} expanded={expanded} />
+            )}
             rowKey='uuid'
             columns={TestFormColumns}
+            onExpand={(expanded, record) => {
+              handleRowClick(expanded, record)
+            }}
             dataSource={dataTable}
           />
         </div>

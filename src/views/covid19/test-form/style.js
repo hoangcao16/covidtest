@@ -1,10 +1,10 @@
 import styled from 'styled-components'
 import Sidebar from '../../components/sidebar'
-import {Card} from 'reactstrap'
+import { Card } from 'reactstrap'
 
 export const StyledTestFormSidebar = styled(Sidebar)`
   .card-header {
-    padding: 0.5rem 0.5rem
+    padding: 0.5rem 0.5rem;
   }
 
   @media (min-width: 768px) {
@@ -214,8 +214,23 @@ export const StyledTestFormPreview = styled(Sidebar)`
       outline: none;
       border: none;
       &:hover {
-        background-color: #5c5ee5;
+        background-color: #6a5cf0;
       }
     }
+  }
+`
+export const StyledExpander = styled.table`
+  thead {
+    text-align: center;
+    font-weight: bold;
+    tr {
+      td {
+        width: 20%;
+        border: 1px solid;
+      }
+    }
+  }
+  tbody {
+    text-align: center;
   }
 `
