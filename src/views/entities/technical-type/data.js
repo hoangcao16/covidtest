@@ -310,6 +310,7 @@ export const serverSideColumns = [
         minWidth: '250px',
         selector: row => row.name
     },
+
     {
         name: 'Thao tác',
         allowOverflow: true,
@@ -343,6 +344,12 @@ export const customizeColumns = (deleteCallback) => {
         {
             sortable: true,
             name: 'Tên',
+            minWidth: '250px',
+            selector: row => row.name
+        },
+        {
+            sortable: true,
+            name: 'Đơn giá tổng',
             minWidth: '250px',
             selector: row => row.name
         },
