@@ -6,11 +6,15 @@ const initialState = {
   isEdit: false,
   selectedUuid: '',
   selectedTestFormList: [],
+  dataTable: [],
 }
 export const AnalysisCertificateSlice = createSlice({
   name: 'analysisCertificate',
   initialState,
   reducers: {
+    fetchListTestForm(state, action) {
+      state.dataTable = action.payload
+    },
     refetchList: (state) => {
       state.refetch = !state.refetch
     },
@@ -40,6 +44,7 @@ export const {
   selectUuid,
   closeSidebar,
   selectTestFormList,
+  fetchListTestForm,
 } = AnalysisCertificateSlice.actions
 export const selectAnalysisCertificate = (state) => state.task
 export default AnalysisCertificateSlice.reducer

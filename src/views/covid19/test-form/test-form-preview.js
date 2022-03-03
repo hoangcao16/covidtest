@@ -5,6 +5,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 // ** Custom Components
 import { StyledTestFormPreview } from './style'
+import './index.css'
 // ** Store & Actions
 // import { addUser } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,6 +13,8 @@ import QRCode from 'react-qr-code'
 import { selectTestFormList } from '../../../redux/analysisCertificate'
 import { useReactToPrint } from 'react-to-print'
 import moment from 'moment'
+import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
+
 //Service
 const TestFormPreview = ({ openTestFormPreview, toggleTestFormPreview }) => {
   // ** States
@@ -51,6 +54,22 @@ const TestFormPreview = ({ openTestFormPreview, toggleTestFormPreview }) => {
   const handlePrintTestForm = useReactToPrint({
     content: () => componentRef.current,
   })
+  const printTestForm = () => {
+    analysisCertificateState.selectedTestFormList.map((item) => {
+      const dataUpdate = {
+        patientUuids: item.patientUuids,
+        agencyUuid1: item.agencyUuid1,
+        testTypeUuid: item.testTypeUuid,
+        state: item.state,
+        printStatus: 1,
+      }
+      analysisCertificateService
+        .update(item.uuid, dataUpdate)
+        .then((res) => console.log(res))
+        .catch((error) => console.log(error))
+    })
+    handlePrintTestForm()
+  }
   return (
     <StyledTestFormPreview
       size='lg'
@@ -61,13 +80,16 @@ const TestFormPreview = ({ openTestFormPreview, toggleTestFormPreview }) => {
       toggleSidebar={toggleTestFormPreview}
       onClosed={handleSidebarClosed}
       titleButtonFooter='In kết quả'
-      onClickButtonFooter={() => handlePrintTestForm()}
+      onClickButtonFooter={() => printTestForm()}
     >
-      <div ref={componentRef} style={{ padding: '2cm 16px' }}>
+      <div
+        ref={componentRef}
+        style={{ padding: '2cm 16px', boxSizing: 'border-box' }}
+      >
         {dataView.length > 0 &&
           dataView.map((item, index) => {
             return (
-              <div key={index}>
+              <div id='print-me' key={index}>
                 <table style={{ width: '100%', textAlign: 'center' }}>
                   <tbody>
                     <tr>
@@ -207,7 +229,6 @@ const TestFormPreview = ({ openTestFormPreview, toggleTestFormPreview }) => {
                     })}
                   </tbody>
                 </table>
-                <></>
                 <p
                   style={{
                     fontSize: '16px',

@@ -30,7 +30,7 @@ import { agencyService } from '../../../services/agencyService'
 import { sampleTypeService } from '../../../services/sampleTypeService'
 import { testTypeService } from '../../../services/testTypeService'
 import { technicalTypeService } from '../../../services/technicalTypeService'
-import { labResultTypesService } from '../../../services/labResultTypesService'
+import { labResultTypeService } from '../../../services/labResultTypeService'
 import { patientService } from '../../../services/patientService'
 import { staffService } from '../../../services/staffService'
 import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
@@ -173,7 +173,7 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
         setTechnicalTypeOptions(options)
       }
     })
-    labResultTypesService.list({ page: 1, perPage: 40, q: '' }).then((res) => {
+    labResultTypeService.list({ page: 1, perPage: 40, q: '' }).then((res) => {
       if (res.data.payload !== null) {
         const options = res.data.payload?.map((labResultType) => ({
           label: labResultType.name,

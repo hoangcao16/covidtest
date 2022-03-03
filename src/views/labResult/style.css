@@ -18,3 +18,11 @@
 .print-button:hover {
   background-color: #6a5cf0;
 }
+@media print {
+  #print-me {
+    height: 297mm;
+  }
+  @page {
+    size: A4;
+  }
+}

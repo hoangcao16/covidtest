@@ -9,11 +9,14 @@ import { analysisCertificateService } from '../../services/analysisCertificateCe
 import moment from 'moment'
 import QRCode from 'react-qr-code'
 import { useReactToPrint } from 'react-to-print'
-
+import { useDispatch, useSelector } from 'react-redux'
 const labResultQrcode = () => {
   const [dataView, setDataView] = useState([])
   const componentRef = useRef()
   const { code, password } = useParams()
+  const analysisCertificateState = useSelector(
+    (state) => state.analysisCertificate
+  )
   console.log(code, password)
   useEffect(() => {
     analysisCertificateService.qrcode(code, password).then((res) => {
@@ -37,13 +40,29 @@ const labResultQrcode = () => {
   const handlePrintTestForm = useReactToPrint({
     content: () => componentRef.current,
   })
+  const printTestForm = () => {
+    analysisCertificateState.selectedTestFormList.map((item) => {
+      const dataUpdate = {
+        patientUuids: item.patientUuids,
+        agencyUuid1: item.agencyUuid1,
+        testTypeUuid: item.testTypeUuid,
+        state: item.state,
+        printStatus: 1,
+      }
+      analysisCertificateService
+        .update(item.uuid, dataUpdate)
+        .then((res) => console.log(res))
+        .catch((error) => console.log(error))
+    })
+    handlePrintTestForm()
+  }
   return (
     <>
       <div ref={componentRef} style={{ padding: '2cm 16px' }}>
         {dataView.length > 0 ? (
           dataView.map((item, index) => {
             return (
-              <div key={index}>
+              <div id='print-me' key={index}>
                 <table style={{ width: '100%', textAlign: 'center' }}>
                   <tbody>
                     <tr>
@@ -348,7 +367,7 @@ const labResultQrcode = () => {
         )}
       </div>
       <div className='button-wrapper'>
-        <button onClick={handlePrintTestForm} className='print-button'>
+        <button onClick={() => printTestForm()} className='print-button'>
           In kết quả
         </button>
       </div>

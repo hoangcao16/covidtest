@@ -18,6 +18,7 @@ import {
   editCertificate,
   addNewCertificate,
   selectTestFormList,
+  fetchListTestForm,
 } from '../../../redux/analysisCertificate'
 // ** Third Party Components
 import { MoreVertical, Edit, FileText, Trash } from 'react-feather'
@@ -26,7 +27,7 @@ import { analysisCertificateService } from '../../../services/analysisCertificat
 import moment from 'moment'
 import Select from 'react-select'
 import { toast, Slide } from 'react-toastify'
-import { isEmpty } from 'lodash'
+import TestFormFilter from './test-form-filter'
 // ** Reactstrap Imports
 import {
   CardHeader,
@@ -40,7 +41,6 @@ import {
 
 const TestForm = ({}) => {
   // ** States
-  const [dataTable, setDataTable] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(40)
   const [searchValue, setSearchValue] = useState('')
@@ -55,13 +55,17 @@ const TestForm = ({}) => {
     (state) => state.analysisCertificate
   )
   useEffect(() => {
-    analysisCertificateService.list(currentPage, rowsPerPage).then((res) => {
+    const params = {
+      page: currentPage,
+      size: rowsPerPage,
+    }
+    analysisCertificateService.list(params).then((res) => {
       // setDataTable(res.data.payload)
       if (res.data.payload !== null) {
-        setDataTable(res.data.payload)
+        dispatch(fetchListTestForm(res.data.payload))
       }
     })
-  }, [analysisCertificateState.refetch])
+  }, [analysisCertificateState.refetch, currentPage, rowsPerPage])
   // ** Function to toggle sidebar
   const toggleTestFormSidebar = () => {
     setSidebarOpen(!sidebarOpen)
@@ -330,6 +334,7 @@ const TestForm = ({}) => {
   }
   return (
     <Fragment>
+      <TestFormFilter></TestFormFilter>
       <StyledCard>
         <CardHeader className='border-bottom'>
           <CardTitle tag='h4'>Danh sách</CardTitle>
@@ -401,12 +406,13 @@ const TestForm = ({}) => {
             expandedRowRender={(record, index, indent, expanded) => (
               <Expander record={record} expanded={expanded} />
             )}
+            pagination={false}
             rowKey='uuid'
             columns={TestFormColumns}
             onExpand={(expanded, record) => {
               handleRowClick(expanded, record)
             }}
-            dataSource={dataTable}
+            dataSource={analysisCertificateState.dataTable}
           />
         </div>
       </StyledCard>
