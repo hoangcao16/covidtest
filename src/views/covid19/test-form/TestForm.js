@@ -9,6 +9,7 @@ import { statusOptions, disableOptions } from './data'
 // ** Invoice List Sidebar
 import TestFormSidebar from './test-form-sidebar'
 import TestFormPreview from './test-form-preview'
+import TestFromUploadCSV from './test-form-upload-sidebar'
 // ** Store & Actions
 import { useSelector, useDispatch } from 'react-redux'
 import { StyledCard, StyledExpander } from './style'
@@ -49,6 +50,7 @@ const TestForm = ({}) => {
   const [searchValue, setSearchValue] = useState('')
   const [selectedCertificate, setSelectedCertificate] = useState([])
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [openTestFormUploadCSV, setOpenTestFormUploadCSV] = useState(false)
   const [openTestFormPreview, setOpenTestFormPreview] = useState(false)
   const [dataExpanded, setDataExpanded] = useState({})
 
@@ -69,6 +71,7 @@ const TestForm = ({}) => {
       }
     })
   }, [analysisCertificateState.refetch, currentPage, rowsPerPage])
+  // ** Function to toggle sidebar
   useEffect(() => {
     if (!isEmpty(analysisCertificateState.dataTable.metadata)) {
       // setTotalPage(analysisCertificateState.dataTable.metadata.total)
@@ -82,6 +85,9 @@ const TestForm = ({}) => {
   const toggleTestFormPreview = () => {
     setOpenTestFormPreview(!openTestFormPreview)
     // dispatch(selectTestFormList([]))
+  }
+  const toggleTestFormUploadCSV = () => {
+    setOpenTestFormUploadCSV(!openTestFormUploadCSV)
   }
   const handleUpdateState = (value, record) => {
     const dataUpdate = {
@@ -158,6 +164,70 @@ const TestForm = ({}) => {
         </Menu.Item>
       </Menu>
     )
+  }
+  const fetchList = (params) => {
+    analysisCertificateService.list(params).then((res) => {
+      dispatch(fetchListTestForm(res.data))
+    })
+  }
+  const debounceSearch = useCallback(
+    debounce((query) => fetchList(query), 500),
+    []
+  )
+  // ** Function to handle filter
+  const handleFilter = (e) => {
+    setSearchValue(e)
+    debounceSearch({ page: currentPage, size: rowsPerPage, filter: e })
+  }
+  // ** Function to handle per page
+  const handlePerPage = (e) => {
+    setRowsPerPage(parseInt(e.target.value))
+  }
+  const handlePageChange = (page) => {
+    setCurrentPage(page)
+  }
+  const rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      console.log(
+        `selectedRowKeys: ${selectedRowKeys}`,
+        'selectedRows: ',
+        selectedRows
+      )
+      setSelectedCertificate(selectedRows)
+    },
+    getCheckboxProps: (record) => ({
+      disabled: record.name === 'Disabled User', // Column configuration not to be checked
+      name: record.name,
+    }),
+  }
+  const handlePrintMultipleTestForm = () => {
+    if (selectedCertificate.length > 0) {
+      let AllTestForm = []
+      selectedCertificate.map((item) => {
+        analysisCertificateService
+          .get(item.uuid)
+          .then((res) => {
+            AllTestForm.push(res.data.payload)
+          })
+          .then(() => {
+            if (AllTestForm.length === selectedCertificate.length) {
+              dispatch(selectTestFormList(AllTestForm))
+              toggleTestFormPreview()
+            }
+          })
+      })
+    } else {
+      toast.error('Hãy chọn phiếu xét nghiệm !', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        transition: Slide,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    }
   }
   // ** Table Server Side Column
   const TestFormColumns = [
@@ -247,70 +317,8 @@ const TestForm = ({}) => {
       },
     },
   ]
-  const fetchList = (params) => {
-    analysisCertificateService.list(params).then((res) => {
-      dispatch(fetchListTestForm(res.data))
-    })
-  }
-  const debounceSearch = useCallback(
-    debounce((query) => fetchList(query), 500),
-    []
-  )
-  // ** Function to handle filter
-  const handleFilter = (e) => {
-    console.log(e)
-    setSearchValue(e)
-    debounceSearch({ page: currentPage, size: rowsPerPage, filter: e })
-  }
-  // ** Function to handle per page
-  const handlePerPage = (e) => {
-    setRowsPerPage(parseInt(e.target.value))
-  }
-  const handlePageChange = (page) => {
-    setCurrentPage(page)
-  }
-  const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        'selectedRows: ',
-        selectedRows
-      )
-      setSelectedCertificate(selectedRows)
-    },
-    getCheckboxProps: (record) => ({
-      disabled: record.name === 'Disabled User', // Column configuration not to be checked
-      name: record.name,
-    }),
-  }
-  const handlePrintMultipleTestForm = () => {
-    if (selectedCertificate.length > 0) {
-      let AllTestForm = []
-      selectedCertificate.map((item) => {
-        analysisCertificateService
-          .get(item.uuid)
-          .then((res) => {
-            AllTestForm.push(res.data.payload)
-          })
-          .then(() => {
-            if (AllTestForm.length === selectedCertificate.length) {
-              dispatch(selectTestFormList(AllTestForm))
-              toggleTestFormPreview()
-            }
-          })
-      })
-    } else {
-      toast.error('Hãy chọn phiếu xét nghiệm !', {
-        position: 'top-right',
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        transition: Slide,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      })
-    }
+  const handleUploadCSV = () => {
+    setOpenTestFormUploadCSV(!openTestFormUploadCSV)
   }
   const handleRowClick = (expanded, record) => {
     console.log(expanded, record)
@@ -355,11 +363,6 @@ const TestForm = ({}) => {
       return <h2>Không có dữ liệu</h2>
     }
   }
-  const handleResetPageSize = (page, size) => {
-    setRowsPerPage(page)
-    setCurrentPage(size)
-    console.log('asssssssssss')
-  }
   return (
     <Fragment>
       <TestFormFilter></TestFormFilter>
@@ -392,6 +395,14 @@ const TestForm = ({}) => {
             className='d-flex align-items-center justify-content-sm-end mt-sm-0 mt-1'
             sm='6'
           >
+            <Button
+              className='upload-test-form mx-1'
+              //   color='error'
+              color='danger'
+              onClick={() => handleUploadCSV()}
+            >
+              Upload CSV
+            </Button>
             <Button
               className='print-test-form'
               color='primary'
@@ -459,6 +470,10 @@ const TestForm = ({}) => {
       <TestFormPreview
         openTestFormPreview={openTestFormPreview}
         toggleTestFormPreview={toggleTestFormPreview}
+      />
+      <TestFromUploadCSV
+        openSideBar={openTestFormUploadCSV}
+        toggleTestFormSidebar={toggleTestFormUploadCSV}
       />
     </Fragment>
   )
