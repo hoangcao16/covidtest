@@ -13,7 +13,7 @@ import QRCode from 'react-qr-code'
 import { selectTestFormList } from '../../../redux/analysisCertificate'
 import { useReactToPrint } from 'react-to-print'
 import moment from 'moment'
-import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
+// import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
 
 //Service
 const TestFormPreview = ({ openTestFormPreview, toggleTestFormPreview }) => {
@@ -39,7 +39,7 @@ const TestFormPreview = ({ openTestFormPreview, toggleTestFormPreview }) => {
           selectedItemsFinal.push({
             ...item,
             customers: it,
-            qrUrl: `http://localhost:3000/result-test-form/${item.searchCode}/${item.password}`,
+            qrUrl: `http://45.118.147.183:3000/result-test-form/${item.searchCode}/${item.password}`,
             partners: partners,
             isMix: isMix,
           })
@@ -53,19 +53,19 @@ const TestFormPreview = ({ openTestFormPreview, toggleTestFormPreview }) => {
     content: () => componentRef.current,
   })
   const printTestForm = () => {
-    analysisCertificateState.selectedTestFormList.map((item) => {
-      const dataUpdate = {
-        patientUuids: item.patientUuids,
-        agencyUuid1: item.agencyUuid1,
-        testTypeUuid: item.testTypeUuid,
-        state: item.state,
-        printStatus: 1,
-      }
-      analysisCertificateService
-        .update(item.uuid, dataUpdate)
-        .then((res) => console.log(res))
-        .catch((error) => console.log(error))
-    })
+    // analysisCertificateState.selectedTestFormList.map((item) => {
+    //   const dataUpdate = {
+    //     patientUuids: item.patientUuids,
+    //     agencyUuid1: item.agencyUuid1,
+    //     testTypeUuid: item.testTypeUuid,
+    //     state: item.state,
+    //     printStatus: 1,
+    //   }
+    //   analysisCertificateService
+    //     .update(item.uuid, dataUpdate)
+    //     .then((res) => console.log(res))
+    //     .catch((error) => console.log(error))
+    // })
     handlePrintTestForm()
   }
   return (
