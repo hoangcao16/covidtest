@@ -1,35 +1,23 @@
+/* eslint-disable object-shorthand */
 /* eslint-disable prefer-const */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable no-unused-vars */
 /* eslint-disable comma-dangle */
 // ** React Imports
 import { Fragment, useState, useEffect, memo, useCallback } from 'react'
-// ** Table Columns
-import { statusOptions, disableOptions } from './data'
-// ** Invoice List Sidebar
-import TestFormSidebar from './test-form-sidebar'
-import TestFormPreview from './test-form-preview'
-import BillPreview from './bill-preview'
-import TestFromUploadCSV from './test-form-upload-sidebar'
 // ** Store & Actions
 import { useSelector, useDispatch } from 'react-redux'
-import { StyledCard, StyledExpander } from './style'
+import { StyledCard } from './style'
 import {
-  refetchList,
-  selectUuid,
-  editCertificate,
-  addNewCertificate,
   selectTestFormList,
   fetchListTestForm,
-} from '../../../redux/analysisCertificate'
+} from '../../redux/analysisCertificate'
 // ** Third Party Components
-import { MoreVertical, Edit, FileText, Trash } from 'react-feather'
+import { MoreVertical, FileText } from 'react-feather'
 import { Table, Menu, Dropdown, Pagination } from 'antd'
-import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
+import { analysisCertificateService } from '../../services/analysisCertificateCervice'
 import moment from 'moment'
-import Select from 'react-select'
 import { toast, Slide } from 'react-toastify'
-import TestFormFilter from './test-form-filter'
 import { isEmpty, debounce } from 'lodash'
 // ** Reactstrap Imports
 import {
@@ -41,20 +29,17 @@ import {
   Button,
   Col,
 } from 'reactstrap'
-
+import BillPreview from '../covid19/test-form/bill-preview'
 const TestForm = ({}) => {
   // ** States
   const [currentPage, setCurrentPage] = useState(1)
   // const [totalPage, setTotalPage] = useState(1)
   const [totalItem, setTotalItem] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
+  const printStatus = 1
   const [searchValue, setSearchValue] = useState('')
   const [selectedCertificate, setSelectedCertificate] = useState([])
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [openTestFormUploadCSV, setOpenTestFormUploadCSV] = useState(false)
-  const [openTestFormPreview, setOpenTestFormPreview] = useState(false)
   const [openBillPreview, setOpenBillPreview] = useState(false)
-  const [dataExpanded, setDataExpanded] = useState({})
 
   // ** Store Vars
   const dispatch = useDispatch()
@@ -65,6 +50,7 @@ const TestForm = ({}) => {
     const params = {
       page: currentPage,
       size: rowsPerPage,
+      printStatus: printStatus,
     }
     analysisCertificateService.list(params).then((res) => {
       // setDataTable(res.data.payload)
@@ -81,61 +67,9 @@ const TestForm = ({}) => {
     }
   }, [analysisCertificateState.dataTable])
   // ** Function to toggle sidebar
-  const toggleTestFormSidebar = () => {
-    setSidebarOpen(!sidebarOpen)
-  }
-  const toggleTestFormPreview = () => {
-    setOpenTestFormPreview(!openTestFormPreview)
-    // dispatch(selectTestFormList([]))
-  }
   const toggleBillPreview = () => {
     setOpenBillPreview(!openBillPreview)
     // dispatch(selectTestFormList([]))
-  }
-  const toggleTestFormUploadCSV = () => {
-    setOpenTestFormUploadCSV(!openTestFormUploadCSV)
-  }
-  const handleUpdateState = (value, record) => {
-    const dataUpdate = {
-      patientUuids: record.patientUuids,
-      agencyUuid1: record.agencyUuid1,
-      testTypeUuid: record.testTypeUuid,
-      state: value.value,
-    }
-    analysisCertificateService.update(record.uuid, dataUpdate).then((res) => {
-      if (res.data.code === 600) {
-        dispatch(refetchList())
-        toast.success('Cập nhật thành công !', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          transition: Slide,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
-      }
-    })
-  }
-  const handleEdit = (uuid) => {
-    toggleTestFormSidebar()
-    dispatch(editCertificate(true))
-    dispatch(selectUuid(uuid))
-  }
-  const handlePrintOne = (uuid) => {
-    let Chosenone = []
-    analysisCertificateService
-      .get(uuid)
-      .then((res) => {
-        Chosenone.push(res.data.payload)
-      })
-      .then(() => {
-        if (Chosenone.length > 0) {
-          dispatch(selectTestFormList(Chosenone))
-          toggleTestFormPreview()
-        }
-      })
   }
   const handlePrintBill = (uuid) => {
     let Chosenone = []
@@ -158,35 +92,11 @@ const TestForm = ({}) => {
           key='1'
           onClick={(e) => {
             e.domEvent.stopPropagation()
-            handlePrintOne(props.text.uuid)
-          }}
-        >
-          <FileText size={15} />
-          <span className='align-middle ms-50'>In phiếu xét nghiệm</span>
-        </Menu.Item>
-        <Menu.Item
-          key='2'
-          onClick={(e) => {
-            e.domEvent.stopPropagation()
             handlePrintBill(props.text.uuid)
           }}
         >
           <FileText size={15} />
           <span className='align-middle ms-50'>In phiếu thu</span>
-        </Menu.Item>
-        <Menu.Item
-          key='3'
-          onClick={(e) => {
-            e.domEvent.stopPropagation()
-            handleEdit(props.text.uuid)
-          }}
-        >
-          <Edit size={15} />
-          <span className='align-middle ms-50'>Edit</span>
-        </Menu.Item>
-        <Menu.Item key='4' onClick={(e) => e.domEvent.stopPropagation()}>
-          <Trash size={15} />
-          <span className='align-middle ms-50'>Delete</span>
         </Menu.Item>
       </Menu>
     )
@@ -203,7 +113,12 @@ const TestForm = ({}) => {
   // ** Function to handle filter
   const handleFilter = (e) => {
     setSearchValue(e)
-    debounceSearch({ page: currentPage, size: rowsPerPage, filter: e })
+    debounceSearch({
+      page: currentPage,
+      size: rowsPerPage,
+      printStatus: printStatus,
+      filter: e,
+    })
   }
   // ** Function to handle per page
   const handlePerPage = (e) => {
@@ -226,7 +141,7 @@ const TestForm = ({}) => {
       name: record.name,
     }),
   }
-  const handlePrintMultipleTestForm = () => {
+  const handlePrintMultipleBill = () => {
     if (selectedCertificate.length > 0) {
       let AllTestForm = []
       selectedCertificate.map((item) => {
@@ -238,12 +153,12 @@ const TestForm = ({}) => {
           .then(() => {
             if (AllTestForm.length === selectedCertificate.length) {
               dispatch(selectTestFormList(AllTestForm))
-              toggleTestFormPreview()
+              toggleBillPreview()
             }
           })
       })
     } else {
-      toast.error('Hãy chọn phiếu xét nghiệm !', {
+      toast.error('Hãy chọn phiếu thu !', {
         position: 'top-right',
         autoClose: 2000,
         hideProgressBar: false,
@@ -261,7 +176,8 @@ const TestForm = ({}) => {
       title: 'Mã',
       align: 'center',
       sorter: (a, b) => a.code.localeCompare(b.code),
-      dataIndex: 'code',
+      dataIndex: 'receiptNo',
+      ellipsis: true,
     },
     {
       title: 'Ngày tạo',
@@ -278,51 +194,22 @@ const TestForm = ({}) => {
       dataIndex: 'testTypeName',
     },
     {
-      title: 'Người thực hiện',
+      title: 'Người nộp tiền',
       align: 'center',
-      sorter: (a, b) => a.staffName2.localeCompare(b.staffName2),
-      dataIndex: 'staffName2',
+      sorter: (a, b) => a.payerName.localeCompare(b.payerName),
+      dataIndex: 'payerName',
     },
     {
-      title: 'Ca',
+      title: 'Lí do nộp tiền',
       align: 'center',
-      sorter: (a, b) => a.shift.localeCompare(b.shift),
-      dataIndex: 'shift',
+      sorter: (a, b) => a.payFor.localeCompare(b.payFor),
+      dataIndex: 'payFor',
     },
     {
-      title: 'Kết quả',
+      title: 'Số tiền',
       align: 'center',
-      sorter: (a, b) => a.labResultName.localeCompare(b.labResultName),
-      dataIndex: 'labResultName',
-    },
-    {
-      title: 'Đơn vị',
-      align: 'center',
-      sorter: (a, b) => a.agencyName1.localeCompare(b.agencyName1),
-      dataIndex: 'agencyName1',
-    },
-    {
-      title: 'Trạng thái',
-      align: 'center',
-      sorter: (a, b) => a.state.localeCompare(b.state),
-      dataIndex: 'state',
-      render: (text, record) => {
-        return (
-          <div onClick={(e) => e.stopPropagation()}>
-            <Select
-              isClearable={false}
-              classNamePrefix='select'
-              className='react-select'
-              options={statusOptions}
-              isOptionDisabled={(option, selectValue) =>
-                disableOptions(option, selectValue)
-              }
-              onChange={(value) => handleUpdateState(value, record)}
-              value={statusOptions.find((c) => c.value === text)}
-            ></Select>
-          </div>
-        )
-      },
+      sorter: (a, b) => a.amount - b.amount,
+      dataIndex: 'amount',
     },
     {
       title: 'Actions',
@@ -343,61 +230,14 @@ const TestForm = ({}) => {
       },
     },
   ]
-  const handleUploadCSV = () => {
-    setOpenTestFormUploadCSV(!openTestFormUploadCSV)
-  }
-  const handleRowClick = (expanded, record) => {
-    console.log(expanded, record)
-    if (expanded) {
-      analysisCertificateService.get(record.uuid).then((res) => {
-        if (res.data.code === 600) {
-          setDataExpanded(res.data.payload)
-          console.log(res.data.payload)
-        }
-      })
-    } else {
-      setDataExpanded({})
-    }
-  }
-  const Expander = ({ record, expanded }) => {
-    if (expanded) {
-      return (
-        <StyledExpander>
-          <thead>
-            <tr>
-              <td>Mã bệnh nhân</td>
-              <td>Tên bệnh nhân</td>
-              <td>CCCD/CMT</td>
-              <td>Số điện thoại</td>
-              <td>Địa chỉ</td>
-            </tr>
-          </thead>
-          <tbody>
-            {dataExpanded?.patients?.map((p, i) => (
-              <tr key={i}>
-                <td>{p.code}</td>
-                <td>{p.name}</td>
-                <td>{p.identityNumber}</td>
-                <td>{p.phone}</td>
-                <td>{p.address}</td>
-              </tr>
-            ))}
-          </tbody>
-        </StyledExpander>
-      )
-    } else {
-      return <h2>Không có dữ liệu</h2>
-    }
-  }
   return (
     <Fragment>
-      <TestFormFilter></TestFormFilter>
       <StyledCard>
         <CardHeader className='border-bottom'>
           <CardTitle tag='h4'>Danh sách</CardTitle>
         </CardHeader>
-        <Row className='mx-0 mt-1 mb-2'>
-          <Col sm='6'>
+        <Row className='mx-0 mt-1 mb-2 justify-content-between'>
+          <Col sm='3'>
             <div className='d-flex align-items-center'>
               <Label for='sort-select'>show</Label>
               <Input
@@ -421,19 +261,11 @@ const TestForm = ({}) => {
             sm='6'
           >
             <Button
-              className='upload-test-form mx-1'
-              //   color='error'
-              color='danger'
-              onClick={() => handleUploadCSV()}
-            >
-              Upload CSV
-            </Button>
-            <Button
               className='print-test-form'
               color='primary'
-              onClick={() => handlePrintMultipleTestForm()}
+              onClick={() => handlePrintMultipleBill()}
             >
-              In phiếu xét nghiệm
+              In phiếu thu
             </Button>
             <Label className='me-1' for='search-input'>
               Search
@@ -446,16 +278,6 @@ const TestForm = ({}) => {
               value={searchValue}
               onChange={(e) => handleFilter(e.target.value)}
             />
-            <Button
-              className='add-new-test-form'
-              color='primary'
-              onClick={() => {
-                toggleTestFormSidebar()
-                dispatch(addNewCertificate(true))
-              }}
-            >
-              Thêm mới
-            </Button>
           </Col>
         </Row>
         <div className='react-dataTable'>
@@ -464,19 +286,10 @@ const TestForm = ({}) => {
               type: 'checkbox',
               ...rowSelection,
             }}
-            expandIconAsCell={false}
-            expandIconColumnIndex={-1}
-            expandRowByClick
-            expandedRowRender={(record, index, indent, expanded) => (
-              <Expander record={record} expanded={expanded} />
-            )}
-            loading={true}
             pagination={false}
+            loading={true}
             rowKey='uuid'
             columns={TestFormColumns}
-            onExpand={(expanded, record) => {
-              handleRowClick(expanded, record)
-            }}
             dataSource={analysisCertificateState.dataTable.payload}
           />
           <div className='pagination'>
@@ -489,21 +302,9 @@ const TestForm = ({}) => {
           </div>
         </div>
       </StyledCard>
-      <TestFormSidebar
-        openSideBar={sidebarOpen}
-        toggleTestFormSidebar={toggleTestFormSidebar}
-      />
-      <TestFormPreview
-        openTestFormPreview={openTestFormPreview}
-        toggleTestFormPreview={toggleTestFormPreview}
-      />
       <BillPreview
         openBillPreview={openBillPreview}
         toggleBillPreview={toggleBillPreview}
-      />
-      <TestFromUploadCSV
-        openSideBar={openTestFormUploadCSV}
-        toggleTestFormSidebar={toggleTestFormUploadCSV}
       />
     </Fragment>
   )
