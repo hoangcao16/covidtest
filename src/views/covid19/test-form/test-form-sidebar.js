@@ -437,7 +437,9 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
     patientService.list({ page: 1, perPage: 40, q: query }).then((res) => {
       if (res.data.payload !== null) {
         const options = res.data.payload?.map((patient) => ({
-          label: patient.name,
+          label: `${patient.name} - ${moment(patient.dateOfBirth).format(
+            'DD/MM/YYYY'
+          )} - ${patient.phone}`,
           value: patient.uuid,
           phone: patient.phone,
           nationality: patient.nationality,
@@ -472,6 +474,7 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
   const handleModal = () => {
     setModal(!modal)
   }
+  const setRefreshTable = () => {}
   return (
     <StyledTestFormSidebar
       size='lg'
@@ -555,7 +558,7 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
               <div className='mb-1'>
                 <Label className='form-label' for='technicaltype'>
                   Kỹ thuật xét nghiệm (Thu ngân)
-                  <span className='text-danger'>*</span>
+                  {/* <span className='text-danger'>*</span> */}
                 </Label>
                 <Controller
                   rules={
@@ -583,7 +586,7 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
             <Col md='4'>
               <div className='mb-1'>
                 <Label className='form-label' for='amount'>
-                  Giá tiền (Thu ngân)<span className='text-danger'>*</span>
+                  {/* Giá tiền (Thu ngân)<span className='text-danger'>*</span> */}
                 </Label>
                 <Controller
                   rules={
@@ -639,7 +642,7 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
               <div className='mb-1 sampletype'>
                 <Label className='form-label ' for='sampleType'>
                   Mẫu bệnh phẩm (Bộ phận lấy mẫu)
-                  <span className='text-danger'>*</span>
+                  {/* <span className='text-danger'>*</span> */}
                 </Label>
                 <Controller
                   rules={
@@ -664,7 +667,8 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
             <Col md='3'>
               <div className='mb-1'>
                 <Label className='form-label' for='shift'>
-                  Ca (Bộ phận lấy mẫu)<span className='text-danger'>*</span>
+                  Ca (Bộ phận lấy mẫu)
+                  {/* <span className='text-danger'>*</span> */}
                 </Label>
                 <Controller
                   rules={
@@ -702,7 +706,7 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
               <div className='mb-1'>
                 <Label className='form-label' for='staffUuid1'>
                   Người lấy mẫu (Bộ phận lấy mẫu)
-                  <span className='text-danger'>*</span>
+                  {/* <span className='text-danger'>*</span> */}
                 </Label>
                 <Controller
                   rules={
@@ -735,7 +739,7 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
               <div className='mb-1'>
                 <Label className='form-label' for='sampleNumber'>
                   Số lần lấy mẫu (Bộ phận lấy mẫu)
-                  <span className='text-danger'>*</span>
+                  {/* <span className='text-danger'>*</span> */}
                 </Label>
                 <Controller
                   rules={
@@ -760,7 +764,7 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
               <div className='mb-1'>
                 <Label className='form-label' for='sampleState'>
                   Tình trạng mẫu (Bộ phận lấy mẫu)
-                  <span className='text-danger'>*</span>
+                  {/* <span className='text-danger'>*</span> */}
                 </Label>
                 <Controller
                   rules={
@@ -790,7 +794,7 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
               <div className='mb-1'>
                 <Label className='form-label' for='takeSampleTime'>
                   Thời gian lấy mẫu (Bộ phận lấy mẫu)
-                  <span className='text-danger'>*</span>
+                  {/* <span className='text-danger'>*</span> */}
                 </Label>
                 <Controller
                   rules={
@@ -817,7 +821,7 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
               <div className='mb-1'>
                 <Label className='form-label' for='receiveSampleTime'>
                   Thời gian nhận mẫu (Bộ phận lấy mẫu)
-                  <span className='text-danger'>*</span>
+                  {/* <span className='text-danger'>*</span> */}
                 </Label>
                 <Controller
                   rules={
@@ -848,7 +852,7 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
               <div className='mb-1'>
                 <Label className='form-label' for='diagnosisEng'>
                   Kết luận tiếng anh (Kỹ thuật viên)
-                  <span className='text-danger'>*</span>
+                  {/* <span className='text-danger'>*</span> */}
                 </Label>
                 <Controller
                   rules={
@@ -873,7 +877,7 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
               <div className='mb-1'>
                 <Label className='form-label' for='performTime'>
                   Thời gian thực hiện (Kỹ thuật viên)
-                  <span className='text-danger'>*</span>
+                  {/* <span className='text-danger'>*</span> */}
                 </Label>
                 <Controller
                   rules={
@@ -899,7 +903,8 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
             <Col md='3'>
               <div className='mb-1'>
                 <Label className='form-label' for='diagnosis'>
-                  Kết luận (Kỹ thuật viên)<span className='text-danger'>*</span>
+                  Kết luận (Kỹ thuật viên)
+                  {/* <span className='text-danger'>*</span> */}
                 </Label>
                 <Controller
                   rules={
@@ -923,7 +928,8 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
             <Col md='3'>
               <div className='mb-1'>
                 <Label className='form-label' for='state'>
-                  Trạng thái <span className='text-danger'>*</span>
+                  Trạng thái
+                  {/* <span className='text-danger'>*</span> */}
                 </Label>
                 <Controller
                   rules={
@@ -955,7 +961,8 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
             <Col md='3'>
               <div className='mb-1'>
                 <Label className='form-label' for='labResultUuid'>
-                  Kết quả (Kỹ thuật viên)<span className='text-danger'>*</span>
+                  Kết quả (Kỹ thuật viên)
+                  {/* <span className='text-danger'>*</span> */}
                 </Label>
                 <Controller
                   rules={
@@ -983,7 +990,8 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
             <Col md='3'>
               <div className='mb-1'>
                 <Label className='form-label' for='staffUuid3'>
-                  Người ký phiếu<span className='text-danger'>*</span>
+                  Người ký phiếu
+                  {/* <span className='text-danger'>*</span> */}
                 </Label>
                 <Controller
                   rules={
@@ -1011,7 +1019,8 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
             <Col md='3'>
               <div className='mb-1'>
                 <Label className='form-label' for='returnTime'>
-                  Ngày trả kết quả <span className='text-danger'>*</span>
+                  Ngày trả kết quả
+                  {/* <span className='text-danger'>*</span> */}
                 </Label>
                 <Controller
                   rules={
@@ -1037,7 +1046,8 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
             <Col md='3'>
               <div className='mb-1'>
                 <Label className='form-label' for='staffUuid2'>
-                  Người thực hiện <span className='text-danger'>*</span>
+                  Người thực hiện
+                  {/* <span className='text-danger'>*</span> */}
                 </Label>
                 <Controller
                   rules={
@@ -1068,7 +1078,8 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
             <Col md='3'>
               <div className='mb-1'>
                 <Label className='form-label' for='staffUuid4'>
-                  Người lập phiếu <span className='text-danger'>*</span>
+                  Người lập phiếu
+                  {/* <span className='text-danger'>*</span> */}
                 </Label>
                 <Controller
                   rules={
@@ -1097,7 +1108,8 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
             <Col md='3'>
               <div className='mb-1'>
                 <Label className='form-label' for='payerUuid'>
-                  Người nộp tiền<span className='text-danger'>*</span>
+                  Người nộp tiền
+                  {/* <span className='text-danger'>*</span> */}
                 </Label>
                 <Controller
                   rules={
@@ -1127,7 +1139,8 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
             <Col md='3'>
               <div className='mb-1'>
                 <Label className='form-label' for='note'>
-                  Ghi chú <span className='text-danger'>*</span>
+                  Ghi chú
+                  {/* <span className='text-danger'>*</span> */}
                 </Label>
                 <Controller
                   rules={
@@ -1162,7 +1175,7 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
       <AddNewModal
         open={modal}
         handleModal={handleModal}
-        // setRefreshTable={setRefreshTable}
+        setRefreshTable={setRefreshTable}
       />
     </StyledTestFormSidebar>
   )

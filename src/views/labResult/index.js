@@ -20,15 +20,16 @@ const labResultQrcode = () => {
   console.log(code, password)
   useEffect(() => {
     analysisCertificateService.qrcode(code, password).then((res) => {
-      if (res.data.code === 600) {
+      console.log(res)
+      if (res.data.code === 600 && res.data.payload !== null) {
         let selectedItemsFinal = []
-        const fullCustomers = res.data.payload.patients
-        res.data.payload.patients.forEach((item) => {
+        const fullCustomers = res?.data?.payload?.patients
+        res?.data?.payload?.patients.forEach((item) => {
           const partners = fullCustomers.filter((i) => i.uuid !== item.uuid)
           selectedItemsFinal.push({
             ...res.data.payload,
             customers: item,
-            qrUrl: `http://localhost:3000/result-test-form/${res.data.payload.searchCode}/${res.data.payload.password}`,
+            qrUrl: `http://45.118.147.183:3000/result-test-form/${res.data.payload.searchCode}/${res.data.payload.password}`,
             partners: partners,
           })
         })
