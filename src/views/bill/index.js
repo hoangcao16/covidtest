@@ -287,7 +287,6 @@ const TestForm = ({}) => {
               ...rowSelection,
             }}
             pagination={false}
-            loading={true}
             rowKey='uuid'
             columns={TestFormColumns}
             dataSource={analysisCertificateState.dataTable.payload}

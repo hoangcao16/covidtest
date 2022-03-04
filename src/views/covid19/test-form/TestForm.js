@@ -470,7 +470,7 @@ const TestForm = ({}) => {
             expandedRowRender={(record, index, indent, expanded) => (
               <Expander record={record} expanded={expanded} />
             )}
-            loading={true}
+            // loading={true}
             pagination={false}
             rowKey='uuid'
             columns={TestFormColumns}
