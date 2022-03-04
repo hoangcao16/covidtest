@@ -29,10 +29,9 @@ const TestFormPreview = ({ openTestFormPreview, toggleTestFormPreview }) => {
   )
   useEffect(() => {
     if (analysisCertificateState.selectedTestFormList.length > 0) {
-      console.log(analysisCertificateState.selectedTestFormList)
-      const listDate = analysisCertificateState.selectedTestFormList
+      const listData = analysisCertificateState.selectedTestFormList
       let selectedItemsFinal = []
-      listDate.forEach((item) => {
+      listData.forEach((item) => {
         const fullCustomers = item.patients
         item.patients.forEach((it) => {
           const partners = fullCustomers.filter((itx) => itx.uuid !== it.uuid)
@@ -46,7 +45,6 @@ const TestFormPreview = ({ openTestFormPreview, toggleTestFormPreview }) => {
           })
         })
       })
-      console.log(selectedItemsFinal)
       setDataView(selectedItemsFinal)
     }
   }, [analysisCertificateState.selectedTestFormList])

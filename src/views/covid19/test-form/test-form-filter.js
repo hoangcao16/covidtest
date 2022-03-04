@@ -47,7 +47,7 @@ const TestFormFilter = () => {
       printStatus: printStatusSearch?.value,
       phone: e,
       page: 1,
-      size: 7,
+      size: 10,
     }
     setPhoneSearch(e)
     debounceSearch(dataSearch)
@@ -61,7 +61,7 @@ const TestFormFilter = () => {
       printStatus: printStatusSearch?.value,
       phone: phoneSearch,
       page: 1,
-      size: 7,
+      size: 10,
     }
     setNameSearch(e)
     debounceSearch(dataSearch)
@@ -75,7 +75,7 @@ const TestFormFilter = () => {
       printStatus: printStatusSearch?.value,
       phone: phoneSearch,
       page: 1,
-      size: 7,
+      size: 10,
     }
     setAddressSearch(e)
     debounceSearch(dataSearch)
@@ -89,7 +89,7 @@ const TestFormFilter = () => {
       printStatus: printStatusSearch?.value,
       phone: phoneSearch,
       page: 1,
-      size: 7,
+      size: 10,
     }
     setStateSearch(e)
     debounceSearch(dataSearch)
@@ -103,7 +103,7 @@ const TestFormFilter = () => {
       printStatus: printStatusSearch?.value,
       phone: phoneSearch,
       page: 1,
-      size: 7,
+      size: 10,
     }
     setReceiptNoSearch(e)
     debounceSearch(dataSearch)
@@ -117,7 +117,7 @@ const TestFormFilter = () => {
       printStatus: e?.value,
       phone: phoneSearch,
       page: 1,
-      size: 7,
+      size: 10,
     }
     setPrintStatusSearch(e)
     debounceSearch(dataSearch)
@@ -129,7 +129,7 @@ const TestFormFilter = () => {
     setStateSearch('')
     setReceiptNoSearch('')
     setPrintStatusSearch('')
-    debounceSearch({ page: 1, size: 7 })
+    debounceSearch({ page: 1, size: 10 })
   }
   return (
     <StyledFilterList>

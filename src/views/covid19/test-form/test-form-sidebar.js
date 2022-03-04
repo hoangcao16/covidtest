@@ -36,7 +36,7 @@ import { staffService } from '../../../services/staffService'
 import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
 import { toast, Slide } from 'react-toastify'
 import Card from '../../../@core/components/card-snippet'
-
+import AddNewModal from '../../patients/patients/AddNewModal'
 const defaultValues = {
   agencyUuid1: '',
   agencyUuid2: '',
@@ -122,6 +122,9 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
   const [labResultTypeOptions, setLabResultTypeOptions] = useState([])
   const [patientsOptions, setPatientsOptions] = useState([])
   const [staffOptions, setStaffOptions] = useState([])
+  const [modal, setModal] = useState(false)
+  // const [refreshTable, setRefreshTable] = useState(false)
+
   const analysisCertificateState = useSelector(
     (state) => state.analysisCertificate
   )
@@ -147,13 +150,13 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
       }
     })
     sampleTypeService.list({ page: 1, perPage: 40, q: '' }).then((res) => {
-      if (res.data.payload !== null) {
+      if (res.data.code === 600 && res.data.payload !== null) {
         const options = res.data.payload?.map((sampleType) => ({
           label: sampleType.name,
           value: sampleType.uuid,
         }))
         setSampleTypeOptions(options)
-        console.log(options)
+        // console.log(options)
         setValue('sampleType', options[0].value)
       }
     })
@@ -465,8 +468,10 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
         : ''
     )
   }
-  console.log(errors)
 
+  const handleModal = () => {
+    setModal(!modal)
+  }
   return (
     <StyledTestFormSidebar
       size='lg'
@@ -482,28 +487,40 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
           <Label className='form-label' for='patients'>
             Chọn khách hàng (Thu ngân)<span className='text-danger'>*</span>
           </Label>
-          <Controller
-            rules={{
-              required: true,
-            }}
-            name='patients'
-            control={control}
-            render={({ field }) => (
-              <Select
-                isClearable={false}
-                isMulti
-                onInputChange={(value) => handleSearchPatients(value)}
-                classNamePrefix='select'
-                options={patientsOptions}
-                theme={selectThemeColors}
-                filterOption={filterOption}
-                className={classnames('react-select', {
-                  'is-invalid': errors.patients,
-                })}
-                {...field}
-              />
-            )}
-          />
+          <div className='d-flex'>
+            <Controller
+              rules={{
+                required: true,
+              }}
+              name='patients'
+              control={control}
+              render={({ field }) => (
+                <>
+                  <Select
+                    isClearable={false}
+                    isMulti
+                    onInputChange={(value) => handleSearchPatients(value)}
+                    classNamePrefix='select'
+                    options={patientsOptions}
+                    theme={selectThemeColors}
+                    filterOption={filterOption}
+                    className={classnames('react-select', {
+                      'is-invalid': errors.patients,
+                    })}
+                    {...field}
+                  />
+                </>
+              )}
+            />
+            <Button
+              type='button'
+              className='me-1 add-patient-button'
+              color='primary'
+              onClick={handleModal}
+            >
+              +
+            </Button>
+          </div>
         </div>
         <Card title='Thu Ngân'>
           <Row>
@@ -1142,6 +1159,11 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
           </div>
         </Card>
       </Form>
+      <AddNewModal
+        open={modal}
+        handleModal={handleModal}
+        // setRefreshTable={setRefreshTable}
+      />
     </StyledTestFormSidebar>
   )
 }
