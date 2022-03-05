@@ -1,3 +1,5 @@
+/* eslint-disable multiline-ternary */
+/* eslint-disable object-shorthand */
 /* eslint-disable prefer-const */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable no-unused-vars */
@@ -55,12 +57,20 @@ const TestForm = ({}) => {
   const [openTestFormPreview, setOpenTestFormPreview] = useState(false)
   const [openBillPreview, setOpenBillPreview] = useState(false)
   const [dataExpanded, setDataExpanded] = useState({})
-
+  const [allParamsSearch, setAllParamsSearch] = useState({})
+  const [metadata, setMetadata] = useState({
+    page: 1,
+    size: 10,
+    total: 0,
+  })
   // ** Store Vars
   const dispatch = useDispatch()
   const analysisCertificateState = useSelector(
     (state) => state.analysisCertificate
   )
+  const paramsSearch = (params) => {
+    setAllParamsSearch(params)
+  }
   useEffect(() => {
     const params = {
       page: currentPage,
@@ -74,12 +84,12 @@ const TestForm = ({}) => {
         dispatch(fetchListTestForm(res.data))
       }
     })
-  }, [analysisCertificateState.refetch, currentPage, rowsPerPage])
+  }, [analysisCertificateState.refetch])
   // ** Function to toggle sidebar
   useEffect(() => {
     if (!isEmpty(analysisCertificateState.dataTable.metadata)) {
       // setTotalPage(analysisCertificateState.dataTable.metadata.total)
-      setTotalItem(analysisCertificateState.dataTable.metadata.total)
+      setMetadata(analysisCertificateState.dataTable.metadata)
     }
   }, [analysisCertificateState.dataTable])
   // ** Function to toggle sidebar
@@ -210,9 +220,47 @@ const TestForm = ({}) => {
   // ** Function to handle per page
   const handlePerPage = (e) => {
     setRowsPerPage(parseInt(e.target.value))
+    const params = {
+      ...allParamsSearch,
+      page: 1,
+      size: parseInt(e.target.value),
+      fromDate:
+        allParamsSearch.fromDate === undefined
+          ? moment().startOf('day').valueOf()
+          : allParamsSearch.fromDate,
+      toDate:
+        allParamsSearch.toDate === undefined
+          ? moment().valueOf()
+          : allParamsSearch.toDate,
+    }
+    analysisCertificateService.list(params).then((res) => {
+      // setDataTable(res.data.payload)
+      if (res.data.payload !== null) {
+        dispatch(fetchListTestForm(res.data))
+      }
+    })
   }
   const handlePageChange = (page) => {
     setCurrentPage(page)
+    const params = {
+      ...allParamsSearch,
+      page: page,
+      size: rowsPerPage,
+      fromDate:
+        allParamsSearch.fromDate === undefined
+          ? moment().startOf('day').valueOf()
+          : allParamsSearch.fromDate,
+      toDate:
+        allParamsSearch.toDate === undefined
+          ? moment().valueOf()
+          : allParamsSearch.toDate,
+    }
+    analysisCertificateService.list(params).then((res) => {
+      // setDataTable(res.data.payload)
+      if (res.data.payload !== null) {
+        dispatch(fetchListTestForm(res.data))
+      }
+    })
   }
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
@@ -391,9 +439,16 @@ const TestForm = ({}) => {
       return <h2>Không có dữ liệu</h2>
     }
   }
+  const handleResetFilter = () => {
+    setRowsPerPage(10)
+    setCurrentPage(1)
+  }
   return (
     <Fragment>
-      <TestFormFilter></TestFormFilter>
+      <TestFormFilter
+        paramsSearch={paramsSearch}
+        handleResetFilter={handleResetFilter}
+      ></TestFormFilter>
       <StyledCard>
         <CardHeader className='border-bottom'>
           <CardTitle tag='h4'>Danh sách</CardTitle>
@@ -483,9 +538,10 @@ const TestForm = ({}) => {
           />
           <div className='pagination'>
             <Pagination
-              defaultPageSize={rowsPerPage}
-              current={currentPage}
-              total={totalItem}
+              // defaultPageSize={rowsPerPage}
+              pageSize={metadata?.size}
+              current={metadata?.page}
+              total={metadata?.total}
               onChange={(page) => handlePageChange(page)}
             />
           </div>
