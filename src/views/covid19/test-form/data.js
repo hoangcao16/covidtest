@@ -122,3 +122,17 @@ export const disableOptions = (option, selectValue) => {
       return false
   }
 }
+export const shiftOptions = [
+  {
+    label: 'Ca 1',
+    value: 'Ca 1',
+  },
+  {
+    label: 'Ca 2',
+    value: 'Ca 2',
+  },
+  {
+    label: 'Ca 3',
+    value: 'Ca 3',
+  },
+]

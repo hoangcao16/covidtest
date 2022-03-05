@@ -11,7 +11,10 @@ import './index.css'
 // import { addUser } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
 import QRCode from 'react-qr-code'
-import { selectTestFormList } from '../../../redux/analysisCertificate'
+import {
+  refetchList,
+  selectTestFormList,
+} from '../../../redux/analysisCertificate'
 import { useReactToPrint } from 'react-to-print'
 import moment from 'moment'
 import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
@@ -61,6 +64,7 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
         .then((res) => console.log(res))
         .catch((error) => console.log(error))
     })
+    dispatch(refetchList())
     handlePrintBill()
   }
   return (

@@ -22,6 +22,13 @@ export const analysisCertificateService = {
       url: `/api/v0/analysis_certificate/${uuid}`,
     })
   },
+  getPrice(params) {
+    return apiClient.request({
+      method: 'GET',
+      url: `/api/v0/get_price`,
+      params: params,
+    })
+  },
   qrcode(code, password) {
     return apiClient.request({
       method: 'GET',

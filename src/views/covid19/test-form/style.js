@@ -67,6 +67,10 @@ export const StyledTestFormSidebar = styled(Sidebar)`
   #returnTime {
     color: #b4b7bd;
   }
+  .countPrice {
+    margin-left: 4px;
+    min-width: 100px;
+  }
 `
 export const StyledCard = styled(Card)`
   .add-new-test-form {
@@ -166,7 +170,7 @@ export const StyledCard = styled(Card)`
 
       a {
         background-color: transparent;
-        color: #ffffff;
+        /* color: #; */
       }
     }
 
@@ -259,6 +263,15 @@ export const StyledFilterList = styled(Card)`
 
     .select__menu {
       z-index: 2;
+    }
+  }
+  .ant-picker {
+    background: transparent;
+    border: 1px solid #404656;
+    color: #7367f0;
+    border-radius: 4px;
+    .ant-picker-suffix {
+      color: #7367f0;
     }
   }
 `

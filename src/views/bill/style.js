@@ -99,7 +99,7 @@ export const StyledCard = styled(Card)`
 
       a {
         background-color: transparent;
-        color: #ffffff;
+        /* color: #ffffff; */
       }
     }
 

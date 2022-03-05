@@ -212,6 +212,12 @@ const TestForm = ({}) => {
       dataIndex: 'amount',
     },
     {
+      title: 'Người tạo',
+      align: 'center',
+      sorter: (a, b) => a.staffName4.localeCompare(b.staffName4),
+      dataIndex: 'staffName4',
+    },
+    {
       title: 'Actions',
       align: 'center',
       fixed: 'right',

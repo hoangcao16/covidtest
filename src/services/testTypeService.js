@@ -1,28 +1,36 @@
+/* eslint-disable comma-dangle */
 import apiClient from './apiService'
 
 export const testTypeService = {
-    list(params) {
-        return apiClient.request({
-            method: 'GET',
-            url: '/api/v0/test_types',
-            params: {
-                page: params.page - 1,
-                size: params.perPage,
-                filter: params.q
-            }
-        })
-    },
-    create(record) {
-        return apiClient.request({
-            method: 'POST',
-            url: '/api/v0/test_types',
-            data: record
-        })
-    },
-    delete(uuid) {
-        return apiClient.request({
-            method: 'DELETE',
-            url: `/api/v0/test_types/${uuid}`
-        })
-    }
+  list(params) {
+    return apiClient.request({
+      method: 'GET',
+      url: '/api/v0/test_types',
+      params: {
+        page: params.page - 1,
+        size: params.perPage,
+        filter: params.q,
+      },
+    })
+  },
+  create(record) {
+    return apiClient.request({
+      method: 'POST',
+      url: '/api/v0/test_types',
+      data: record,
+    })
+  },
+  edit(uuid, record) {
+    return apiClient.request({
+      method: 'PUT',
+      url: `/api/v0/test_types/${uuid}`,
+      data: record,
+    })
+  },
+  delete(uuid) {
+    return apiClient.request({
+      method: 'DELETE',
+      url: `/api/v0/test_types/${uuid}`,
+    })
+  },
 }
