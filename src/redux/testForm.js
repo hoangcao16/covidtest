@@ -5,6 +5,15 @@ import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 // import axios from 'axios'
 import {testFormService} from "../services/testFormService"
 
+
+export const uploadCSV = createAsyncThunk('testForm/upload-csv', async data => {
+    console.log('testForm:uploadCSV:response:', data)
+    const response = await testFormService.upload(data)
+    console.log('testForm:uploadCSV:response:', response)
+    return {}
+})
+
+
 export const getData = createAsyncThunk('testForm/getData', async params => {
     const response = await testFormService.list()
     console.log('testForm:response:', response)

@@ -9,14 +9,14 @@ export const htmlToString = html => html.replace(/<\/?[^>]+(>|$)/g, '')
 
 // ** Checks if the passed date is today
 const isToday = date => {
-  const today = new Date()
-  return (
-    /* eslint-disable operator-linebreak */
-    date.getDate() === today.getDate() &&
-    date.getMonth() === today.getMonth() &&
-    date.getFullYear() === today.getFullYear()
-    /* eslint-enable */
-  )
+    const today = new Date()
+    return (
+        /* eslint-disable operator-linebreak */
+        date.getDate() === today.getDate() &&
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear()
+        /* eslint-enable */
+    )
 }
 
 /**
@@ -26,21 +26,21 @@ const isToday = date => {
  * @param {String} value date to format
  * @param {Object} formatting Intl object to format with
  */
-export const formatDate = (value, formatting = { month: 'short', day: 'numeric', year: 'numeric' }) => {
-  if (!value) return value
-  return new Intl.DateTimeFormat('en-US', formatting).format(new Date(value))
+export const formatDate = (value, formatting = {month: 'short', day: 'numeric', year: 'numeric'}) => {
+    if (!value) return value
+    return new Intl.DateTimeFormat('en-US', formatting).format(new Date(value))
 }
 
 // ** Returns short month of passed date
 export const formatDateToMonthShort = (value, toTimeForCurrentDay = true) => {
-  const date = new Date(value)
-  let formatting = { month: 'short', day: 'numeric' }
+    const date = new Date(value)
+    let formatting = {month: 'short', day: 'numeric'}
 
-  if (toTimeForCurrentDay && isToday(date)) {
-    formatting = { hour: 'numeric', minute: 'numeric' }
-  }
+    if (toTimeForCurrentDay && isToday(date)) {
+        formatting = {hour: 'numeric', minute: 'numeric'}
+    }
 
-  return new Intl.DateTimeFormat('en-US', formatting).format(new Date(value))
+    return new Intl.DateTimeFormat('en-US', formatting).format(new Date(value))
 }
 
 /**
@@ -60,22 +60,22 @@ export const getUserData = () => JSON.parse(localStorage.getItem('userData'))
  * @param {String} userRole Role of user
  */
 export const getHomeRouteForLoggedInUser = userRole => {
-  if (userRole === 'admin') return '/'
-  if (userRole === 'client') return '/access-control'
-  return '/login'
+    if (userRole === 'admin') return '/'
+    if (userRole === 'client') return '/access-control'
+    return '/login'
 }
 
 // ** React Select Theme Colors
 export const selectThemeColors = theme => ({
-  ...theme,
-  colors: {
-    ...theme.colors,
-    primary25: '#7367f01a', // for option hover bg-color
-    primary: '#7367f0', // for selected option bg-color
-    neutral10: '#7367f0', // for tags bg-color
-    neutral20: '#ededed', // for input border-color
-    neutral30: '#ededed' // for input hover border-color
-  }
+    ...theme,
+    colors: {
+        ...theme.colors,
+        primary25: '#7367f01a', // for option hover bg-color
+        primary: '#7367f0', // for selected option bg-color
+        neutral10: '#7367f0', // for tags bg-color
+        neutral20: '#ededed', // for input border-color
+        neutral30: '#ededed' // for input hover border-color
+    }
 })
 
 
@@ -85,14 +85,58 @@ import Avatar from '@components/avatar'
 
 export const ToastContent = ({name, description}) => (
     <Fragment>
-      <div className='toastify-header'>
-        <div className='title-wrapper'>
-          <h6 className='toast-title fw-bold'>{name}</h6>
+        <div className='toastify-header'>
+            <div className='title-wrapper'>
+                <h6 className='toast-title fw-bold'>{name}</h6>
+            </div>
         </div>
-      </div>
-      <div className='toastify-body'>
-        <span>{description}</span>
-      </div>
+        <div className='toastify-body'>
+            <span>{description}</span>
+        </div>
     </Fragment>
 )
 
+
+export const generateCode = (prefix, length) => {
+    let result = `${prefix}-`
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    const charactersLength = characters.length
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() *
+            charactersLength))
+    }
+    return result
+}
+
+export const generateCodeWithNumber = (prefix, length) => {
+    let result = `${prefix}-`
+    const characters = '0123456789'
+    const charactersLength = characters.length
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() *
+            charactersLength))
+    }
+    return result
+}
+
+let m_w = 123456789
+let m_z = 987654321
+const mask = 0xffffffff
+
+// Takes any integer
+export const seed = (i) => {
+    m_w = (123456789 + i) & mask
+    m_z = (987654321 - i) & mask
+}
+
+// Returns number between 0 (inclusive) and 1.0 (exclusive),
+// just like Math.random().
+export const random = () => {
+    // eslint-disable-next-line no-mixed-operators
+    m_z = (36969 * (m_z & 65535) + (m_z >> 16)) & mask
+    // eslint-disable-next-line no-mixed-operators
+    m_w = (18000 * (m_w & 65535) + (m_w >> 16)) & mask
+    let result = ((m_z << 16) + (m_w & 65535)) >>> 0
+    result /= 4294967296
+    return result
+}

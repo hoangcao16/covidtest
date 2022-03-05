@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import Sidebar from '../../components/sidebar'
-import { Card } from 'reactstrap'
+import {Card} from 'reactstrap'
 
 export const StyledTestFormSidebar = styled(Sidebar)`
   .card-header {
@@ -40,12 +40,15 @@ export const StyledTestFormSidebar = styled(Sidebar)`
     padding-top: 1rem;
     text-align: center;
   }
+
   .react-select {
     flex: 1;
   }
+
   .add-patient-button {
     margin-left: 8px;
   }
+
   .groupshift {
     width: 100%;
   }
@@ -201,6 +204,7 @@ export const StyledCard = styled(Card)`
   .print-test-form {
     margin-right: 1rem;
   }
+
   .pagination {
     margin: 2rem 1rem;
     float: right;
@@ -252,6 +256,7 @@ export const StyledExpander = styled.table`
 export const StyledFilterList = styled(Card)`
   .select-filter {
     width: 100%;
+
     .select__menu {
       z-index: 2;
     }
@@ -259,8 +264,24 @@ export const StyledFilterList = styled(Card)`
 `
 export const StyledTestFormUploadCSV = styled(Sidebar)`
   @media (min-width: 768px) {
-    width: 70vw !important;
+    width: 80vw !important;
   }
+
+  .patients {
+    height: 50vh;
+
+    .patient {
+      display: flex;
+      justify-content: left;
+      align-items: center;
+      border: 1px solid whitesmoke;
+
+      &-item {
+        width: 8%;
+      }
+    }
+  }
+
 `
 export const StyledBillPreview = styled(Sidebar)`
   @media (min-width: 768px) {
