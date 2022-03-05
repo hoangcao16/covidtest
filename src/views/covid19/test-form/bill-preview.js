@@ -159,7 +159,7 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
                       </td>
                     </tr>
                     <tr>
-                      <td>Đối tượng KCB:</td>
+                      <td>Đơn vị:{item.agency}</td>
                       <td
                         rowSpan='5'
                         style={{ textAlign: 'right', paddingRight: '2rem' }}
@@ -196,13 +196,10 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
                       <td style={{ border: '1px solid', width: '25%' }}>
                         Nội dung
                       </td>
-                      <td style={{ border: '1px solid', width: '25%' }}>
+                      <td style={{ border: '1px solid', width: '45%' }}>
                         Ghi chú
                       </td>
-                      <td style={{ border: '1px solid', width: '5%' }}>SL</td>
-                      <td style={{ border: '1px solid', width: '20%' }}>
-                        Đơn giá
-                      </td>
+                      <td style={{ border: '1px solid', width: '5%' }}>Đơn vị tính</td>
                       <td style={{ border: '1px solid', width: '20%' }}>
                         Thành tiền
                       </td>
@@ -219,8 +216,7 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
                       <td style={{ border: '1px solid' }}>1</td>
                       <td style={{ border: '1px solid' }}>{item?.payFor}</td>
                       <td style={{ border: '1px solid' }}>{item?.note}</td>
-                      <td style={{ border: '1px solid' }}></td>
-                      <td style={{ border: '1px solid' }}></td>
+                      <td style={{ border: '1px solid' }}>{item?.patients.length}</td>
                       <td style={{ border: '1px solid' }}>{item?.amount}</td>
                     </tr>
                     <tr>
@@ -230,7 +226,7 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
                           fontWeight: 'bold',
                           textAlign: 'left',
                         }}
-                        colSpan='5'
+                        colSpan='4'
                       >
                         Tổng cộng
                       </td>
