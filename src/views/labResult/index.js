@@ -17,6 +17,7 @@ const labResultQrcode = () => {
   const analysisCertificateState = useSelector(
     (state) => state.analysisCertificate
   )
+  const baseURL = process.env.REACT_APP_BASE_QR_URL
   console.log(code, password)
   useEffect(() => {
     analysisCertificateService.qrcode(code, password).then((res) => {
@@ -29,7 +30,7 @@ const labResultQrcode = () => {
           selectedItemsFinal.push({
             ...res.data.payload,
             customers: item,
-            qrUrl: `http://45.118.147.183:3000/result-test-form/${res.data.payload.searchCode}/${res.data.payload.password}`,
+            qrUrl: `${baseURL}/${res.data.payload.searchCode}/${res.data.payload.password}`,
             partners: partners,
           })
         })

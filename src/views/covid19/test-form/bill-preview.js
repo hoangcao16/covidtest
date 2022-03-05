@@ -18,7 +18,7 @@ import {
 import { useReactToPrint } from 'react-to-print'
 import moment from 'moment'
 import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
-
+const baseURL = process.env.REACT_APP_BASE_QR_URL
 //Service
 const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
   // ** States
@@ -39,7 +39,7 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
       const selectedItemsFinal = listDate.map((item) => {
         return {
           ...item,
-          qrUrl: `http://45.118.147.183:3000/result-test-form/${item?.searchCode}/${item?.password}`,
+          qrUrl: `${baseURL}/${item?.searchCode}/${item?.password}`,
         }
       })
       // console.log(selectedItemsFinal)
