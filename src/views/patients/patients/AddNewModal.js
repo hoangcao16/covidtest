@@ -264,7 +264,7 @@ const AddNewModal = ({open, handleModal, setRefreshTable}) => {
                             />
                         </InputGroup>
                     </div>
-                    <Button type='submit' className='me-1' color='primary'>
+                    <Button className='me-1' color='primary'>
                         Submit
                     </Button>
                     <Button color='secondary' onClick={handleModal} outline>

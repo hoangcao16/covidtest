@@ -11,18 +11,21 @@ import {Modal, Input, Label, Button, ModalHeader, ModalBody, InputGroup, InputGr
 // ** Styles
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 import {agencyService} from "../../../services/agencyService"
+import {Radio} from "antd"
 
 const AddNewModal = ({open, handleModal, setRefreshTable}) => {
     // ** State
     const [code, setCode] = useState()
     const [description, setDescription] = useState()
+    const [type, setType] = useState()
     // ** Custom close btn
     const CloseBtn = <X className='cursor-pointer' size={15} onClick={handleModal}/>
     const handleSubmit = () => {
         console.log('handleSubmit:', code, description)
         agencyService.create({
             code,
-            name: description
+            name: description,
+            type
         }).then(r => {
             console.log('handleSubmit:response:', r)
             handleModal()
@@ -62,6 +65,23 @@ const AddNewModal = ({open, handleModal, setRefreshTable}) => {
                         </InputGroupText>
                         <Input id='description' placeholder='Trung tâm xét nghiệm công nghệ cao HSTC'
                                onChange={e => setDescription(e.target.value)}/>
+                    </InputGroup>
+                </div>
+                <div className='mb-1'>
+                    <Label className='form-label' for='description'>
+                        Thuộc loại đơn vi:
+                    </Label>
+                    <InputGroup>
+                        <Radio.Group
+                            value={type}
+                            onChange={(e) => {
+                                setType(e.target.value)
+                            }}
+                            name='type'
+                        >
+                            <Radio value={0}>Đơn vị trong</Radio>
+                            <Radio value={1}>Đơn vị ngoài</Radio>
+                        </Radio.Group>
                     </InputGroup>
                 </div>
                 <Button className='me-1' color='primary' onClick={handleSubmit}>
