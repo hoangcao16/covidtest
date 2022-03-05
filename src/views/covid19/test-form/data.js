@@ -46,11 +46,11 @@ export const statusOptions = [
 ]
 export const samplestateOptions = [
   {
-    label: 'Đủ mẫu',
+    label: 'Đạt',
     value: true,
   },
   {
-    label: 'Không đủ mẫu',
+    label: 'Không Đạt',
     value: false,
   },
 ]

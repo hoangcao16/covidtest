@@ -86,7 +86,7 @@ export default [
     title: 'Công nợ',
     icon: <Cpu size={20} />,
     navLink: '/loans',
-    children: [],
+    // children: [],
   },
   {
     id: 'reports',

@@ -37,8 +37,8 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
   const [codeSearch, setCodeSearch] = useState('')
   const [passwordSearch, setPasswordSearch] = useState('')
   const [identityNumberSearch, setIdentityNumberSearch] = useState('')
-  const [startTimeRange, setStartTimeRange] = useState()
-  const [endTimeRange, setEndTimeRange] = useState()
+  const [startTimeRange, setStartTimeRange] = useState(moment().startOf('day'))
+  const [endTimeRange, setEndTimeRange] = useState(moment())
 
   useEffect(() => {
     const allParamsSearch = {
@@ -393,8 +393,8 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
       page: 1,
       size: 10,
     }
-    setStartTimeRange(e !== null ? e[0] : undefined)
-    setEndTimeRange(e !== null ? e[1] : undefined)
+    setStartTimeRange(e !== null ? e[0] : moment().startOf('day'))
+    setEndTimeRange(e !== null ? e[1] : moment())
     debounceSearch(dataSearch)
   }
 
@@ -410,8 +410,8 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     setCodeSearch('')
     setPasswordSearch('')
     setIdentityNumberSearch('')
-    setStartTimeRange()
-    setEndTimeRange()
+    setStartTimeRange(moment().startOf('day'))
+    setEndTimeRange(moment())
     debounceSearch({
       page: 1,
       size: 10,
@@ -629,8 +629,16 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
           <RangePicker
             separator={<span>to</span>}
             placeholder={['DD-MM-YYYY', 'DD-MM-YYYY']}
+            format={['DD-MM-YYYY HH:mm ', 'DD-MM-YYYY HH:mm ']}
             value={[startTimeRange, endTimeRange]}
             onChange={handleSearchTime}
+            showTime={{
+              format: 'HH:mm',
+              defaultValue: [
+                moment('00:00', 'HH:mm'),
+                moment('23:59', 'HH:mm'),
+              ],
+            }}
             className='dataTable-filter'
           />
         </Col>

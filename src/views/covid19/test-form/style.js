@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import Sidebar from '../../components/sidebar'
-import {Card} from 'reactstrap'
+import { Card } from 'reactstrap'
 
 export const StyledTestFormSidebar = styled(Sidebar)`
   .card-header {
@@ -274,6 +274,9 @@ export const StyledFilterList = styled(Card)`
       color: #7367f0;
     }
   }
+  .ant-picker-input > input {
+    color: #fff;
+  }
 `
 export const StyledTestFormUploadCSV = styled(Sidebar)`
   @media (min-width: 768px) {
@@ -294,7 +297,6 @@ export const StyledTestFormUploadCSV = styled(Sidebar)`
       }
     }
   }
-
 `
 export const StyledBillPreview = styled(Sidebar)`
   @media (min-width: 768px) {

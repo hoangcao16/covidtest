@@ -82,6 +82,8 @@ const TestForm = ({}) => {
       // setDataTable(res.data.payload)
       if (res.data.payload !== null) {
         dispatch(fetchListTestForm(res.data))
+      } else {
+        dispatch(fetchListTestForm([]))
       }
     })
   }, [analysisCertificateState.refetch])
@@ -127,6 +129,17 @@ const TestForm = ({}) => {
           draggable: true,
           progress: undefined,
         })
+      } else {
+        toast.error('Cập nhật thất bại !', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          transition: Slide,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
       }
     })
   }
@@ -134,6 +147,35 @@ const TestForm = ({}) => {
     toggleTestFormSidebar()
     dispatch(editCertificate(true))
     dispatch(selectUuid(uuid))
+  }
+  const handleDelete = (uuid) => {
+    console.log(uuid)
+    analysisCertificateService.delete(uuid).then((res) => {
+      if (res.data.code === 600) {
+        dispatch(refetchList())
+        toast.success('Xóa thành công !', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          transition: Slide,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+      } else {
+        toast.error('Xóa thất bại !', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          transition: Slide,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+      }
+    })
   }
   const handlePrintOne = (uuid) => {
     let Chosenone = []
@@ -196,7 +238,13 @@ const TestForm = ({}) => {
           <Edit size={15} />
           <span className='align-middle ms-50'>Edit</span>
         </Menu.Item>
-        <Menu.Item key='4' onClick={(e) => e.domEvent.stopPropagation()}>
+        <Menu.Item
+          key='4'
+          onClick={(e) => {
+            e.domEvent.stopPropagation()
+            handleDelete(props.text.uuid)
+          }}
+        >
           <Trash size={15} />
           <span className='align-middle ms-50'>Delete</span>
         </Menu.Item>

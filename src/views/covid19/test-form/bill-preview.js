@@ -141,9 +141,11 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
                           (Birthday)
                         </span>:{' '}
                         <span>
-                          {moment(item?.payer?.dateOfBirth).format(
-                            'DD-MM-YYYY'
-                          )}
+                          {item?.payer?.dateOfBirth !== undefined
+                            ? moment(item?.payer?.dateOfBirth).format(
+                                'DD-MM-YYYY'
+                              )
+                            : ''}
                         </span>
                       </td>
                       <td>
@@ -199,7 +201,9 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
                       <td style={{ border: '1px solid', width: '45%' }}>
                         Ghi chú
                       </td>
-                      <td style={{ border: '1px solid', width: '5%' }}>Đơn vị tính</td>
+                      <td style={{ border: '1px solid', width: '5%' }}>
+                        Đơn vị tính
+                      </td>
                       <td style={{ border: '1px solid', width: '20%' }}>
                         Thành tiền
                       </td>
@@ -216,7 +220,9 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
                       <td style={{ border: '1px solid' }}>1</td>
                       <td style={{ border: '1px solid' }}>{item?.payFor}</td>
                       <td style={{ border: '1px solid' }}>{item?.note}</td>
-                      <td style={{ border: '1px solid' }}>{item?.patients.length}</td>
+                      <td style={{ border: '1px solid' }}>
+                        {item?.patients.length}
+                      </td>
                       <td style={{ border: '1px solid' }}>{item?.amount}</td>
                     </tr>
                     <tr>
@@ -249,7 +255,7 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
                       <td
                         style={{
                           border: '1px solid',
-                          width: '20%',
+                          width: '10%',
                           fontWeight: 'bold',
                         }}
                       >
@@ -258,7 +264,7 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
                       <td
                         style={{
                           border: '1px solid',
-                          width: '40%',
+                          width: '35%',
                           fontWeight: 'bold',
                         }}
                       >
@@ -267,11 +273,20 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
                       <td
                         style={{
                           border: '1px solid',
-                          width: '40%',
+                          width: '35%',
                           fontWeight: 'bold',
                         }}
                       >
                         Địa chỉ
+                      </td>
+                      <td
+                        style={{
+                          border: '1px solid',
+                          width: '20%',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        Số điện thoại
                       </td>
                     </tr>
                     {item?.patients?.map((a, b) => {
@@ -280,6 +295,7 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
                           <td style={{ border: '1px solid' }}>{b + 1}</td>
                           <td style={{ border: '1px solid' }}>{a.name}</td>
                           <td style={{ border: '1px solid' }}>{a.address}</td>
+                          <td style={{ border: '1px solid' }}>{a.phone}</td>
                         </tr>
                       )
                     })}
