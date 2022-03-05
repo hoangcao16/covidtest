@@ -11,6 +11,7 @@ import EntitiesRoutes from './Entities'
 import SettingsRoutes from './Settings'
 import PatientsRoutes from './Patients'
 import BillRoutes from './Bill'
+import LoansRoutes from './Loans'
 // ** Merge Routes
 const Routes = [
   ...PagesRoutes,
@@ -18,6 +19,7 @@ const Routes = [
   ...SettingsRoutes,
   ...PatientsRoutes,
   ...BillRoutes,
+  ...LoansRoutes,
 ]
 
 export { DefaultRoute, TemplateTitle, Routes }

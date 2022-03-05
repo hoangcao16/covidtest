@@ -13,6 +13,7 @@ import {
   fetchListTestForm,
 } from '../../redux/analysisCertificate'
 // ** Third Party Components
+import { selectThemeColors } from '@utils'
 import { MoreVertical, FileText } from 'react-feather'
 import { Table, Menu, Dropdown, Pagination } from 'antd'
 import { analysisCertificateService } from '../../services/analysisCertificateCervice'
@@ -29,15 +30,19 @@ import {
   Button,
   Col,
 } from 'reactstrap'
+import Select from 'react-select'
 import BillPreview from '../covid19/test-form/bill-preview'
+import { agencyService } from '../../services/agencyService'
 
 const TestForm = ({}) => {
   // ** States
   const [currentPage, setCurrentPage] = useState(1)
   // const [totalPage, setTotalPage] = useState(1)
   const [totalItem, setTotalItem] = useState(0)
+  const [agencyOptions, setAgencyOptions] = useState([])
+
   const [rowsPerPage, setRowsPerPage] = useState(10)
-  const printStatus = 1
+  const state = 'DEBT'
   const [searchValue, setSearchValue] = useState('')
   const [selectedCertificate, setSelectedCertificate] = useState([])
   const [openBillPreview, setOpenBillPreview] = useState(false)
@@ -55,7 +60,7 @@ const TestForm = ({}) => {
     const params = {
       page: currentPage,
       size: rowsPerPage,
-      printStatus: printStatus,
+      state: state,
       //   fromDate: moment().startOf('day').valueOf(),
       //   toDate: moment().valueOf(),
     }
@@ -65,6 +70,15 @@ const TestForm = ({}) => {
         dispatch(fetchListTestForm(res.data))
       } else {
         dispatch(fetchListTestForm([]))
+      }
+    })
+    agencyService.list({ page: 1, perPage: 40, q: '' }).then((res) => {
+      if (res.data.payload !== null) {
+        const options = res.data.payload?.map((agency) => ({
+          label: agency.name,
+          value: agency.uuid,
+        }))
+        setAgencyOptions(options)
       }
     })
   }, [analysisCertificateState.refetch, currentPage, rowsPerPage])
@@ -125,7 +139,7 @@ const TestForm = ({}) => {
     debounceSearch({
       page: currentPage,
       size: rowsPerPage,
-      printStatus: printStatus,
+      state: state,
       filter: e,
     })
   }
@@ -301,6 +315,13 @@ const TestForm = ({}) => {
               value={searchValue}
               onChange={(e) => handleFilter(e.target.value)}
             />
+            {/* <Select
+              isClearable={false}
+              classNamePrefix='select'
+              options={agencyOptions}
+              theme={selectThemeColors}
+              className='react-select'
+            /> */}
           </Col>
         </Row>
         <div className='react-dataTable'>

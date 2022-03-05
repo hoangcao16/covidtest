@@ -19,6 +19,7 @@ import moment from 'moment'
 const TestFormPreview = ({ openTestFormPreview, toggleTestFormPreview }) => {
   // ** States
   const dispatch = useDispatch()
+  const baseURL = process.env.REACT_APP_BASE_QR_URL
   const [dataView, setDataView] = useState([])
   const handleSidebarClosed = () => {
     dispatch(selectTestFormList([]))
@@ -39,7 +40,7 @@ const TestFormPreview = ({ openTestFormPreview, toggleTestFormPreview }) => {
           selectedItemsFinal.push({
             ...item,
             customers: it,
-            qrUrl: `http://45.118.147.183:3000/result-test-form/${item.searchCode}/${item.password}`,
+            qrUrl: `${baseURL}/${item.searchCode}/${item.password}`,
             partners: partners,
             isMix: isMix,
           })
