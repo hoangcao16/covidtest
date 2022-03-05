@@ -24,7 +24,7 @@ import { labResultTypeService } from '../../../services/labResultTypeService'
 import { DatePicker, Space } from 'antd'
 import moment from 'moment'
 
-const TestFormFilter = () => {
+const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
   const [labResultTypeOptions, setLabResultTypeOptions] = useState([])
   const [phoneSearch, setPhoneSearch] = useState('')
   const [nameSearch, setNameSearch] = useState('')
@@ -39,6 +39,43 @@ const TestFormFilter = () => {
   const [identityNumberSearch, setIdentityNumberSearch] = useState('')
   const [startTimeRange, setStartTimeRange] = useState()
   const [endTimeRange, setEndTimeRange] = useState()
+
+  useEffect(() => {
+    const allParamsSearch = {
+      name: nameSearch,
+      address: addressSearch,
+      state: stateSearch?.value,
+      receiptNo: receiptNoSearch,
+      printStatus: printStatusSearch?.value,
+      phone: phoneSearch,
+      searchCode: codeSearch,
+      password: passwordSearch,
+      identityNumber: identityNumberSearch,
+      shift: shiftSearch?.value,
+      labResultUuid: labResultSearch?.value,
+      fromDate:
+        startTimeRange !== undefined
+          ? moment(startTimeRange).valueOf()
+          : undefined,
+      toDate:
+        endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
+    }
+    paramsSearch(allParamsSearch)
+  }, [
+    phoneSearch,
+    nameSearch,
+    addressSearch,
+    stateSearch,
+    receiptNoSearch,
+    printStatusSearch,
+    shiftSearch,
+    labResultSearch,
+    codeSearch,
+    passwordSearch,
+    identityNumberSearch,
+    startTimeRange,
+    endTimeRange,
+  ])
 
   const dispatch = useDispatch()
   const { RangePicker } = DatePicker
@@ -81,6 +118,8 @@ const TestFormFilter = () => {
           : undefined,
       toDate:
         endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
+      page: 1,
+      size: 10,
     }
     setPhoneSearch(e)
     debounceSearch(dataSearch)
@@ -104,6 +143,8 @@ const TestFormFilter = () => {
           : undefined,
       toDate:
         endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
+      page: 1,
+      size: 10,
     }
     setNameSearch(e)
     debounceSearch(dataSearch)
@@ -127,6 +168,8 @@ const TestFormFilter = () => {
           : undefined,
       toDate:
         endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
+      page: 1,
+      size: 10,
     }
     setAddressSearch(e)
     debounceSearch(dataSearch)
@@ -150,6 +193,8 @@ const TestFormFilter = () => {
           : undefined,
       toDate:
         endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
+      page: 1,
+      size: 10,
     }
     setStateSearch(e)
     debounceSearch(dataSearch)
@@ -173,6 +218,8 @@ const TestFormFilter = () => {
           : undefined,
       toDate:
         endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
+      page: 1,
+      size: 10,
     }
     setReceiptNoSearch(e)
     debounceSearch(dataSearch)
@@ -196,6 +243,8 @@ const TestFormFilter = () => {
           : undefined,
       toDate:
         endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
+      page: 1,
+      size: 10,
     }
     setPrintStatusSearch(e)
     debounceSearch(dataSearch)
@@ -219,6 +268,8 @@ const TestFormFilter = () => {
           : undefined,
       toDate:
         endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
+      page: 1,
+      size: 10,
     }
     setShiftSearch(e)
     debounceSearch(dataSearch)
@@ -242,6 +293,8 @@ const TestFormFilter = () => {
           : undefined,
       toDate:
         endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
+      page: 1,
+      size: 10,
     }
     setLabResultSearch(e)
     debounceSearch(dataSearch)
@@ -265,6 +318,8 @@ const TestFormFilter = () => {
           : undefined,
       toDate:
         endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
+      page: 1,
+      size: 10,
     }
     setCodeSearch(e)
     debounceSearch(dataSearch)
@@ -288,6 +343,8 @@ const TestFormFilter = () => {
           : undefined,
       toDate:
         endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
+      page: 1,
+      size: 10,
     }
     setPasswordSearch(e)
     debounceSearch(dataSearch)
@@ -311,6 +368,8 @@ const TestFormFilter = () => {
           : undefined,
       toDate:
         endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
+      page: 1,
+      size: 10,
     }
     setIdentityNumberSearch(e)
     debounceSearch(dataSearch)
@@ -331,6 +390,8 @@ const TestFormFilter = () => {
       labResultUuid: labResultSearch?.value,
       fromDate: e !== null ? moment(e[0]).valueOf() : undefined,
       toDate: e !== null ? moment(e[1]).valueOf() : undefined,
+      page: 1,
+      size: 10,
     }
     setStartTimeRange(e !== null ? e[0] : undefined)
     setEndTimeRange(e !== null ? e[1] : undefined)
@@ -351,7 +412,13 @@ const TestFormFilter = () => {
     setIdentityNumberSearch('')
     setStartTimeRange()
     setEndTimeRange()
-    debounceSearch({ page: 1, size: 10 })
+    debounceSearch({
+      page: 1,
+      size: 10,
+      fromDate: moment().startOf('day').valueOf(),
+      toDate: moment().valueOf(),
+    })
+    handleResetFilter()
   }
   return (
     <StyledFilterList>
