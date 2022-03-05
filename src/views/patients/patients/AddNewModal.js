@@ -40,7 +40,7 @@ const AddNewModal = ({open, handleModal, setRefreshTable}) => {
             phone: data?.phone,
             identityNumber: data?.identityNumber,
             address: data?.address,
-            dateOfBirth: moment(data?.dateOfBirth).format('DD-MM-YYYY'),
+            dateOfBirth: data?.dateOfBirth,
             sex: data?.sex?.value
         }).then(r => {
             console.log('handleSubmit:response:', r)
@@ -224,15 +224,12 @@ const AddNewModal = ({open, handleModal, setRefreshTable}) => {
                                 name='dateOfBirth'
                                 control={control}
                                 render={({field}) => (
-                                    <input
-                                        type='datetime-local'
-                                        className='date-picker'
-                                        id='performTime'
-                                        name='dateOfBirth'
-                                        placeholder='Ngày sinh'
+                                    <Input
+                                        id='dateOfBirth'
+                                        placeholder='1435434344545'
+                                        invalid={errors.dateOfBirth && true}
                                         {...field}
-                                    />
-                                )}
+                                    />)}
                             />
                         </InputGroup>
                     </div>

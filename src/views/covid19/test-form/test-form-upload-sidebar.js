@@ -62,20 +62,33 @@ const TestFromUploadCSV = ({openSideBar, toggleTestFormSidebar}) => {
                 console.log('item', item)
                 if (idx > 1) {
                     console.log('push item', item)
-                    patientsTemp.push({
-                        code: generateCodeWithNumber(`BN-${today}`, 7),
-                        name: item[1],
-                        dateOfBirth: item[2],
-                        sex: item[3],
-                        nationIdentify: item[4],
-                        address: item[5],
-                        phone: item[6],
-                        session: item[12],
-                        dateCreated: moment(item[16]).format('DD-MM-YYYY'),
-                        agency: item[13],
-                        result: item[10],
-                        gop: item[14]
-                    })
+                    if (item[1] !== null ||
+                        item[2] !== null ||
+                        item[3] !== null ||
+                        item[4] !== null ||
+                        item[5] !== null ||
+                        item[6] !== null ||
+                        item[12] !== null ||
+                        item[16] !== null ||
+                        item[13] !== null ||
+                        item[10] !== null ||
+                        item[14] !== null) {
+                        patientsTemp.push({
+                            code: generateCodeWithNumber(`BN-${today}`, 7),
+                            name: item[1],
+                            dateOfBirth: item[2],
+                            sex: item[3],
+                            nationIdentify: item[4],
+                            address: item[5],
+                            phone: item[6],
+                            session: item[12],
+                            dateCreated: moment(item[16]).format('DD-MM-YYYY'),
+                            agency: item[13],
+                            result: item[10],
+                            gop: item[14]
+                        })
+                    }
+
                 }
             })
 
@@ -180,6 +193,8 @@ const TestFromUploadCSV = ({openSideBar, toggleTestFormSidebar}) => {
                                     <div className='patient-item patient-result'>{item.result}</div>
                                     <div className='patient-item patient-gop'>{item.gop}</div>
                                     <div className='patient-item patient-dateCreated'>{item.dateCreated}</div>
+                                    <button color='primary' className='patient-item patient-dateCreated'>Gửi lên
+                                    </button>
                                 </div>
                             ))
                         }
