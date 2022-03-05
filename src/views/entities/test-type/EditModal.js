@@ -4,7 +4,7 @@
 // ** Third Party Components
 import Flatpickr from 'react-flatpickr'
 import { User, Briefcase, Mail, Calendar, DollarSign, X } from 'react-feather'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 // ** Reactstrap Imports
 import {
   Modal,
@@ -28,7 +28,6 @@ const defaultValues = {
   code: '',
   name: '',
   basePrice: '',
-  getSampleAtHomePrice: '',
   mix: [],
   sum2: '2',
   sum3: '3',
@@ -38,9 +37,10 @@ const defaultValues = {
   price3: '',
   price4: '',
   price5: '',
+  getSampleAtHomePrice: '',
 }
 
-const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
+const EditModal = ({ open, selecteditem, handleModal, setRefreshTable }) => {
   // ** State
   // const [code, setCode] = useState()
   // const [description, setDescription] = useState()
@@ -52,18 +52,29 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({ defaultValues })
-  // const mix = [
-  //     {
-  //         number: 2,
-  //         price: 880000
-  //     },
-  //     {
-  //         number: 2,
-  //         price: 880000
-  //     }
-  // ]
+  useEffect(() => {
+    console.log('selecteditem:', selecteditem)
+    const dataForm = {
+      code: selecteditem?.code,
+      name: selecteditem?.name,
+      basePrice: selecteditem?.price,
+      getSampleAtHomePrice: selecteditem?.getSampleAtHomePrice,
+      sum2: selecteditem?.groupPrices?.find((x) => x.quantity === 2)?.quantity,
+      sum3: selecteditem?.groupPrices?.find((x) => x.quantity === 3)?.quantity,
+      sum4: selecteditem?.groupPrices?.find((x) => x.quantity === 4)?.quantity,
+      sum5: selecteditem?.groupPrices?.find((x) => x.quantity === 5)?.quantity,
+      price2: selecteditem?.groupPrices?.find((x) => x.quantity === 2)?.price,
+      price3: selecteditem?.groupPrices?.find((x) => x.quantity === 3)?.price,
+      price4: selecteditem?.groupPrices?.find((x) => x.quantity === 4)?.price,
+      price5: selecteditem?.groupPrices?.find((x) => x.quantity === 5)?.price,
+    }
+    for (const key in dataForm) {
+      setValue(key, dataForm[key])
+    }
+  }, [selecteditem])
   const add = () => {
     setTotalSumary((prevState) => [...prevState, { sum: '', price: '' }])
   }
@@ -97,7 +108,9 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
         },
       ],
     }
-    testTypeService.create(dataSend).then((r) => {
+    console.log('dataSend:', data)
+    console.log('dataSend:', dataSend)
+    testTypeService.edit(selecteditem.uuid, dataSend).then((r) => {
       console.log('handleSubmit:response:', r)
       handleModal()
       setRefreshTable()
@@ -412,4 +425,4 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
   )
 }
 
-export default AddNewModal
+export default EditModal

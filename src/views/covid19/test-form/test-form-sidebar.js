@@ -1,3 +1,4 @@
+/* eslint-disable object-shorthand */
 /* eslint-disable multiline-ternary */
 /* eslint-disable no-unneeded-ternary */
 /* eslint-disable semi */
@@ -21,7 +22,7 @@ import toVND from '../../components/common/toVND'
 import { Button, Label, Form, Input, Row, Col } from 'reactstrap'
 import { refetchList, closeSidebar } from '../../../redux/analysisCertificate'
 import moment from 'moment'
-import { Radio } from 'antd'
+import { Radio, Checkbox } from 'antd'
 // ** Store & Actions
 // import { addUser } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
@@ -29,7 +30,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { agencyService } from '../../../services/agencyService'
 import { sampleTypeService } from '../../../services/sampleTypeService'
 import { testTypeService } from '../../../services/testTypeService'
-import { technicalTypeService } from '../../../services/technicalTypeService'
 import { labResultTypeService } from '../../../services/labResultTypeService'
 import { patientService } from '../../../services/patientService'
 import { staffService } from '../../../services/staffService'
@@ -111,6 +111,9 @@ const defaultValues = {
       ? 'Ca 3'
       : '',
   note: '',
+  ct: '',
+  getSampleAtHome: false,
+  getSampleAtHomePrice: '',
 }
 
 const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
@@ -118,7 +121,6 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
   const [agencyOptions, setAgencyOptions] = useState([])
   const [sampleTypeOptions, setSampleTypeOptions] = useState([])
   const [testTypeOptions, setTestTypeOptions] = useState([])
-  const [technicalTypeOptions, setTechnicalTypeOptions] = useState([])
   const [labResultTypeOptions, setLabResultTypeOptions] = useState([])
   const [patientsOptions, setPatientsOptions] = useState([])
   const [staffOptions, setStaffOptions] = useState([])
@@ -134,6 +136,7 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
   const {
     control,
     setValue,
+    getValues,
     setError,
     handleSubmit,
     register,
@@ -165,17 +168,9 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
         const options = res.data.payload?.map((testType) => ({
           label: testType.name,
           value: testType.uuid,
+          getSampleAtHomePrice: testType.getSampleAtHomePrice,
         }))
         setTestTypeOptions(options)
-      }
-    })
-    technicalTypeService.list({ page: 1, perPage: 40, q: '' }).then((res) => {
-      if (res.data.payload !== null) {
-        const options = res.data.payload?.map((technicalType) => ({
-          label: technicalType.name,
-          value: technicalType.uuid,
-        }))
-        setTechnicalTypeOptions(options)
       }
     })
     labResultTypeService.list({ page: 1, perPage: 40, q: '' }).then((res) => {
@@ -288,11 +283,6 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
               takeSampleTime: moment(payload?.takeSampleTime).format(
                 'YYYY-DD-MMTHH:mm'
               ),
-              technicaltype: {
-                ...payload?.technicalType,
-                value: payload?.technicalType?.uuid,
-                label: payload?.technicalType?.name,
-              },
               // testNumber: payload?.testNumber,
               testtype: {
                 ...payload?.testType,
@@ -301,6 +291,9 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
               },
               // shift: payload?.shift,
               // note: payload?.note,
+              ct: payload?.ct,
+              getSampleAtHome: payload?.getSampleAtHome,
+              getSampleAtHomePrice: payload?.getSampleAtHomePrice,
             }
             for (const key in dataForm) {
               setValue(key, dataForm[key])
@@ -315,7 +308,7 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
       const newDataEdit = {
         agencyUuid1: data?.agencyUuid1?.value,
         agencyUuid2: data?.agencyUuid1?.value,
-        amount: Number(data?.amount),
+        amount: parseFloat(data?.amount),
         diagnosis: data?.diagnosis,
         diagnosisEng: data?.diagnosisEng,
         inWords: to_vietnamese(data?.amount),
@@ -326,7 +319,7 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
         performTime: moment(data?.performTime).valueOf(),
         receiveSampleTime: moment(data?.receiveSampleTime).valueOf(),
         returnTime: moment(data?.returnTime).valueOf(),
-        sampleNumber: Number(data?.sampleNumber),
+        sampleNumber: parseFloat(data?.sampleNumber),
         sampleState: data?.sampleState?.value,
         sampleTypeUuid: data?.sampleType,
         staffUuid1: data?.staffUuid1?.value,
@@ -335,11 +328,12 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
         staffUuid4: data?.staffUuid4?.value,
         state: data?.state?.value,
         takeSampleTime: moment(data?.takeSampleTime).valueOf(),
-        technicalUuid: data?.technicaltype?.value,
-        testNumber: 1,
         testTypeUuid: data?.testtype?.value,
         shift: data?.shift,
         note: data?.note,
+        ct: parseFloat(data?.ct),
+        getSampleAtHome: data?.getSampleAtHome,
+        getSampleAtHomePrice: parseFloat(data?.getSampleAtHomePrice),
       }
       analysisCertificateService.update(data?.uuid, newDataEdit).then((res) => {
         if (res.data.code === 600) {
@@ -375,7 +369,7 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
       const newData = {
         agencyUuid1: data?.agencyUuid1?.value,
         agencyUuid2: data?.agencyUuid1?.value,
-        amount: Number(data?.amount),
+        amount: parseFloat(data?.amount),
         diagnosis: data?.diagnosis,
         diagnosisEng: data?.diagnosisEng,
         inWords: to_vietnamese(data?.amount),
@@ -386,7 +380,7 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
         performTime: moment(data?.performTime).valueOf(),
         receiveSampleTime: moment(data?.receiveSampleTime).valueOf(),
         returnTime: moment(data?.returnTime).valueOf(),
-        sampleNumber: Number(data?.sampleNumber),
+        sampleNumber: parseFloat(data?.sampleNumber),
         sampleState: data?.sampleState?.value,
         sampleTypeUuid: data?.sampleType,
         staffUuid1: data?.staffUuid1?.value,
@@ -395,11 +389,12 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
         staffUuid4: data?.staffUuid4?.value,
         state: data?.state?.value,
         takeSampleTime: moment(data?.takeSampleTime).valueOf(),
-        technicalUuid: data?.technicaltype?.value,
-        testNumber: 1,
         testTypeUuid: data?.testtype?.value,
         shift: data?.shift,
         note: data?.note,
+        ct: parseFloat(data?.ct),
+        getSampleAtHome: data?.getSampleAtHome,
+        getSampleAtHomePrice: parseFloat(data?.getSampleAtHomePrice),
       }
       analysisCertificateService.add(newData).then((res) => {
         if (res.data.code === 600) {
@@ -475,6 +470,33 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
     setModal(!modal)
   }
   const setRefreshTable = () => {}
+  const handleCountPrice = () => {
+    const totalPatient = getValues('patients')?.length
+    const testtype = getValues('testtype')
+    console.log(testtype.value)
+    if (testtype.value === undefined) {
+      toast.error('Chọn yêu cầu xét nghiệm !', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        transition: Slide,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    } else {
+      const data = {
+        numberOfPatient: totalPatient,
+        uuid: testtype.value,
+      }
+      analysisCertificateService.getPrice(data).then((res) => {
+        if (res.data.code === 600) {
+          setValue('amount', res.data.payload.price)
+        }
+      })
+    }
+  }
   return (
     <StyledTestFormSidebar
       size='lg'
@@ -539,25 +561,38 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
                   }}
                   name='testtype'
                   control={control}
-                  render={({ field }) => (
-                    <Select
-                      isClearable={false}
-                      classNamePrefix='select'
-                      options={testTypeOptions}
-                      theme={selectThemeColors}
-                      className={classnames('react-select', {
-                        'is-invalid': errors.testtype,
-                      })}
-                      {...field}
-                    />
-                  )}
+                  render={({ field: { onChange, value, ref } }) => {
+                    return (
+                      <Select
+                        inputRef={ref}
+                        value={testTypeOptions.find(
+                          (c) => c.value === value.value
+                        )}
+                        onChange={(val) => {
+                          setValue(
+                            'getSampleAtHomePrice',
+                            val.getSampleAtHomePrice
+                          )
+                          console.log(val)
+                          onChange(val)
+                        }}
+                        isClearable={false}
+                        classNamePrefix='select'
+                        options={testTypeOptions}
+                        theme={selectThemeColors}
+                        className={classnames('react-select', {
+                          'is-invalid': errors.testtype,
+                        })}
+                      />
+                    )
+                  }}
                 />
               </div>
             </Col>
             <Col md='4'>
-              <div className='mb-1'>
-                <Label className='form-label' for='technicaltype'>
-                  Kỹ thuật xét nghiệm (Thu ngân)
+              <div className='mb-1 d-flex flex-column'>
+                <Label className='form-label' for='getSampleAtHome'>
+                  Lấy mẫu tại nhà (Thu ngân)
                   {/* <span className='text-danger'>*</span> */}
                 </Label>
                 <Controller
@@ -566,17 +601,37 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
                       // required: true,
                     }
                   }
-                  name='technicaltype'
+                  name='getSampleAtHome'
+                  control={control}
+                  render={({
+                    field: { onChange, onBlur, value, name, ref },
+                  }) => (
+                    <Checkbox onChange={onChange} checked={value}>
+                      Lấy mẫu tại nhà
+                    </Checkbox>
+                  )}
+                />
+              </div>
+            </Col>
+            <Col md='4'>
+              <div className='mb-1'>
+                <Label className='form-label' for='getSampleAtHomePrice'>
+                  Giá tiền thu tại nhà (Thu ngân)
+                  {/* <span className='text-danger'>*</span> */}
+                </Label>
+                <Controller
+                  rules={
+                    {
+                      // required: true,
+                    }
+                  }
+                  name='getSampleAtHomePrice'
                   control={control}
                   render={({ field }) => (
-                    <Select
-                      isClearable={false}
-                      classNamePrefix='select'
-                      options={technicalTypeOptions}
-                      theme={selectThemeColors}
-                      className={classnames('react-select', {
-                        'is-invalid': errors.technicaltype,
-                      })}
+                    <Input
+                      id='getSampleAtHomePrice'
+                      placeholder='50000'
+                      invalid={errors.getSampleAtHomePrice && true}
                       {...field}
                     />
                   )}
@@ -586,7 +641,8 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
             <Col md='4'>
               <div className='mb-1'>
                 <Label className='form-label' for='amount'>
-                  {/* Giá tiền (Thu ngân)<span className='text-danger'>*</span> */}
+                  Giá tiền (Thu ngân)
+                  {/* <span className='text-danger'>*</span> */}
                 </Label>
                 <Controller
                   rules={
@@ -597,12 +653,22 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
                   name='amount'
                   control={control}
                   render={({ field }) => (
-                    <Input
-                      id='amount'
-                      placeholder='50000'
-                      invalid={errors.amount && true}
-                      {...field}
-                    />
+                    <div className='d-flex'>
+                      <Input
+                        id='amount'
+                        placeholder='50000'
+                        invalid={errors.amount && true}
+                        {...field}
+                      />{' '}
+                      <Button
+                        type='button'
+                        className='me-1 countPrice'
+                        color='primary'
+                        onClick={handleCountPrice}
+                      >
+                        Tính tiền
+                      </Button>
+                    </div>
                   )}
                 />
               </div>
@@ -1152,6 +1218,25 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
                   control={control}
                   render={({ field }) => (
                     <Input id='note' invalid={errors.note && true} {...field} />
+                  )}
+                />
+              </div>
+            </Col>
+            <Col md='3'>
+              <div className='mb-1'>
+                <Label className='form-label' for='ct'>
+                  CT
+                </Label>
+                <Controller
+                  rules={
+                    {
+                      // required: true,
+                    }
+                  }
+                  name='ct'
+                  control={control}
+                  render={({ field }) => (
+                    <Input id='ct' invalid={errors.ct && true} {...field} />
                   )}
                 />
               </div>

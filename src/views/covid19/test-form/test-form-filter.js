@@ -1,3 +1,4 @@
+/* eslint-disable multiline-ternary */
 /* eslint-disable object-shorthand */
 /* eslint-disable no-unused-vars */
 /* eslint-disable comma-dangle */
@@ -11,24 +12,47 @@ import {
   Button,
 } from 'reactstrap'
 import { useDispatch } from 'react-redux'
-import { useState, useCallback } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import Select from 'react-select'
 import { selectThemeColors } from '@utils'
-import { statusOptions, printStatusOptions } from './data'
+import { statusOptions, printStatusOptions, shiftOptions } from './data'
 import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
 import { fetchListTestForm } from '../../../redux/analysisCertificate'
 import { debounce } from 'lodash'
 import { StyledFilterList } from './style'
+import { labResultTypeService } from '../../../services/labResultTypeService'
+import { DatePicker, Space } from 'antd'
+import moment from 'moment'
 
 const TestFormFilter = () => {
+  const [labResultTypeOptions, setLabResultTypeOptions] = useState([])
   const [phoneSearch, setPhoneSearch] = useState('')
   const [nameSearch, setNameSearch] = useState('')
   const [addressSearch, setAddressSearch] = useState('')
   const [stateSearch, setStateSearch] = useState('')
   const [receiptNoSearch, setReceiptNoSearch] = useState('')
   const [printStatusSearch, setPrintStatusSearch] = useState(null)
-  const dispatch = useDispatch()
+  const [shiftSearch, setShiftSearch] = useState('')
+  const [labResultSearch, setLabResultSearch] = useState('')
+  const [codeSearch, setCodeSearch] = useState('')
+  const [passwordSearch, setPasswordSearch] = useState('')
+  const [identityNumberSearch, setIdentityNumberSearch] = useState('')
+  const [startTimeRange, setStartTimeRange] = useState()
+  const [endTimeRange, setEndTimeRange] = useState()
 
+  const dispatch = useDispatch()
+  const { RangePicker } = DatePicker
+  useEffect(() => {
+    labResultTypeService.list({ page: 1, perPage: 40, q: '' }).then((res) => {
+      if (res.data.payload !== null) {
+        const options = res.data.payload?.map((labResultType) => ({
+          label: labResultType.name,
+          value: labResultType.uuid,
+        }))
+        setLabResultTypeOptions(options)
+      }
+    })
+  }, [])
   const fetchList = (params) => {
     analysisCertificateService.list(params).then((res) => {
       dispatch(fetchListTestForm(res.data))
@@ -46,8 +70,17 @@ const TestFormFilter = () => {
       receiptNo: receiptNoSearch,
       printStatus: printStatusSearch?.value,
       phone: e,
-      page: 1,
-      size: 10,
+      searchCode: codeSearch,
+      password: passwordSearch,
+      identityNumber: identityNumberSearch,
+      shift: shiftSearch?.value,
+      labResultUuid: labResultSearch?.value,
+      fromDate:
+        startTimeRange !== undefined
+          ? moment(startTimeRange).valueOf()
+          : undefined,
+      toDate:
+        endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
     }
     setPhoneSearch(e)
     debounceSearch(dataSearch)
@@ -60,8 +93,17 @@ const TestFormFilter = () => {
       receiptNo: receiptNoSearch,
       printStatus: printStatusSearch?.value,
       phone: phoneSearch,
-      page: 1,
-      size: 10,
+      searchCode: codeSearch,
+      password: passwordSearch,
+      identityNumber: identityNumberSearch,
+      shift: shiftSearch?.value,
+      labResultUuid: labResultSearch?.value,
+      fromDate:
+        startTimeRange !== undefined
+          ? moment(startTimeRange).valueOf()
+          : undefined,
+      toDate:
+        endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
     }
     setNameSearch(e)
     debounceSearch(dataSearch)
@@ -74,8 +116,17 @@ const TestFormFilter = () => {
       receiptNo: receiptNoSearch,
       printStatus: printStatusSearch?.value,
       phone: phoneSearch,
-      page: 1,
-      size: 10,
+      searchCode: codeSearch,
+      password: passwordSearch,
+      identityNumber: identityNumberSearch,
+      shift: shiftSearch?.value,
+      labResultUuid: labResultSearch?.value,
+      fromDate:
+        startTimeRange !== undefined
+          ? moment(startTimeRange).valueOf()
+          : undefined,
+      toDate:
+        endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
     }
     setAddressSearch(e)
     debounceSearch(dataSearch)
@@ -88,8 +139,17 @@ const TestFormFilter = () => {
       receiptNo: receiptNoSearch,
       printStatus: printStatusSearch?.value,
       phone: phoneSearch,
-      page: 1,
-      size: 10,
+      searchCode: codeSearch,
+      password: passwordSearch,
+      identityNumber: identityNumberSearch,
+      shift: shiftSearch?.value,
+      labResultUuid: labResultSearch?.value,
+      fromDate:
+        startTimeRange !== undefined
+          ? moment(startTimeRange).valueOf()
+          : undefined,
+      toDate:
+        endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
     }
     setStateSearch(e)
     debounceSearch(dataSearch)
@@ -102,8 +162,17 @@ const TestFormFilter = () => {
       receiptNo: e,
       printStatus: printStatusSearch?.value,
       phone: phoneSearch,
-      page: 1,
-      size: 10,
+      searchCode: codeSearch,
+      password: passwordSearch,
+      identityNumber: identityNumberSearch,
+      shift: shiftSearch?.value,
+      labResultUuid: labResultSearch?.value,
+      fromDate:
+        startTimeRange !== undefined
+          ? moment(startTimeRange).valueOf()
+          : undefined,
+      toDate:
+        endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
     }
     setReceiptNoSearch(e)
     debounceSearch(dataSearch)
@@ -116,12 +185,158 @@ const TestFormFilter = () => {
       receiptNo: receiptNoSearch,
       printStatus: e?.value,
       phone: phoneSearch,
-      page: 1,
-      size: 10,
+      searchCode: codeSearch,
+      password: passwordSearch,
+      identityNumber: identityNumberSearch,
+      shift: shiftSearch?.value,
+      labResultUuid: labResultSearch?.value,
+      fromDate:
+        startTimeRange !== undefined
+          ? moment(startTimeRange).valueOf()
+          : undefined,
+      toDate:
+        endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
     }
     setPrintStatusSearch(e)
     debounceSearch(dataSearch)
   }
+  const hanldeSearchShift = (e) => {
+    const dataSearch = {
+      name: nameSearch,
+      address: addressSearch,
+      state: stateSearch?.value,
+      receiptNo: receiptNoSearch,
+      printStatus: printStatusSearch?.value,
+      phone: phoneSearch,
+      searchCode: codeSearch,
+      password: passwordSearch,
+      identityNumber: identityNumberSearch,
+      shift: e?.value,
+      labResultUuid: labResultSearch?.value,
+      fromDate:
+        startTimeRange !== undefined
+          ? moment(startTimeRange).valueOf()
+          : undefined,
+      toDate:
+        endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
+    }
+    setShiftSearch(e)
+    debounceSearch(dataSearch)
+  }
+  const hanldeSearchLabResult = (e) => {
+    const dataSearch = {
+      name: nameSearch,
+      address: addressSearch,
+      state: stateSearch?.value,
+      receiptNo: receiptNoSearch,
+      printStatus: printStatusSearch?.value,
+      phone: phoneSearch,
+      searchCode: codeSearch,
+      password: passwordSearch,
+      identityNumber: identityNumberSearch,
+      shift: shiftSearch?.value,
+      labResultUuid: e?.value,
+      fromDate:
+        startTimeRange !== undefined
+          ? moment(startTimeRange).valueOf()
+          : undefined,
+      toDate:
+        endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
+    }
+    setLabResultSearch(e)
+    debounceSearch(dataSearch)
+  }
+  const handleSearchCode = (e) => {
+    const dataSearch = {
+      name: nameSearch,
+      address: addressSearch,
+      state: stateSearch?.value,
+      receiptNo: receiptNoSearch,
+      printStatus: printStatusSearch?.value,
+      phone: phoneSearch,
+      searchCode: e,
+      password: passwordSearch,
+      identityNumber: identityNumberSearch,
+      shift: shiftSearch?.value,
+      labResultUuid: labResultSearch?.value,
+      fromDate:
+        startTimeRange !== undefined
+          ? moment(startTimeRange).valueOf()
+          : undefined,
+      toDate:
+        endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
+    }
+    setCodeSearch(e)
+    debounceSearch(dataSearch)
+  }
+  const handleSearchPassWord = (e) => {
+    const dataSearch = {
+      name: nameSearch,
+      address: addressSearch,
+      state: stateSearch?.value,
+      receiptNo: receiptNoSearch,
+      printStatus: printStatusSearch?.value,
+      phone: phoneSearch,
+      searchCode: codeSearch,
+      password: e,
+      identityNumber: identityNumberSearch,
+      shift: shiftSearch?.value,
+      labResultUuid: labResultSearch?.value,
+      fromDate:
+        startTimeRange !== undefined
+          ? moment(startTimeRange).valueOf()
+          : undefined,
+      toDate:
+        endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
+    }
+    setPasswordSearch(e)
+    debounceSearch(dataSearch)
+  }
+  const handleSearchidentityNumber = (e) => {
+    const dataSearch = {
+      name: nameSearch,
+      address: addressSearch,
+      state: stateSearch?.value,
+      receiptNo: receiptNoSearch,
+      printStatus: printStatusSearch?.value,
+      phone: phoneSearch,
+      searchCode: codeSearch,
+      password: passwordSearch,
+      identityNumber: e,
+      shift: shiftSearch?.value,
+      labResultUuid: labResultSearch?.value,
+      fromDate:
+        startTimeRange !== undefined
+          ? moment(startTimeRange).valueOf()
+          : undefined,
+      toDate:
+        endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
+    }
+    setIdentityNumberSearch(e)
+    debounceSearch(dataSearch)
+  }
+  const handleSearchTime = (e) => {
+    console.log(e)
+    const dataSearch = {
+      name: nameSearch,
+      address: addressSearch,
+      state: stateSearch?.value,
+      receiptNo: receiptNoSearch,
+      printStatus: printStatusSearch?.value,
+      phone: phoneSearch,
+      searchCode: codeSearch,
+      password: passwordSearch,
+      identityNumber: identityNumberSearch,
+      shift: shiftSearch?.value,
+      labResultUuid: labResultSearch?.value,
+      fromDate: e !== null ? moment(e[0]).valueOf() : undefined,
+      toDate: e !== null ? moment(e[1]).valueOf() : undefined,
+    }
+    setStartTimeRange(e !== null ? e[0] : undefined)
+    setEndTimeRange(e !== null ? e[1] : undefined)
+    debounceSearch(dataSearch)
+  }
+
   const handleReset = () => {
     setPhoneSearch('')
     setNameSearch('')
@@ -129,6 +344,13 @@ const TestFormFilter = () => {
     setStateSearch('')
     setReceiptNoSearch('')
     setPrintStatusSearch('')
+    setShiftSearch('')
+    setLabResultSearch('')
+    setCodeSearch('')
+    setPasswordSearch('')
+    setIdentityNumberSearch('')
+    setStartTimeRange()
+    setEndTimeRange()
     debounceSearch({ page: 1, size: 10 })
   }
   return (
@@ -144,10 +366,10 @@ const TestFormFilter = () => {
         </Button>
       </CardHeader>
 
-      <Row className='mx-0 mt-1 mb-2'>
+      <Row className='mx-0 mt-1 mb-1'>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='4'
+          sm='3'
         >
           <Label className='me-1' for='search-input'>
             Số điện thoại
@@ -163,7 +385,7 @@ const TestFormFilter = () => {
         </Col>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='4'
+          sm='3'
         >
           <Label className='me-1' for='search-input'>
             Họ và tên
@@ -179,7 +401,7 @@ const TestFormFilter = () => {
         </Col>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='4'
+          sm='3'
         >
           <Label className='me-1' for='search-input'>
             Địa chỉ
@@ -193,11 +415,9 @@ const TestFormFilter = () => {
             onChange={(e) => hanldeSearchAddress(e.target.value)}
           />
         </Col>
-      </Row>
-      <Row className='mx-0 mt-1 mb-2'>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='4'
+          sm='3'
         >
           <Label className='me-1' for='search-input'>
             Trạng thái
@@ -212,9 +432,11 @@ const TestFormFilter = () => {
             onChange={(e) => hanldeSearchState(e)}
           />
         </Col>
+      </Row>
+      <Row className='mx-0 mt-1 mb-1'>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='4'
+          sm='3'
         >
           <Label className='me-1' for='search-input'>
             Mã phiếu
@@ -230,7 +452,41 @@ const TestFormFilter = () => {
         </Col>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='4'
+          sm='3'
+        >
+          <Label className='me-1' for='search-input'>
+            Ca
+          </Label>
+          <Select
+            isClearable={false}
+            classNamePrefix='select'
+            className='dataTable-filter select-filter'
+            options={shiftOptions}
+            theme={selectThemeColors}
+            value={shiftSearch}
+            onChange={(e) => hanldeSearchShift(e)}
+          />
+        </Col>
+        <Col
+          className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
+          sm='3'
+        >
+          <Label className='me-1' for='search-input'>
+            Kết quả
+          </Label>
+          <Select
+            isClearable={false}
+            classNamePrefix='select'
+            className='dataTable-filter select-filter'
+            options={labResultTypeOptions}
+            theme={selectThemeColors}
+            value={labResultSearch}
+            onChange={(e) => hanldeSearchLabResult(e)}
+          />
+        </Col>
+        <Col
+          className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
+          sm='3'
         >
           <Label className='me-1' for='search-input'>
             Print Status
@@ -243,6 +499,72 @@ const TestFormFilter = () => {
             theme={selectThemeColors}
             value={printStatusSearch}
             onChange={(e) => hanldeSearchPrintStatus(e)}
+          />
+        </Col>
+      </Row>
+      <Row className='mx-0 mt-1 mb-1'>
+        <Col
+          className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
+          sm='3'
+        >
+          <Label className='me-1' for='search-input'>
+            Mã code
+          </Label>
+          <Input
+            className='dataTable-filter'
+            type='text'
+            bsSize='sm'
+            id='receiptNo-input'
+            value={codeSearch}
+            onChange={(e) => handleSearchCode(e.target.value)}
+          />
+        </Col>
+        <Col
+          className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
+          sm='3'
+        >
+          <Label className='me-1' for='search-input'>
+            Mật khẩu
+          </Label>
+          <Input
+            className='dataTable-filter'
+            type='text'
+            bsSize='sm'
+            id='receiptNo-input'
+            value={passwordSearch}
+            onChange={(e) => handleSearchPassWord(e.target.value)}
+          />
+        </Col>
+        <Col
+          className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
+          sm='3'
+        >
+          <Label className='me-1' for='search-input'>
+            CCCD/CMT
+          </Label>
+          <Input
+            className='dataTable-filter'
+            type='text'
+            bsSize='sm'
+            id='receiptNo-input'
+            value={identityNumberSearch}
+            onChange={(e) => handleSearchidentityNumber(e.target.value)}
+          />
+        </Col>
+
+        <Col
+          className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
+          sm='3'
+        >
+          <Label className='me-1' for='search-input'>
+            Chọn thời gian
+          </Label>
+          <RangePicker
+            separator={<span>to</span>}
+            placeholder={['DD-MM-YYYY', 'DD-MM-YYYY']}
+            value={[startTimeRange, endTimeRange]}
+            onChange={handleSearchTime}
+            className='dataTable-filter'
           />
         </Col>
       </Row>

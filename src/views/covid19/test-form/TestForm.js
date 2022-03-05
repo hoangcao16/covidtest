@@ -65,6 +65,8 @@ const TestForm = ({}) => {
     const params = {
       page: currentPage,
       size: rowsPerPage,
+      fromDate: moment().startOf('day').valueOf(),
+      toDate: moment().valueOf(),
     }
     analysisCertificateService.list(params).then((res) => {
       // setDataTable(res.data.payload)
