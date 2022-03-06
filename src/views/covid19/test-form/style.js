@@ -216,6 +216,9 @@ export const StyledCard = styled(Card)`
   .ant-table-expanded-row {
     background: #292e39;
     color: #f0f0f0;
+    td {
+      background: #292e39 !important;
+    }
   }
 `
 export const StyledTestFormPreview = styled(Sidebar)`
@@ -256,7 +259,8 @@ export const StyledExpander = styled.table`
     }
   }
   /* background: #ccc; */
-  .ant-table-cell {
+  .link-to-history {
+    color: #f0f0f0;
   }
   tbody {
     text-align: center;
