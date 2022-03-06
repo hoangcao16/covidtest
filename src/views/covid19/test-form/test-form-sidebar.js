@@ -454,14 +454,11 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
     setValue(
       'returnTime',
       value === 'Ca 1'
-        ? moment().set({ hour: 15, minute: 0 }).format('YYYY-DD-MMTHH:mm')
+        ? moment().set({ hour: 15, minute: 0 })
         : value === 'Ca 2'
-        ? moment().set({ hour: 21, minute: 0 }).format('YYYY-DD-MMTHH:mm')
+        ? moment().set({ hour: 21, minute: 0 })
         : value === 'Ca 3'
-        ? moment()
-            .add(1, 'd')
-            .set({ hour: 7, minute: 0 })
-            .format('YYYY-DD-MMTHH:mm')
+        ? moment().add(1, 'd').set({ hour: 7, minute: 0 })
         : ''
     )
   }

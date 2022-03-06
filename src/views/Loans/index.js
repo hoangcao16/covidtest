@@ -1,3 +1,4 @@
+/* eslint-disable multiline-ternary */
 /* eslint-disable object-shorthand */
 /* eslint-disable prefer-const */
 /* eslint-disable implicit-arrow-linebreak */
@@ -5,47 +6,30 @@
 /* eslint-disable comma-dangle */
 // ** React Imports
 import { Fragment, useState, useEffect, memo, useCallback } from 'react'
+// ** Table Columns
+import { statusOptions, disableOptions } from '../covid19/test-form/data'
 // ** Store & Actions
 import { useSelector, useDispatch } from 'react-redux'
 import { StyledCard } from './style'
-import {
-  selectTestFormList,
-  fetchListTestForm,
-} from '../../redux/analysisCertificate'
+import { refetchList, fetchListTestForm } from '../../redux/analysisCertificate'
 // ** Third Party Components
-import { selectThemeColors } from '@utils'
-import { MoreVertical, FileText } from 'react-feather'
-import { Table, Menu, Dropdown, Pagination } from 'antd'
+import { Table, Pagination } from 'antd'
 import { analysisCertificateService } from '../../services/analysisCertificateCervice'
 import moment from 'moment'
+import Select from 'react-select'
 import { toast, Slide } from 'react-toastify'
+import LoansFilter from './loans-filter'
 import { isEmpty, debounce } from 'lodash'
 // ** Reactstrap Imports
-import {
-  CardHeader,
-  CardTitle,
-  Input,
-  Label,
-  Row,
-  Button,
-  Col,
-} from 'reactstrap'
-import Select from 'react-select'
-import BillPreview from '../covid19/test-form/bill-preview'
-import { agencyService } from '../../services/agencyService'
+import { CardHeader, CardTitle, Input, Label, Row, Col } from 'reactstrap'
 
 const TestForm = ({}) => {
   // ** States
   const [currentPage, setCurrentPage] = useState(1)
   // const [totalPage, setTotalPage] = useState(1)
-  const [totalItem, setTotalItem] = useState(0)
-  const [agencyOptions, setAgencyOptions] = useState([])
-
   const [rowsPerPage, setRowsPerPage] = useState(10)
-  const state = 'DEBT'
   const [searchValue, setSearchValue] = useState('')
-  const [selectedCertificate, setSelectedCertificate] = useState([])
-  const [openBillPreview, setOpenBillPreview] = useState(false)
+  const [allParamsSearch, setAllParamsSearch] = useState({})
   const [metadata, setMetadata] = useState({
     page: 1,
     size: 10,
@@ -56,13 +40,16 @@ const TestForm = ({}) => {
   const analysisCertificateState = useSelector(
     (state) => state.analysisCertificate
   )
+  const paramsSearch = (params) => {
+    setAllParamsSearch(params)
+  }
   useEffect(() => {
     const params = {
       page: currentPage,
       size: rowsPerPage,
-      state: state,
-      //   fromDate: moment().startOf('day').valueOf(),
-      //   toDate: moment().valueOf(),
+      state: 'DEBT',
+      fromDate: moment().startOf('day').valueOf(),
+      toDate: moment().valueOf(),
     }
     analysisCertificateService.list(params).then((res) => {
       // setDataTable(res.data.payload)
@@ -72,16 +59,7 @@ const TestForm = ({}) => {
         dispatch(fetchListTestForm([]))
       }
     })
-    agencyService.list({ page: 1, perPage: 40, q: '' }).then((res) => {
-      if (res.data.payload !== null) {
-        const options = res.data.payload?.map((agency) => ({
-          label: agency.name,
-          value: agency.uuid,
-        }))
-        setAgencyOptions(options)
-      }
-    })
-  }, [analysisCertificateState.refetch, currentPage, rowsPerPage])
+  }, [analysisCertificateState.refetch])
   // ** Function to toggle sidebar
   useEffect(() => {
     if (!isEmpty(analysisCertificateState.dataTable.metadata)) {
@@ -89,40 +67,39 @@ const TestForm = ({}) => {
       setMetadata(analysisCertificateState.dataTable.metadata)
     }
   }, [analysisCertificateState.dataTable])
-  // ** Function to toggle sidebar
-  const toggleBillPreview = () => {
-    setOpenBillPreview(!openBillPreview)
-    // dispatch(selectTestFormList([]))
-  }
-  const handlePrintBill = (uuid) => {
-    let Chosenone = []
-    analysisCertificateService
-      .get(uuid)
-      .then((res) => {
-        Chosenone.push(res.data.payload)
-      })
-      .then(() => {
-        if (Chosenone.length > 0) {
-          dispatch(selectTestFormList(Chosenone))
-          toggleBillPreview()
-        }
-      })
-  }
-  const ActionsMenu = (props) => {
-    return (
-      <Menu>
-        <Menu.Item
-          key='1'
-          onClick={(e) => {
-            e.domEvent.stopPropagation()
-            handlePrintBill(props.text.uuid)
-          }}
-        >
-          <FileText size={15} />
-          <span className='align-middle ms-50'>In phiếu thu</span>
-        </Menu.Item>
-      </Menu>
-    )
+  const handleUpdateState = (value, record) => {
+    const dataUpdate = {
+      patientUuids: record.patientUuids,
+      agencyUuid1: record.agencyUuid1,
+      testTypeUuid: record.testTypeUuid,
+      state: value.value,
+    }
+    analysisCertificateService.update(record.uuid, dataUpdate).then((res) => {
+      if (res.data.code === 600) {
+        dispatch(refetchList())
+        toast.success('Cập nhật thành công !', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          transition: Slide,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+      } else {
+        toast.error('Cập nhật thất bại !', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          transition: Slide,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+      }
+    })
   }
   const fetchList = (params) => {
     analysisCertificateService.list(params).then((res) => {
@@ -139,76 +116,64 @@ const TestForm = ({}) => {
     debounceSearch({
       page: currentPage,
       size: rowsPerPage,
-      state: state,
+      state: 'DEBT',
       filter: e,
     })
   }
   // ** Function to handle per page
   const handlePerPage = (e) => {
     setRowsPerPage(parseInt(e.target.value))
+    const params = {
+      ...allParamsSearch,
+      page: 1,
+      size: parseInt(e.target.value),
+      state: 'DEBT',
+      fromDate:
+        allParamsSearch.fromDate === undefined
+          ? moment().startOf('day').valueOf()
+          : allParamsSearch.fromDate,
+      toDate:
+        allParamsSearch.toDate === undefined
+          ? moment().valueOf()
+          : allParamsSearch.toDate,
+    }
+    analysisCertificateService.list(params).then((res) => {
+      // setDataTable(res.data.payload)
+      if (res.data.payload !== null) {
+        dispatch(fetchListTestForm(res.data))
+      }
+    })
   }
   const handlePageChange = (page) => {
     setCurrentPage(page)
-  }
-  const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        'selectedRows: ',
-        selectedRows
-      )
-      setSelectedCertificate(selectedRows)
-    },
-    getCheckboxProps: (record) => ({
-      disabled: record.name === 'Disabled User', // Column configuration not to be checked
-      name: record.name,
-    }),
-  }
-  const handlePrintMultipleBill = () => {
-    if (selectedCertificate.length > 0) {
-      let AllTestForm = []
-      selectedCertificate.map((item) => {
-        analysisCertificateService
-          .get(item.uuid)
-          .then((res) => {
-            AllTestForm.push(res.data.payload)
-          })
-          .then(() => {
-            if (AllTestForm.length === selectedCertificate.length) {
-              dispatch(selectTestFormList(AllTestForm))
-              toggleBillPreview()
-            }
-          })
-      })
-    } else {
-      toast.error('Hãy chọn phiếu thu !', {
-        position: 'top-right',
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        transition: Slide,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      })
+    const params = {
+      ...allParamsSearch,
+      page: page,
+      size: rowsPerPage,
+      state: 'DEBT',
+      fromDate:
+        allParamsSearch.fromDate === undefined
+          ? moment().startOf('day').valueOf()
+          : allParamsSearch.fromDate,
+      toDate:
+        allParamsSearch.toDate === undefined
+          ? moment().valueOf()
+          : allParamsSearch.toDate,
     }
+    analysisCertificateService.list(params).then((res) => {
+      // setDataTable(res.data.payload)
+      if (res.data.payload !== null) {
+        dispatch(fetchListTestForm(res.data))
+      }
+    })
   }
   // ** Table Server Side Column
   const TestFormColumns = [
     {
-      title: 'Mã Phiếu thu',
-      align: 'center',
-      sorter: (a, b) => a.code.localeCompare(b.code),
-      dataIndex: 'receiptNo',
-      ellipsis: true,
-    },
-    {
-      title: 'Mã XN',
+      title: 'Mã',
       align: 'center',
       sorter: (a, b) => a.code.localeCompare(b.code),
       dataIndex: 'code',
-      ellipsis: true,
-      render: (code) => <a href='/covid19/test-form'>{code} </a>,
     },
     {
       title: 'Ngày tạo',
@@ -225,55 +190,62 @@ const TestForm = ({}) => {
       dataIndex: 'testTypeName',
     },
     {
-      title: 'Người nộp tiền',
+      title: 'Người thực hiện',
       align: 'center',
-      sorter: (a, b) => a.payerName.localeCompare(b.payerName),
-      dataIndex: 'payerName',
+      sorter: (a, b) => a.staffName2.localeCompare(b.staffName2),
+      dataIndex: 'staffName2',
     },
     {
-      title: 'Lí do nộp tiền',
+      title: 'Ca',
       align: 'center',
-      sorter: (a, b) => a.payFor.localeCompare(b.payFor),
-      dataIndex: 'payFor',
+      sorter: (a, b) => a.shift.localeCompare(b.shift),
+      dataIndex: 'shift',
     },
     {
-      title: 'Số tiền',
+      title: 'Đơn vị nợ',
       align: 'center',
-      sorter: (a, b) => a.amount - b.amount,
-      dataIndex: 'amount',
+      sorter: (a, b) => a.agencyName3.localeCompare(b.agencyName3),
+      dataIndex: 'agencyName3',
     },
     {
-      title: 'Người tạo',
+      title: 'Trạng thái',
       align: 'center',
-      sorter: (a, b) => a.staffName4.localeCompare(b.staffName4),
-      dataIndex: 'staffName4',
-    },
-    {
-      title: 'Actions',
-      align: 'center',
-      fixed: 'right',
+      sorter: (a, b) => a.state.localeCompare(b.state),
+      dataIndex: 'state',
       render: (text, record) => {
         return (
-          <div className='d-flex justify-content-center'>
-            <Dropdown
-              overlay={<ActionsMenu text={text} />}
-              trigger={['click']}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <MoreVertical size={15} />
-            </Dropdown>
+          <div onClick={(e) => e.stopPropagation()}>
+            <Select
+              isClearable={false}
+              classNamePrefix='select'
+              className='react-select'
+              options={statusOptions}
+              isOptionDisabled={(option, selectValue) =>
+                disableOptions(option, selectValue)
+              }
+              onChange={(value) => handleUpdateState(value, record)}
+              value={statusOptions.find((c) => c.value === text)}
+            ></Select>
           </div>
         )
       },
     },
   ]
+  const handleResetFilter = () => {
+    setRowsPerPage(10)
+    setCurrentPage(1)
+  }
   return (
     <Fragment>
+      <LoansFilter
+        paramsSearch={paramsSearch}
+        handleResetFilter={handleResetFilter}
+      ></LoansFilter>
       <StyledCard>
         <CardHeader className='border-bottom'>
           <CardTitle tag='h4'>Danh sách</CardTitle>
         </CardHeader>
-        <Row className='mx-0 mt-1 mb-2 justify-content-between'>
+        <Row className='mx-0 mt-1 mb-2'>
           <Col sm='3'>
             <div className='d-flex align-items-center'>
               <Label for='sort-select'>show</Label>
@@ -297,13 +269,6 @@ const TestForm = ({}) => {
             className='d-flex align-items-center justify-content-sm-end mt-sm-0 mt-1'
             sm='6'
           >
-            <Button
-              className='print-test-form'
-              color='primary'
-              onClick={() => handlePrintMultipleBill()}
-            >
-              In phiếu thu
-            </Button>
             <Label className='me-1' for='search-input'>
               Search
             </Label>
@@ -315,21 +280,10 @@ const TestForm = ({}) => {
               value={searchValue}
               onChange={(e) => handleFilter(e.target.value)}
             />
-            {/* <Select
-              isClearable={false}
-              classNamePrefix='select'
-              options={agencyOptions}
-              theme={selectThemeColors}
-              className='react-select'
-            /> */}
           </Col>
         </Row>
         <div className='react-dataTable'>
           <Table
-            rowSelection={{
-              type: 'checkbox',
-              ...rowSelection,
-            }}
             pagination={false}
             rowKey='uuid'
             columns={TestFormColumns}
@@ -346,10 +300,6 @@ const TestForm = ({}) => {
           </div>
         </div>
       </StyledCard>
-      <BillPreview
-        openBillPreview={openBillPreview}
-        toggleBillPreview={toggleBillPreview}
-      />
     </Fragment>
   )
 }

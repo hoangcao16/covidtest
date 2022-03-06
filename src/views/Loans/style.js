@@ -99,7 +99,7 @@ export const StyledCard = styled(Card)`
 
       a {
         background-color: transparent;
-        /* color: #ffffff; */
+        /* color: #; */
       }
     }
 
@@ -137,8 +137,30 @@ export const StyledCard = styled(Card)`
   .print-test-form {
     margin-right: 1rem;
   }
+
   .pagination {
     margin: 2rem 1rem;
     float: right;
+  }
+`
+export const StyledFilterList = styled(Card)`
+  .select-filter {
+    width: 100%;
+
+    .select__menu {
+      z-index: 2;
+    }
+  }
+  .ant-picker {
+    background: transparent;
+    border: 1px solid #404656;
+    color: #7367f0;
+    border-radius: 4px;
+    .ant-picker-suffix {
+      color: #7367f0;
+    }
+  }
+  .ant-picker-input > input {
+    color: #fff;
   }
 `

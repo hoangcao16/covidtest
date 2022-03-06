@@ -48,7 +48,6 @@ const Patients = () => {
       setRefreshTable(!refreshTable)
     })
   }
-
   const handleModal = () => {
     setModal(!modal)
   }
@@ -58,23 +57,23 @@ const Patients = () => {
     setSelectedItem(item)
   }
   // ** Table data to render
-  const dataToRender = () => {
-    const filters = {
-      q: searchValue,
-    }
+  // const dataToRender = () => {
+  //   const filters = {
+  //     q: searchValue,
+  //   }
 
-    const isFiltered = Object.keys(filters).some(function (k) {
-      return filters[k].length > 0
-    })
+  //   const isFiltered = Object.keys(filters).some(function (k) {
+  //     return filters[k].length > 0
+  //   })
 
-    if (store && store.allData?.length > 0) {
-      return store.allData.slice(currentPage - 1, rowsPerPage)
-    } else if (store.allData?.length === 0 && isFiltered) {
-      return []
-    } else {
-      return store.allData?.slice(0, rowsPerPage)
-    }
-  }
+  //   if (store && store.allData?.length > 0) {
+  //     return store.allData.slice(currentPage - 1, rowsPerPage)
+  //   } else if (store.allData?.length === 0 && isFiltered) {
+  //     return []
+  //   } else {
+  //     return store.allData?.slice(0, rowsPerPage)
+  //   }
+  // }
   // ** Get data on mount
   useEffect(() => {
     dispatch(
@@ -101,6 +100,7 @@ const Patients = () => {
 
   // ** Function to handle Pagination and get data
   const handlePagination = (page) => {
+    console.log('handlePagination', page.selected + 1)
     dispatch(
       getList({
         page: page.selected + 1,
@@ -211,7 +211,7 @@ const Patients = () => {
             columns={customizeColumns(handleEditModal, handleDelete)}
             sortIcon={<ChevronDown size={10} />}
             paginationComponent={CustomPagination}
-            data={dataToRender()}
+            data={store?.data}
           />
         </div>
       </Card>
