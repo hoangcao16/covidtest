@@ -15,6 +15,7 @@ import BillPreview from './bill-preview'
 import TestFromUploadCSV from './test-form-upload-sidebar'
 // ** Store & Actions
 import { useSelector, useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { StyledCard, StyledExpander } from './style'
 import {
   refetchList,
@@ -483,7 +484,16 @@ const TestForm = ({}) => {
             <tbody>
               {dataExpanded[index]?.patients?.map((p, i) => (
                 <tr key={i}>
-                  <td>{p.code}</td>
+                  <td>
+                    <Link
+                      to={`/patient-history/${p.uuid}`}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className='link-to-history'
+                    >
+                      {p.code}
+                    </Link>
+                  </td>
                   <td>{p.name}</td>
                   <td>{p.identityNumber}</td>
                   <td>{p.phone}</td>
