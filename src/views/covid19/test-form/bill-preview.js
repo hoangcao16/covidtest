@@ -244,7 +244,7 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
                 <table style={{ width: '100%' }}>
                   <thead>
                     <tr>
-                      <td>
+                      <td colSpan='5'>
                         Danh sách khách hàng gồm kèm : {item?.patients.length}{' '}
                         người
                       </td>
