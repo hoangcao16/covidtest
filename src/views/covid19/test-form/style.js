@@ -213,6 +213,10 @@ export const StyledCard = styled(Card)`
     margin: 2rem 1rem;
     float: right;
   }
+  .ant-table-expanded-row {
+    background: #292e39;
+    color: #f0f0f0;
+  }
 `
 export const StyledTestFormPreview = styled(Sidebar)`
   @media (min-width: 768px) {
@@ -244,7 +248,6 @@ export const StyledExpander = styled.table`
   thead {
     text-align: center;
     font-weight: bold;
-
     tr {
       td {
         width: 20%;
@@ -252,7 +255,9 @@ export const StyledExpander = styled.table`
       }
     }
   }
-
+  /* background: #ccc; */
+  .ant-table-cell {
+  }
   tbody {
     text-align: center;
   }

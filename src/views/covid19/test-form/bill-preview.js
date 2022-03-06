@@ -127,19 +127,29 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
                   </thead>
                   <tbody>
                     <tr>
-                      <td style={{ width: '50%' }}>
-                        Họ và tên: <span>{item?.payerName}</span>
+                      <td style={{ width: '50%', lineHeight: '1.1' }}>
+                        Họ và tên : <span>{item?.payerName}</span>
                       </td>
-                      <td>
-                        Mã BN: <span>{item?.payer?.code}</span>
+                      <td style={{ lineHeight: '1.1' }}>
+                        Mã BN : <span>{item?.payer?.code}</span>
+                      </td>
+                      <td
+                        rowSpan='6'
+                        style={{
+                          textAlign: 'right',
+                          paddingRight: '2rem',
+                          lineHeight: '1.1',
+                        }}
+                      >
+                        <QRCode value={item?.qrUrl} size={110} />
                       </td>
                     </tr>
                     <tr>
-                      <td>
-                        Ngày sinh
-                        <span style={{ fontStyle: 'italic' }}>
+                      <td style={{ width: '50%', lineHeight: '1.1' }}>
+                        Ngày sinh :
+                        {/* <span style={{ fontStyle: 'italic' }}>
                           (Birthday)
-                        </span>:{' '}
+                        </span>:{' '} */}
                         <span>
                           {item?.payer?.dateOfBirth !== undefined
                             ? moment(item?.payer?.dateOfBirth).format(
@@ -148,9 +158,9 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
                             : ''}
                         </span>
                       </td>
-                      <td>
-                        Giới tính
-                        <span style={{ fontStyle: 'italic' }}>(Sex)</span>:{' '}
+                      <td style={{ width: '50%', lineHeight: '1.1' }}>
+                        Giới tính :
+                        {/* <span style={{ fontStyle: 'italic' }}>(Sex)</span>:{' '} */}
                         <span>
                           {item?.payer?.sex === 0
                             ? 'Nam'
@@ -161,21 +171,18 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
                       </td>
                     </tr>
                     <tr>
-                      <td>Đơn vị:{item.agency}</td>
-                      <td
-                        rowSpan='5'
-                        style={{ textAlign: 'right', paddingRight: '2rem' }}
-                      >
-                        <QRCode value={item?.qrUrl} size={120} />
+                      <td style={{ lineHeight: '1.1' }}>
+                        Đơn vị:{item.agency}
                       </td>
+                      <td></td>
                     </tr>
                     <tr>
-                      <td>
+                      <td style={{ lineHeight: '1.1' }}>
                         Nơi chỉ định: <span>{item?.agencyName2}</span>
                       </td>
                     </tr>
                     <tr>
-                      <td>
+                      <td style={{ lineHeight: '1.1' }}>
                         Hẹn trả KQ:&nbsp;
                         <span>
                           {moment(item?.returnTime).format('HH:mm DD-MM-YYYY')}
@@ -183,7 +190,7 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
                       </td>
                     </tr>
                     <tr>
-                      <td>
+                      <td style={{ lineHeight: '1.1' }}>
                         Địa điểm: <span>{item?.agencyName1}</span>
                       </td>
                     </tr>

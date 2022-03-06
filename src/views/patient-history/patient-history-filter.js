@@ -15,37 +15,45 @@ import { useDispatch } from 'react-redux'
 import { useEffect, useState, useCallback } from 'react'
 import Select from 'react-select'
 import { selectThemeColors } from '@utils'
-import { shiftOptions } from '../covid19/test-form/data'
+import {
+  statusOptions,
+  printStatusOptions,
+  shiftOptions,
+} from '../covid19/test-form/data'
 import { analysisCertificateService } from '../../services/analysisCertificateCervice'
 import { fetchListTestForm } from '../../redux/analysisCertificate'
 import { debounce } from 'lodash'
-import { StyledFilterList } from './style'
+import { StyledFilterList } from '../covid19/test-form/style'
+import { labResultTypeService } from '../../services/labResultTypeService'
 import { agencyService } from '../../services/agencyService'
 import { DatePicker } from 'antd'
 import moment from 'moment'
 
-const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
-  const [agencyOptions, setAgencyOptions] = useState([])
-  const [phoneSearch, setPhoneSearch] = useState('')
-  const [nameSearch, setNameSearch] = useState('')
-  const [addressSearch, setAddressSearch] = useState('')
+const PatientHistoryFilter = ({
+  paramsSearch,
+  handleResetFilter,
+  patientuuid,
+}) => {
+  const [labResultTypeOptions, setLabResultTypeOptions] = useState([])
+  const [stateSearch, setStateSearch] = useState('')
   const [codeSearch, setCodeSearch] = useState('')
+  const [printStatusSearch, setPrintStatusSearch] = useState(null)
   const [shiftSearch, setShiftSearch] = useState('')
-  const [identityNumberSearch, setIdentityNumberSearch] = useState('')
+  const [labResultSearch, setLabResultSearch] = useState('')
+  const [qrcodeSearch, setQrCodeSearch] = useState('')
+  const [passwordSearch, setPasswordSearch] = useState('')
   const [startTimeRange, setStartTimeRange] = useState()
   const [endTimeRange, setEndTimeRange] = useState()
-  const [agency3Search, setAgency3Search] = useState('')
 
   useEffect(() => {
     const allParamsSearch = {
-      phone: phoneSearch,
-      name: nameSearch,
-      address: addressSearch,
-      state: 'DEBT',
+      state: stateSearch?.value,
       code: codeSearch,
+      printStatus: printStatusSearch?.value,
+      searchCode: qrcodeSearch,
+      password: passwordSearch,
       shift: shiftSearch?.value,
-      identityNumber: identityNumberSearch,
-      agencyUuid3: agency3Search?.value,
+      labResultUuid: labResultSearch?.value,
       fromDate:
         startTimeRange !== undefined
           ? moment(startTimeRange).valueOf()
@@ -55,27 +63,26 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
     }
     paramsSearch(allParamsSearch)
   }, [
-    phoneSearch,
-    nameSearch,
-    addressSearch,
+    stateSearch,
     codeSearch,
+    printStatusSearch,
     shiftSearch,
-    identityNumberSearch,
+    labResultSearch,
+    qrcodeSearch,
+    passwordSearch,
     startTimeRange,
     endTimeRange,
-    agency3Search,
   ])
-
   const dispatch = useDispatch()
   const { RangePicker } = DatePicker
   useEffect(() => {
-    agencyService.list({ page: 1, perPage: 40, q: '' }).then((res) => {
+    labResultTypeService.list({ page: 1, perPage: 40, q: '' }).then((res) => {
       if (res.data.payload !== null) {
-        const options = res.data.payload?.map((agency) => ({
-          label: agency.name,
-          value: agency.uuid,
+        const options = res.data.payload?.map((labResultType) => ({
+          label: labResultType.name,
+          value: labResultType.uuid,
         }))
-        setAgencyOptions(options)
+        setLabResultTypeOptions(options)
       }
     })
   }, [])
@@ -94,151 +101,172 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
     debounce((query) => fetchList(query), 500),
     []
   )
-  const hanldeSearchPhone = (e) => {
+  const hanldeSearchState = (e) => {
     const dataSearch = {
-      phone: e,
-      name: nameSearch,
-      address: addressSearch,
-      state: 'DEBT',
+      state: e?.value,
       code: codeSearch,
-      identityNumber: identityNumberSearch,
+      patientUuid: patientuuid,
+      printStatus: printStatusSearch?.value,
+      searchCode: qrcodeSearch,
+      password: passwordSearch,
       shift: shiftSearch?.value,
+      labResultUuid: labResultSearch?.value,
       fromDate:
         startTimeRange !== undefined
           ? moment(startTimeRange).valueOf()
           : undefined,
       toDate:
         endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
-      agencyUuid3: agency3Search?.value,
       page: 1,
       size: 10,
     }
-    setPhoneSearch(e)
-    debounceSearch(dataSearch)
-  }
-  const hanldeSearchName = (e) => {
-    const dataSearch = {
-      phone: phoneSearch,
-      name: e,
-      address: addressSearch,
-      state: 'DEBT',
-      code: codeSearch,
-      identityNumber: identityNumberSearch,
-      shift: shiftSearch?.value,
-      fromDate:
-        startTimeRange !== undefined
-          ? moment(startTimeRange).valueOf()
-          : undefined,
-      toDate:
-        endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
-      agencyUuid3: agency3Search?.value,
-      page: 1,
-      size: 10,
-    }
-    setNameSearch(e)
-    debounceSearch(dataSearch)
-  }
-  const hanldeSearchAddress = (e) => {
-    const dataSearch = {
-      phone: phoneSearch,
-      name: nameSearch,
-      address: e,
-      state: 'DEBT',
-      code: codeSearch,
-      identityNumber: identityNumberSearch,
-      shift: shiftSearch?.value,
-      fromDate:
-        startTimeRange !== undefined
-          ? moment(startTimeRange).valueOf()
-          : undefined,
-      toDate:
-        endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
-      agencyUuid3: agency3Search?.value,
-      page: 1,
-      size: 10,
-    }
-    setAddressSearch(e)
+    setStateSearch(e)
     debounceSearch(dataSearch)
   }
   const hanldeSearchCode = (e) => {
     const dataSearch = {
-      phone: phoneSearch,
-      name: nameSearch,
-      address: addressSearch,
-      state: 'DEBT',
+      state: stateSearch?.value,
       code: e,
-      identityNumber: identityNumberSearch,
+      patientUuid: patientuuid,
+      printStatus: printStatusSearch?.value,
+      searchCode: qrcodeSearch,
+      password: passwordSearch,
       shift: shiftSearch?.value,
+      labResultUuid: labResultSearch?.value,
       fromDate:
         startTimeRange !== undefined
           ? moment(startTimeRange).valueOf()
           : undefined,
       toDate:
         endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
-      agencyUuid3: agency3Search?.value,
       page: 1,
       size: 10,
     }
     setCodeSearch(e)
     debounceSearch(dataSearch)
   }
-  const hanldeSearchShift = (e) => {
+  const hanldeSearchPrintStatus = (e) => {
     const dataSearch = {
-      phone: phoneSearch,
-      name: nameSearch,
-      address: addressSearch,
-      state: 'DEBT',
+      status: stateSearch?.value,
       code: codeSearch,
-      identityNumber: identityNumberSearch,
-      shift: e?.value,
+      patientUuid: patientuuid,
+      printStatus: e?.value,
+      searchCode: qrcodeSearch,
+      password: passwordSearch,
+      shift: shiftSearch?.value,
+      labResultUuid: labResultSearch?.value,
       fromDate:
         startTimeRange !== undefined
           ? moment(startTimeRange).valueOf()
           : undefined,
       toDate:
         endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
-      agencyUuid3: agency3Search?.value,
+      page: 1,
+      size: 10,
+    }
+    setPrintStatusSearch(e)
+    debounceSearch(dataSearch)
+  }
+  const hanldeSearchShift = (e) => {
+    const dataSearch = {
+      state: stateSearch?.value,
+      code: codeSearch,
+      patientUuid: patientuuid,
+      printStatus: printStatusSearch?.value,
+      searchCode: qrcodeSearch,
+      password: passwordSearch,
+      shift: e?.value,
+      labResultUuid: labResultSearch?.value,
+      fromDate:
+        startTimeRange !== undefined
+          ? moment(startTimeRange).valueOf()
+          : undefined,
+      toDate:
+        endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
       page: 1,
       size: 10,
     }
     setShiftSearch(e)
     debounceSearch(dataSearch)
   }
-  const handleSearchidentityNumber = (e) => {
+  const hanldeSearchLabResult = (e) => {
     const dataSearch = {
-      phone: phoneSearch,
-      name: nameSearch,
-      address: addressSearch,
-      state: 'DEBT',
+      state: stateSearch?.value,
       code: codeSearch,
-      identityNumber: e,
+      patientUuid: patientuuid,
+      printStatus: printStatusSearch?.value,
+      searchCode: qrcodeSearch,
+      password: passwordSearch,
       shift: shiftSearch?.value,
+      labResultUuid: e?.value,
       fromDate:
         startTimeRange !== undefined
           ? moment(startTimeRange).valueOf()
           : undefined,
       toDate:
         endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
-      agencyUuid3: agency3Search?.value,
       page: 1,
       size: 10,
     }
-    setIdentityNumberSearch(e)
+    setLabResultSearch(e)
+    debounceSearch(dataSearch)
+  }
+  const handleSearchQRCode = (e) => {
+    const dataSearch = {
+      state: stateSearch?.value,
+      code: codeSearch,
+      patientUuid: patientuuid,
+      printStatus: printStatusSearch?.value,
+      searchCode: e,
+      password: passwordSearch,
+      shift: shiftSearch?.value,
+      labResultUuid: labResultSearch?.value,
+      fromDate:
+        startTimeRange !== undefined
+          ? moment(startTimeRange).valueOf()
+          : undefined,
+      toDate:
+        endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
+      page: 1,
+      size: 10,
+    }
+    setQrCodeSearch(e)
+    debounceSearch(dataSearch)
+  }
+  const handleSearchPassWord = (e) => {
+    const dataSearch = {
+      state: stateSearch?.value,
+      code: codeSearch,
+      patientUuid: patientuuid,
+      printStatus: printStatusSearch?.value,
+      searchCode: qrcodeSearch,
+      password: e,
+      shift: shiftSearch?.value,
+      labResultUuid: labResultSearch?.value,
+      fromDate:
+        startTimeRange !== undefined
+          ? moment(startTimeRange).valueOf()
+          : undefined,
+      toDate:
+        endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
+      page: 1,
+      size: 10,
+    }
+    setPasswordSearch(e)
     debounceSearch(dataSearch)
   }
   const handleSearchTime = (e) => {
-    console.log(e)
     const dataSearch = {
-      phone: phoneSearch,
-      name: nameSearch,
-      address: addressSearch,
-      state: 'DEBT',
+      state: stateSearch?.value,
       code: codeSearch,
-      identityNumber: identityNumberSearch,
+      patientUuid: patientuuid,
+      printStatus: printStatusSearch?.value,
+      searchCode: qrcodeSearch,
+      password: passwordSearch,
       shift: shiftSearch?.value,
+      labResultUuid: labResultSearch?.value,
       fromDate: e !== null ? moment(e[0]).valueOf() : undefined,
       toDate: e !== null ? moment(e[1]).valueOf() : undefined,
-      agencyUuid3: agency3Search?.value,
       page: 1,
       size: 10,
     }
@@ -246,44 +274,22 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
     setEndTimeRange(e !== null ? e[1] : moment())
     debounceSearch(dataSearch)
   }
-  const hanldeSearchAgency3 = (e) => {
-    const dataSearch = {
-      phone: phoneSearch,
-      name: nameSearch,
-      address: addressSearch,
-      state: 'DEBT',
-      code: codeSearch,
-      identityNumber: identityNumberSearch,
-      shift: shiftSearch?.value,
-      fromDate:
-        startTimeRange !== undefined
-          ? moment(startTimeRange).valueOf()
-          : undefined,
-      toDate:
-        endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
-      agencyUuid3: e?.value,
-      page: 1,
-      size: 10,
-    }
-    setAgency3Search(e)
-    debounceSearch(dataSearch)
-  }
   const handleReset = () => {
-    setPhoneSearch('')
-    setNameSearch('')
-    setAddressSearch('')
+    setStateSearch('')
     setCodeSearch('')
+    setPrintStatusSearch('')
     setShiftSearch('')
-    setIdentityNumberSearch('')
-    setStartTimeRange(moment().startOf('day'))
-    setEndTimeRange(moment())
-    setAgency3Search('')
+    setLabResultSearch('')
+    setQrCodeSearch('')
+    setPasswordSearch('')
+    setStartTimeRange()
+    setEndTimeRange()
     debounceSearch({
       page: 1,
       size: 10,
-      state: 'DEBT',
-      fromDate: moment().startOf('day').valueOf(),
-      toDate: moment().valueOf(),
+      patientUuid: patientuuid,
+      // fromDate: moment().startOf('day').valueOf(),
+      // toDate: moment().valueOf(),
     })
     handleResetFilter()
   }
@@ -306,54 +312,6 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
           sm='3'
         >
           <Label className='me-1' for='search-input'>
-            Số điện thoại
-          </Label>
-          <Input
-            className='dataTable-filter'
-            type='text'
-            bsSize='sm'
-            id='phone-input'
-            placeholder='Nhập số điện thoại'
-            onChange={(e) => hanldeSearchPhone(e.target.value)}
-          />
-        </Col>
-        <Col
-          className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
-        >
-          <Label className='me-1' for='search-input'>
-            Họ và tên
-          </Label>
-          <Input
-            className='dataTable-filter'
-            type='text'
-            bsSize='sm'
-            id='name-input'
-            value={nameSearch}
-            onChange={(e) => hanldeSearchName(e.target.value)}
-          />
-        </Col>
-        <Col
-          className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
-        >
-          <Label className='me-1' for='search-input'>
-            Địa chỉ
-          </Label>
-          <Input
-            className='dataTable-filter'
-            type='text'
-            bsSize='sm'
-            id='address-input'
-            value={addressSearch}
-            onChange={(e) => hanldeSearchAddress(e.target.value)}
-          />
-        </Col>
-        <Col
-          className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
-        >
-          <Label className='me-1' for='search-input'>
             Mã phiếu
           </Label>
           <Input
@@ -365,25 +323,59 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
             onChange={(e) => hanldeSearchCode(e.target.value)}
           />
         </Col>
-      </Row>
-      <Row className='mx-0 mt-1 mb-1'>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
           sm='3'
         >
           <Label className='me-1' for='search-input'>
-            Đơn vị nợ
+            Trạng thái
           </Label>
           <Select
             isClearable={false}
             classNamePrefix='select'
             className='dataTable-filter select-filter'
-            options={agencyOptions}
+            options={statusOptions}
             theme={selectThemeColors}
-            value={agency3Search}
-            onChange={(e) => hanldeSearchAgency3(e)}
+            value={stateSearch}
+            onChange={(e) => hanldeSearchState(e)}
           />
         </Col>
+        <Col
+          className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
+          sm='3'
+        >
+          <Label className='me-1' for='search-input'>
+            Kết quả
+          </Label>
+          <Select
+            isClearable={false}
+            classNamePrefix='select'
+            className='dataTable-filter select-filter'
+            options={labResultTypeOptions}
+            theme={selectThemeColors}
+            value={labResultSearch}
+            onChange={(e) => hanldeSearchLabResult(e)}
+          />
+        </Col>
+        <Col
+          className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
+          sm='3'
+        >
+          <Label className='me-1' for='search-input'>
+            Print Status
+          </Label>
+          <Select
+            isClearable={false}
+            classNamePrefix='select'
+            className='dataTable-filter select-filter'
+            options={printStatusOptions}
+            theme={selectThemeColors}
+            value={printStatusSearch}
+            onChange={(e) => hanldeSearchPrintStatus(e)}
+          />
+        </Col>
+      </Row>
+      <Row className='mx-0 mt-1 mb-1'>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
           sm='3'
@@ -406,15 +398,31 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
           sm='3'
         >
           <Label className='me-1' for='search-input'>
-            CCCD/CMT
+            Mã QR code
           </Label>
           <Input
             className='dataTable-filter'
             type='text'
             bsSize='sm'
             id='receiptNo-input'
-            value={identityNumberSearch}
-            onChange={(e) => handleSearchidentityNumber(e.target.value)}
+            value={qrcodeSearch}
+            onChange={(e) => handleSearchQRCode(e.target.value)}
+          />
+        </Col>
+        <Col
+          className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
+          sm='3'
+        >
+          <Label className='me-1' for='search-input'>
+            Mật khẩu
+          </Label>
+          <Input
+            className='dataTable-filter'
+            type='text'
+            bsSize='sm'
+            id='receiptNo-input'
+            value={passwordSearch}
+            onChange={(e) => handleSearchPassWord(e.target.value)}
           />
         </Col>
         <Col
@@ -444,4 +452,4 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
     </StyledFilterList>
   )
 }
-export default LoansFilter
+export default PatientHistoryFilter
