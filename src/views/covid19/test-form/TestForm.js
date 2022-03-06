@@ -56,7 +56,7 @@ const TestForm = ({}) => {
   const [openTestFormUploadCSV, setOpenTestFormUploadCSV] = useState(false)
   const [openTestFormPreview, setOpenTestFormPreview] = useState(false)
   const [openBillPreview, setOpenBillPreview] = useState(false)
-  const [dataExpanded, setDataExpanded] = useState({})
+  const [dataExpanded, setDataExpanded] = useState([])
   const [allParamsSearch, setAllParamsSearch] = useState({})
   const [metadata, setMetadata] = useState({
     page: 1,
@@ -253,7 +253,13 @@ const TestForm = ({}) => {
   }
   const fetchList = (params) => {
     analysisCertificateService.list(params).then((res) => {
-      dispatch(fetchListTestForm(res.data))
+      if (res.data.code === 600) {
+        if (res.data.payload !== null) {
+          dispatch(fetchListTestForm(res.data))
+        } else {
+          dispatch(fetchListTestForm([]))
+        }
+      }
     })
   }
   const debounceSearch = useCallback(
@@ -445,46 +451,53 @@ const TestForm = ({}) => {
     setOpenTestFormUploadCSV(!openTestFormUploadCSV)
   }
   const handleRowClick = (expanded, record) => {
-    console.log(expanded, record)
     if (expanded) {
       analysisCertificateService.get(record.uuid).then((res) => {
         if (res.data.code === 600) {
-          setDataExpanded(res.data.payload)
-          console.log(res.data.payload)
+          const index = dataExpanded.findIndex(
+            (item) => item.uuid === res.data.payload.uuid
+          )
+          if (index === -1 && dataExpanded !== undefined) {
+            setDataExpanded((prev) => [...prev, res.data.payload])
+          }
         }
       })
-    } else {
-      setDataExpanded({})
     }
   }
   const Expander = ({ record, expanded }) => {
+    // console.log(record)
     if (expanded) {
-      return (
-        <StyledExpander>
-          <thead>
-            <tr>
-              <td>Mã bệnh nhân</td>
-              <td>Tên bệnh nhân</td>
-              <td>CCCD/CMT</td>
-              <td>Số điện thoại</td>
-              <td>Địa chỉ</td>
-            </tr>
-          </thead>
-          <tbody>
-            {dataExpanded?.patients?.map((p, i) => (
-              <tr key={i}>
-                <td>{p.code}</td>
-                <td>{p.name}</td>
-                <td>{p.identityNumber}</td>
-                <td>{p.phone}</td>
-                <td>{p.address}</td>
+      const index = dataExpanded.findIndex((item) => item.uuid === record.uuid)
+      if (index !== -1 && dataExpanded !== undefined) {
+        return (
+          <StyledExpander>
+            <thead>
+              <tr>
+                <td>Mã bệnh nhân</td>
+                <td>Tên bệnh nhân</td>
+                <td>CCCD/CMT</td>
+                <td>Số điện thoại</td>
+                <td>Địa chỉ</td>
               </tr>
-            ))}
-          </tbody>
-        </StyledExpander>
-      )
+            </thead>
+            <tbody>
+              {dataExpanded[index]?.patients?.map((p, i) => (
+                <tr key={i}>
+                  <td>{p.code}</td>
+                  <td>{p.name}</td>
+                  <td>{p.identityNumber}</td>
+                  <td>{p.phone}</td>
+                  <td>{p.address}</td>
+                </tr>
+              ))}
+            </tbody>
+          </StyledExpander>
+        )
+      } else {
+        return <h3>Không có dữ liệu</h3>
+      }
     } else {
-      return <h2>Không có dữ liệu</h2>
+      return <h3>Không có dữ liệu</h3>
     }
   }
   const handleResetFilter = () => {

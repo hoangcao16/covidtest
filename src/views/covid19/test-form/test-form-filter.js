@@ -106,7 +106,13 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
   }, [])
   const fetchList = (params) => {
     analysisCertificateService.list(params).then((res) => {
-      dispatch(fetchListTestForm(res.data))
+      if (res.data.code === 600) {
+        if (res.data.payload !== null) {
+          dispatch(fetchListTestForm(res.data))
+        } else {
+          dispatch(fetchListTestForm([]))
+        }
+      }
     })
   }
   const debounceSearch = useCallback(
@@ -634,7 +640,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
             type='text'
             bsSize='sm'
             id='receiptNo-input'
-            value={codeSearch}
+            value={qrcodeSearch}
             onChange={(e) => handleSearchQRCode(e.target.value)}
           />
         </Col>

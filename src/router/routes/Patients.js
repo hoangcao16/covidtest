@@ -1,10 +1,11 @@
-import {lazy} from 'react'
+/* eslint-disable comma-dangle */
+import { lazy } from 'react'
 
 const PatientsRoutes = [
-    {
-        path: '/patients',
-        component: lazy(() => import('../../views/patients/patients'))
-    }
+  {
+    path: '/patients',
+    component: lazy(() => import('../../views/patients/patients')),
+  },
 ]
 
 export default PatientsRoutes

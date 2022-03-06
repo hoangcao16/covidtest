@@ -48,8 +48,8 @@ const TestForm = ({}) => {
       page: currentPage,
       size: rowsPerPage,
       state: 'DEBT',
-      fromDate: moment().startOf('day').valueOf(),
-      toDate: moment().valueOf(),
+      // fromDate: moment().startOf('day').valueOf(),
+      // toDate: moment().valueOf(),
     }
     analysisCertificateService.list(params).then((res) => {
       // setDataTable(res.data.payload)
@@ -103,7 +103,13 @@ const TestForm = ({}) => {
   }
   const fetchList = (params) => {
     analysisCertificateService.list(params).then((res) => {
-      dispatch(fetchListTestForm(res.data))
+      if (res.data.code === 600) {
+        if (res.data.payload !== null) {
+          dispatch(fetchListTestForm(res.data))
+        } else {
+          dispatch(fetchListTestForm([]))
+        }
+      }
     })
   }
   const debounceSearch = useCallback(
@@ -111,15 +117,15 @@ const TestForm = ({}) => {
     []
   )
   // ** Function to handle filter
-  const handleFilter = (e) => {
-    setSearchValue(e)
-    debounceSearch({
-      page: currentPage,
-      size: rowsPerPage,
-      state: 'DEBT',
-      filter: e,
-    })
-  }
+  // const handleFilter = (e) => {
+  //   setSearchValue(e)
+  //   debounceSearch({
+  //     page: currentPage,
+  //     size: rowsPerPage,
+  //     state: 'DEBT',
+  //     filter: e,
+  //   })
+  // }
   // ** Function to handle per page
   const handlePerPage = (e) => {
     setRowsPerPage(parseInt(e.target.value))
@@ -130,19 +136,14 @@ const TestForm = ({}) => {
       state: 'DEBT',
       fromDate:
         allParamsSearch.fromDate === undefined
-          ? moment().startOf('day').valueOf()
+          ? undefined
           : allParamsSearch.fromDate,
       toDate:
         allParamsSearch.toDate === undefined
-          ? moment().valueOf()
+          ? undefined
           : allParamsSearch.toDate,
     }
-    analysisCertificateService.list(params).then((res) => {
-      // setDataTable(res.data.payload)
-      if (res.data.payload !== null) {
-        dispatch(fetchListTestForm(res.data))
-      }
-    })
+    debounceSearch(params)
   }
   const handlePageChange = (page) => {
     setCurrentPage(page)
@@ -153,19 +154,14 @@ const TestForm = ({}) => {
       state: 'DEBT',
       fromDate:
         allParamsSearch.fromDate === undefined
-          ? moment().startOf('day').valueOf()
+          ? undefined
           : allParamsSearch.fromDate,
       toDate:
         allParamsSearch.toDate === undefined
-          ? moment().valueOf()
+          ? undefined
           : allParamsSearch.toDate,
     }
-    analysisCertificateService.list(params).then((res) => {
-      // setDataTable(res.data.payload)
-      if (res.data.payload !== null) {
-        dispatch(fetchListTestForm(res.data))
-      }
-    })
+    debounceSearch(params)
   }
   // ** Table Server Side Column
   const TestFormColumns = [
@@ -230,6 +226,15 @@ const TestForm = ({}) => {
         )
       },
     },
+    {
+      title: 'Số tiền',
+      align: 'center',
+      sorter: (a, b) => a.amount - b.amount,
+      dataIndex: 'amount',
+      render: (text) => {
+        return <div>{text} VNĐ</div>
+      },
+    },
   ]
   const handleResetFilter = () => {
     setRowsPerPage(10)
@@ -267,9 +272,9 @@ const TestForm = ({}) => {
           </Col>
           <Col
             className='d-flex align-items-center justify-content-sm-end mt-sm-0 mt-1'
-            sm='6'
+            sm={{ offset: 3, size: 6 }}
           >
-            <Label className='me-1' for='search-input'>
+            {/* <Label className='me-1' for='search-input'>
               Search
             </Label>
             <Input
@@ -279,7 +284,7 @@ const TestForm = ({}) => {
               id='search-input'
               value={searchValue}
               onChange={(e) => handleFilter(e.target.value)}
-            />
+            /> */}
           </Col>
         </Row>
         <div className='react-dataTable'>
