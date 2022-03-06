@@ -46,6 +46,7 @@ const TestFormPreview = ({ openTestFormPreview, toggleTestFormPreview }) => {
           })
         })
       })
+      console.log('selectedItemsFinal:', selectedItemsFinal)
       setDataView(selectedItemsFinal)
     }
   }, [analysisCertificateState.selectedTestFormList])
@@ -284,7 +285,7 @@ const TestFormPreview = ({ openTestFormPreview, toggleTestFormPreview }) => {
                         )}
                       </td>
                       <td style={{ border: '1px solid' }}>
-                        {item.sampleState ? 'Đủ mẫu' : 'Không đủ mẫu'}
+                        {item.sampleState ? 'Đạt' : 'Không đạt'}
                       </td>
                     </tr>
                   </tbody>
@@ -333,13 +334,13 @@ const TestFormPreview = ({ openTestFormPreview, toggleTestFormPreview }) => {
                       </td>
                       <td style={{ border: '1px solid' }}>{item.testNumber}</td>
                       <td style={{ border: '1px solid' }}>
-                        {item.technicalName}
+                        {item.testTypeName}
                       </td>
                       <td style={{ border: '1px solid' }}>
                         {moment(item.performTime).format('HH:mm DD-MM-YYYY')}
                       </td>
                       <td style={{ border: '1px solid' }}>
-                        {item.labResultName}
+                        {item.diagnosis}
                       </td>
                     </tr>
                     <tr style={{ textAlign: 'left', border: '1px solid' }}>
