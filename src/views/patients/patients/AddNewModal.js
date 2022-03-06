@@ -75,7 +75,7 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
   const genderOptions = [
     {
       value: 0,
-      label: 'Name',
+      label: 'Nam',
     },
     {
       value: 1,

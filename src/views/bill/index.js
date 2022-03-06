@@ -184,7 +184,7 @@ const TestForm = ({}) => {
     {
       title: 'Mã Phiếu thu',
       align: 'center',
-      sorter: (a, b) => a.code.localeCompare(b.code),
+      sorter: (a, b) => a.receiptNo.localeCompare(b.receiptNo),
       dataIndex: 'receiptNo',
       ellipsis: true,
     },
