@@ -36,8 +36,6 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
   const [printStatusSearch, setPrintStatusSearch] = useState(null)
   const [shiftSearch, setShiftSearch] = useState('')
   const [labResultSearch, setLabResultSearch] = useState('')
-  const [qrcodeSearch, setQrCodeSearch] = useState('')
-  const [passwordSearch, setPasswordSearch] = useState('')
   const [identityNumberSearch, setIdentityNumberSearch] = useState('')
   const [startTimeRange, setStartTimeRange] = useState(moment().startOf('day'))
   const [endTimeRange, setEndTimeRange] = useState(moment())
@@ -51,8 +49,6 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
       code: codeSearch,
       printStatus: printStatusSearch?.value,
       phone: phoneSearch,
-      searchCode: qrcodeSearch,
-      password: passwordSearch,
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       labResultUuid: labResultSearch?.value,
@@ -74,8 +70,6 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     printStatusSearch,
     shiftSearch,
     labResultSearch,
-    qrcodeSearch,
-    passwordSearch,
     identityNumberSearch,
     startTimeRange,
     endTimeRange,
@@ -127,8 +121,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
       code: codeSearch,
       printStatus: printStatusSearch?.value,
       phone: e,
-      searchCode: qrcodeSearch,
-      password: passwordSearch,
+
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       labResultUuid: labResultSearch?.value,
@@ -153,8 +146,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
       code: codeSearch,
       printStatus: printStatusSearch?.value,
       phone: phoneSearch,
-      searchCode: qrcodeSearch,
-      password: passwordSearch,
+
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       labResultUuid: labResultSearch?.value,
@@ -179,8 +171,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
       code: codeSearch,
       printStatus: printStatusSearch?.value,
       phone: phoneSearch,
-      searchCode: qrcodeSearch,
-      password: passwordSearch,
+
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       labResultUuid: labResultSearch?.value,
@@ -205,8 +196,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
       code: codeSearch,
       printStatus: printStatusSearch?.value,
       phone: phoneSearch,
-      searchCode: qrcodeSearch,
-      password: passwordSearch,
+
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       labResultUuid: labResultSearch?.value,
@@ -231,8 +221,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
       code: e,
       printStatus: printStatusSearch?.value,
       phone: phoneSearch,
-      searchCode: qrcodeSearch,
-      password: passwordSearch,
+
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       labResultUuid: labResultSearch?.value,
@@ -257,8 +246,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
       code: codeSearch,
       printStatus: e?.value,
       phone: phoneSearch,
-      searchCode: qrcodeSearch,
-      password: passwordSearch,
+
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       labResultUuid: labResultSearch?.value,
@@ -283,8 +271,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
       code: codeSearch,
       printStatus: printStatusSearch?.value,
       phone: phoneSearch,
-      searchCode: qrcodeSearch,
-      password: passwordSearch,
+
       identityNumber: identityNumberSearch,
       shift: e?.value,
       labResultUuid: labResultSearch?.value,
@@ -309,8 +296,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
       code: codeSearch,
       printStatus: printStatusSearch?.value,
       phone: phoneSearch,
-      searchCode: qrcodeSearch,
-      password: passwordSearch,
+
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       labResultUuid: e?.value,
@@ -327,58 +313,6 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     setLabResultSearch(e)
     debounceSearch(dataSearch)
   }
-  const handleSearchQRCode = (e) => {
-    const dataSearch = {
-      name: nameSearch,
-      address: addressSearch,
-      state: stateSearch?.value,
-      code: codeSearch,
-      printStatus: printStatusSearch?.value,
-      phone: phoneSearch,
-      searchCode: e,
-      password: passwordSearch,
-      identityNumber: identityNumberSearch,
-      shift: shiftSearch?.value,
-      labResultUuid: labResultSearch?.value,
-      fromDate:
-        startTimeRange !== undefined
-          ? moment(startTimeRange).valueOf()
-          : undefined,
-      toDate:
-        endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
-      agencyUuid2: agency2Search?.value,
-      page: 1,
-      size: 10,
-    }
-    setQrCodeSearch(e)
-    debounceSearch(dataSearch)
-  }
-  const handleSearchPassWord = (e) => {
-    const dataSearch = {
-      name: nameSearch,
-      address: addressSearch,
-      state: stateSearch?.value,
-      code: codeSearch,
-      printStatus: printStatusSearch?.value,
-      phone: phoneSearch,
-      searchCode: qrcodeSearch,
-      password: e,
-      identityNumber: identityNumberSearch,
-      shift: shiftSearch?.value,
-      labResultUuid: labResultSearch?.value,
-      fromDate:
-        startTimeRange !== undefined
-          ? moment(startTimeRange).valueOf()
-          : undefined,
-      toDate:
-        endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
-      agencyUuid2: agency2Search?.value,
-      page: 1,
-      size: 10,
-    }
-    setPasswordSearch(e)
-    debounceSearch(dataSearch)
-  }
   const handleSearchidentityNumber = (e) => {
     const dataSearch = {
       name: nameSearch,
@@ -387,8 +321,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
       code: codeSearch,
       printStatus: printStatusSearch?.value,
       phone: phoneSearch,
-      searchCode: qrcodeSearch,
-      password: passwordSearch,
+
       identityNumber: e,
       shift: shiftSearch?.value,
       labResultUuid: labResultSearch?.value,
@@ -414,8 +347,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
       code: codeSearch,
       printStatus: printStatusSearch?.value,
       phone: phoneSearch,
-      searchCode: qrcodeSearch,
-      password: passwordSearch,
+
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       labResultUuid: labResultSearch?.value,
@@ -437,8 +369,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
       code: codeSearch,
       printStatus: printStatusSearch?.value,
       phone: phoneSearch,
-      searchCode: qrcodeSearch,
-      password: passwordSearch,
+
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       labResultUuid: labResultSearch?.value,
@@ -464,8 +395,6 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     setPrintStatusSearch('')
     setShiftSearch('')
     setLabResultSearch('')
-    setQrCodeSearch('')
-    setPasswordSearch('')
     setIdentityNumberSearch('')
     setStartTimeRange(moment().startOf('day'))
     setEndTimeRange(moment())
@@ -494,7 +423,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
       <Row className='mx-0 mt-1 mb-1'>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
+          sm='2'
         >
           <Label className='me-1' for='search-input'>
             Số điện thoại
@@ -510,7 +439,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
         </Col>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
+          sm='2'
         >
           <Label className='me-1' for='search-input'>
             Họ và tên
@@ -526,7 +455,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
         </Col>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
+          sm='2'
         >
           <Label className='me-1' for='search-input'>
             Địa chỉ
@@ -542,7 +471,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
         </Col>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
+          sm='2'
         >
           <Label className='me-1' for='search-input'>
             Trạng thái
@@ -557,27 +486,9 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
             onChange={(e) => hanldeSearchState(e)}
           />
         </Col>
-      </Row>
-      <Row className='mx-0 mt-1 mb-1'>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
-        >
-          <Label className='me-1' for='search-input'>
-            Mã phiếu
-          </Label>
-          <Input
-            className='dataTable-filter'
-            type='text'
-            bsSize='sm'
-            id='receiptNo-input'
-            value={codeSearch}
-            onChange={(e) => hanldeSearchCode(e.target.value)}
-          />
-        </Col>
-        <Col
-          className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
+          sm='2'
         >
           <Label className='me-1' for='search-input'>
             Ca
@@ -594,7 +505,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
         </Col>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
+          sm='2'
         >
           <Label className='me-1' for='search-input'>
             Kết quả
@@ -609,9 +520,28 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
             onChange={(e) => hanldeSearchLabResult(e)}
           />
         </Col>
+      </Row>
+      <Row className='mx-0 mt-1 mb-1'>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
+          sm='2'
+        >
+          <Label className='me-1' for='search-input'>
+            Mã phiếu
+          </Label>
+          <Input
+            className='dataTable-filter'
+            type='text'
+            bsSize='sm'
+            id='receiptNo-input'
+            value={codeSearch}
+            onChange={(e) => hanldeSearchCode(e.target.value)}
+          />
+        </Col>
+
+        <Col
+          className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
+          sm='2'
         >
           <Label className='me-1' for='search-input'>
             Print Status
@@ -626,43 +556,26 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
             onChange={(e) => hanldeSearchPrintStatus(e)}
           />
         </Col>
-      </Row>
-      <Row className='mx-0 mt-1 mb-1'>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
+          sm='2'
         >
           <Label className='me-1' for='search-input'>
-            Mã QR code
+            Đơn vị
           </Label>
-          <Input
-            className='dataTable-filter'
-            type='text'
-            bsSize='sm'
-            id='receiptNo-input'
-            value={qrcodeSearch}
-            onChange={(e) => handleSearchQRCode(e.target.value)}
+          <Select
+            isClearable={false}
+            classNamePrefix='select'
+            className='dataTable-filter select-filter'
+            options={agencyOptions}
+            theme={selectThemeColors}
+            value={agency2Search}
+            onChange={(e) => hanldeSearchAgency2(e)}
           />
         </Col>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
-        >
-          <Label className='me-1' for='search-input'>
-            Mật khẩu
-          </Label>
-          <Input
-            className='dataTable-filter'
-            type='text'
-            bsSize='sm'
-            id='receiptNo-input'
-            value={passwordSearch}
-            onChange={(e) => handleSearchPassWord(e.target.value)}
-          />
-        </Col>
-        <Col
-          className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
+          sm='2'
         >
           <Label className='me-1' for='search-input'>
             CCCD/CMT
@@ -678,7 +591,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
         </Col>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
+          sm='2'
         >
           <Label className='me-1' for='search-input'>
             Chọn thời gian
@@ -697,25 +610,6 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
               ],
             }}
             className='dataTable-filter'
-          />
-        </Col>
-      </Row>
-      <Row className='mx-0 mt-1 mb-1'>
-        <Col
-          className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
-        >
-          <Label className='me-1' for='search-input'>
-            Đơn vị
-          </Label>
-          <Select
-            isClearable={false}
-            classNamePrefix='select'
-            className='dataTable-filter select-filter'
-            options={agencyOptions}
-            theme={selectThemeColors}
-            value={agency2Search}
-            onChange={(e) => hanldeSearchAgency2(e)}
           />
         </Col>
       </Row>

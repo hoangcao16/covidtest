@@ -55,8 +55,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
       code: receiptNoSearch,
       printStatus: printStatus,
       phone: phoneSearch,
-      searchCode: qrcodeSearch,
-      password: passwordSearch,
+
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       labResultUuid: labResultSearch?.value,
@@ -77,8 +76,6 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
     receiptNoSearch,
     shiftSearch,
     labResultSearch,
-    qrcodeSearch,
-    passwordSearch,
     identityNumberSearch,
     startTimeRange,
     endTimeRange,
@@ -130,8 +127,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
       receiptNo: receiptNoSearch,
       printStatus: printStatus,
       phone: e,
-      searchCode: qrcodeSearch,
-      password: passwordSearch,
+
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       labResultUuid: labResultSearch?.value,
@@ -156,8 +152,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
       receiptNo: receiptNoSearch,
       printStatus: printStatus,
       phone: phoneSearch,
-      searchCode: qrcodeSearch,
-      password: passwordSearch,
+
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       labResultUuid: labResultSearch?.value,
@@ -182,8 +177,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
       receiptNo: receiptNoSearch,
       printStatus: printStatus,
       phone: phoneSearch,
-      searchCode: qrcodeSearch,
-      password: passwordSearch,
+
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       labResultUuid: labResultSearch?.value,
@@ -208,8 +202,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
       receiptNo: receiptNoSearch,
       printStatus: printStatus,
       phone: phoneSearch,
-      searchCode: qrcodeSearch,
-      password: passwordSearch,
+
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       labResultUuid: labResultSearch?.value,
@@ -234,8 +227,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
       receiptNo: e,
       printStatus: printStatus,
       phone: phoneSearch,
-      searchCode: qrcodeSearch,
-      password: passwordSearch,
+
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       labResultUuid: labResultSearch?.value,
@@ -260,8 +252,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
       receiptNo: receiptNoSearch,
       printStatus: printStatus,
       phone: phoneSearch,
-      searchCode: qrcodeSearch,
-      password: passwordSearch,
+
       identityNumber: identityNumberSearch,
       shift: e?.value,
       labResultUuid: labResultSearch?.value,
@@ -286,8 +277,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
       receiptNo: receiptNoSearch,
       printStatus: printStatus,
       phone: phoneSearch,
-      searchCode: qrcodeSearch,
-      password: passwordSearch,
+
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       labResultUuid: e?.value,
@@ -304,58 +294,6 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
     setLabResultSearch(e)
     debounceSearch(dataSearch)
   }
-  const handleSearchQRCode = (e) => {
-    const dataSearch = {
-      name: nameSearch,
-      address: addressSearch,
-      state: stateSearch?.value,
-      receiptNo: receiptNoSearch,
-      printStatus: printStatus,
-      phone: phoneSearch,
-      searchCode: e,
-      password: passwordSearch,
-      identityNumber: identityNumberSearch,
-      shift: shiftSearch?.value,
-      labResultUuid: labResultSearch?.value,
-      fromDate:
-        startTimeRange !== undefined
-          ? moment(startTimeRange).valueOf()
-          : undefined,
-      toDate:
-        endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
-      agencyUuid2: agency2Search?.value,
-      page: 1,
-      size: 10,
-    }
-    setQrCodeSearch(e)
-    debounceSearch(dataSearch)
-  }
-  const handleSearchPassWord = (e) => {
-    const dataSearch = {
-      name: nameSearch,
-      address: addressSearch,
-      state: stateSearch?.value,
-      receiptNo: receiptNoSearch,
-      printStatus: printStatus,
-      phone: phoneSearch,
-      searchCode: qrcodeSearch,
-      password: e,
-      identityNumber: identityNumberSearch,
-      shift: shiftSearch?.value,
-      labResultUuid: labResultSearch?.value,
-      fromDate:
-        startTimeRange !== undefined
-          ? moment(startTimeRange).valueOf()
-          : undefined,
-      toDate:
-        endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
-      agencyUuid2: agency2Search?.value,
-      page: 1,
-      size: 10,
-    }
-    setPasswordSearch(e)
-    debounceSearch(dataSearch)
-  }
   const handleSearchidentityNumber = (e) => {
     const dataSearch = {
       name: nameSearch,
@@ -364,8 +302,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
       receiptNo: receiptNoSearch,
       printStatus: printStatus,
       phone: phoneSearch,
-      searchCode: qrcodeSearch,
-      password: passwordSearch,
+
       identityNumber: e,
       shift: shiftSearch?.value,
       labResultUuid: labResultSearch?.value,
@@ -391,8 +328,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
       receiptNo: receiptNoSearch,
       printStatus: printStatus,
       phone: phoneSearch,
-      searchCode: qrcodeSearch,
-      password: passwordSearch,
+
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       labResultUuid: labResultSearch?.value,
@@ -414,8 +350,6 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
       receiptNo: receiptNoSearch,
       printStatus: printStatus,
       phone: phoneSearch,
-      searchCode: qrcodeSearch,
-      password: passwordSearch,
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       labResultUuid: labResultSearch?.value,
@@ -440,8 +374,6 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
     setReceiptNoSearch('')
     setShiftSearch('')
     setLabResultSearch('')
-    setQrCodeSearch('')
-    setPasswordSearch('')
     setIdentityNumberSearch('')
     setStartTimeRange(moment().startOf('day'))
     setEndTimeRange(moment())
@@ -471,7 +403,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
       <Row className='mx-0 mt-1 mb-1'>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
+          sm='2'
         >
           <Label className='me-1' for='search-input'>
             Số điện thoại
@@ -487,7 +419,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
         </Col>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
+          sm='2'
         >
           <Label className='me-1' for='search-input'>
             Họ và tên
@@ -503,7 +435,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
         </Col>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
+          sm='2'
         >
           <Label className='me-1' for='search-input'>
             Địa chỉ
@@ -519,7 +451,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
         </Col>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
+          sm='2'
         >
           <Label className='me-1' for='search-input'>
             Trạng thái
@@ -534,27 +466,9 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
             onChange={(e) => hanldeSearchState(e)}
           />
         </Col>
-      </Row>
-      <Row className='mx-0 mt-1 mb-1'>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
-        >
-          <Label className='me-1' for='search-input'>
-            Mã phiếu thu
-          </Label>
-          <Input
-            className='dataTable-filter'
-            type='text'
-            bsSize='sm'
-            id='receiptNo-input'
-            value={receiptNoSearch}
-            onChange={(e) => hanldeSearchReceipt(e.target.value)}
-          />
-        </Col>
-        <Col
-          className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
+          sm='2'
         >
           <Label className='me-1' for='search-input'>
             Đơn vị
@@ -571,7 +485,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
         </Col>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
+          sm='2'
         >
           <Label className='me-1' for='search-input'>
             Ca
@@ -586,60 +500,27 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
             onChange={(e) => hanldeSearchShift(e)}
           />
         </Col>
-        <Col
-          className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
-        >
-          <Label className='me-1' for='search-input'>
-            Kết quả
-          </Label>
-          <Select
-            isClearable={false}
-            classNamePrefix='select'
-            className='dataTable-filter select-filter'
-            options={labResultTypeOptions}
-            theme={selectThemeColors}
-            value={labResultSearch}
-            onChange={(e) => hanldeSearchLabResult(e)}
-          />
-        </Col>
       </Row>
       <Row className='mx-0 mt-1 mb-1'>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
+          sm='2'
         >
           <Label className='me-1' for='search-input'>
-            Mã QR code
+            Mã phiếu thu
           </Label>
           <Input
             className='dataTable-filter'
             type='text'
             bsSize='sm'
             id='receiptNo-input'
-            value={qrcodeSearch}
-            onChange={(e) => handleSearchQRCode(e.target.value)}
+            value={receiptNoSearch}
+            onChange={(e) => hanldeSearchReceipt(e.target.value)}
           />
         </Col>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
-        >
-          <Label className='me-1' for='search-input'>
-            Mật khẩu
-          </Label>
-          <Input
-            className='dataTable-filter'
-            type='text'
-            bsSize='sm'
-            id='receiptNo-input'
-            value={passwordSearch}
-            onChange={(e) => handleSearchPassWord(e.target.value)}
-          />
-        </Col>
-        <Col
-          className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
+          sm='2'
         >
           <Label className='me-1' for='search-input'>
             CCCD/CMT
@@ -655,7 +536,24 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
         </Col>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='3'
+          sm='2'
+        >
+          <Label className='me-1' for='search-input'>
+            Kết quả
+          </Label>
+          <Select
+            isClearable={false}
+            classNamePrefix='select'
+            className='dataTable-filter select-filter'
+            options={labResultTypeOptions}
+            theme={selectThemeColors}
+            value={labResultSearch}
+            onChange={(e) => hanldeSearchLabResult(e)}
+          />
+        </Col>
+        <Col
+          className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
+          sm='2'
         >
           <Label className='me-1' for='search-input'>
             Chọn thời gian

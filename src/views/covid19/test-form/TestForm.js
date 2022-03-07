@@ -74,6 +74,7 @@ const TestForm = ({}) => {
   }
   useEffect(() => {
     const params = {
+      ...allParamsSearch,
       page: currentPage,
       size: rowsPerPage,
       fromDate: moment().startOf('day').valueOf(),

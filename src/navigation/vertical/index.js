@@ -56,12 +56,6 @@ export default [
         navLink: '/entities/test-type',
       },
       {
-        id: 'technical-type',
-        title: 'Loại kỹ thuật',
-        icon: <Circle size={12} />,
-        navLink: '/entities/technical-type',
-      },
-      {
         id: 'sample-type',
         title: 'Mẫu bệnh phẩm',
         icon: <Circle size={12} />,

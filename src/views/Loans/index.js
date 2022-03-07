@@ -45,6 +45,7 @@ const TestForm = ({}) => {
   }
   useEffect(() => {
     const params = {
+      ...allParamsSearch,
       page: currentPage,
       size: rowsPerPage,
       state: 'DEBT',
@@ -185,12 +186,12 @@ const TestForm = ({}) => {
       sorter: (a, b) => a.testTypeName.localeCompare(b.testTypeName),
       dataIndex: 'testTypeName',
     },
-    {
-      title: 'Người thực hiện',
-      align: 'center',
-      sorter: (a, b) => a.staffName2.localeCompare(b.staffName2),
-      dataIndex: 'staffName2',
-    },
+    // {
+    //   title: 'Người tạo',
+    //   align: 'center',
+    //   sorter: (a, b) => a.staffName2.localeCompare(b.staffName2),
+    //   dataIndex: 'staffName4',
+    // },
     {
       title: 'Ca',
       align: 'center',

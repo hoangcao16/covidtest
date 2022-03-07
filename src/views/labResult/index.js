@@ -310,7 +310,7 @@ const labResultQrcode = () => {
                       </td>
                       <td style={{ border: '1px solid' }}>{item.testNumber}</td>
                       <td style={{ border: '1px solid' }}>
-                        {item.technicalName}
+                        {item.testTypeName}
                       </td>
                       <td style={{ border: '1px solid' }}>
                         {moment(item.performTime).format('HH:mm DD-MM-YYYY')}
