@@ -7,7 +7,7 @@
 // ** React Imports
 import { Fragment, useState, useEffect, memo, useCallback } from 'react'
 // ** Table Columns
-import { statusOptions, disableOptions } from '../covid19/test-form/data'
+import { statusOptions, disableOptions } from '../components/common/data'
 // ** Store & Actions
 import { useSelector, useDispatch } from 'react-redux'
 import { StyledCard } from './style'

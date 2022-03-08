@@ -19,7 +19,7 @@ import {
   statusOptions,
   printStatusOptions,
   shiftOptions,
-} from '../covid19/test-form/data'
+} from '../components/common/data'
 import { analysisCertificateService } from '../../services/analysisCertificateCervice'
 import { fetchListTestForm } from '../../redux/analysisCertificate'
 import { debounce } from 'lodash'

@@ -15,7 +15,11 @@ import { useDispatch } from 'react-redux'
 import { useEffect, useState, useCallback } from 'react'
 import Select from 'react-select'
 import { selectThemeColors } from '@utils'
-import { statusOptions, printStatusOptions, shiftOptions } from './data'
+import {
+  statusOptions,
+  printStatusOptions,
+  shiftOptions,
+} from '../../components/common/data'
 import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
 import { fetchListTestForm } from '../../../redux/analysisCertificate'
 import { debounce } from 'lodash'

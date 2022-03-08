@@ -12,12 +12,12 @@ import { StyledTestFormSidebar } from './style'
 import { debounce } from 'lodash'
 // ** Utils
 import { selectThemeColors } from '@utils'
-import { samplestateOptions, statusOptions } from './data'
+import { samplestateOptions, statusOptions } from '../common/data'
 // ** Third Party Components
 import Select from 'react-select'
 import classnames from 'classnames'
 import { useForm, Controller } from 'react-hook-form'
-import toVND from '../../components/common/toVND'
+import toVND from '../common/toVND'
 // ** Reactstrap Imports
 import { Button, Label, Form, Input, Row, Col } from 'reactstrap'
 import { refetchList, closeSidebar } from '../../../redux/analysisCertificate'

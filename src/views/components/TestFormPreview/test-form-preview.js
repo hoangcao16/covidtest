@@ -339,9 +339,7 @@ const TestFormPreview = ({ openTestFormPreview, toggleTestFormPreview }) => {
                       <td style={{ border: '1px solid' }}>
                         {moment(item.performTime).format('HH:mm DD-MM-YYYY')}
                       </td>
-                      <td style={{ border: '1px solid' }}>
-                        {item.diagnosis}
-                      </td>
+                      <td style={{ border: '1px solid' }}>{item.diagnosis}</td>
                     </tr>
                     <tr style={{ textAlign: 'left', border: '1px solid' }}>
                       <td colSpan='5'>

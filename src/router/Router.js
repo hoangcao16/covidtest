@@ -1,9 +1,12 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable comma-dangle */
 // ** React Imports
-import { Suspense, lazy, Fragment } from 'react'
+import { Suspense, lazy, Fragment, useContext } from 'react'
 
 // ** Utils
+import { isUserLoggedIn } from '../utility/Utils'
 import { useLayout } from '@hooks/useLayout'
+import { AbilityContext } from '@src/utility/context/Can'
 import { useRouterTransition } from '@hooks/useRouterTransition'
 
 // ** Custom Components
@@ -25,13 +28,14 @@ import BlankLayout from '@layouts/BlankLayout'
 import VerticalLayout from '@src/layouts/VerticalLayout'
 import HorizontalLayout from '@src/layouts/HorizontalLayout'
 import ResultLabQr from '../views/labResult/index'
-import { isUserLoggedIn } from '../utility/Utils'
 
 const Router = () => {
   // ** Hooks
   const { layout, setLayout, setLastLayout } = useLayout()
   const { transition, setTransition } = useRouterTransition()
 
+  // ** ACL Ability Context
+  const ability = useContext(AbilityContext)
   // ** Default Layout
   const DefaultLayout =
     layout === 'horizontal' ? 'HorizontalLayout' : 'VerticalLayout'
@@ -75,13 +79,13 @@ const Router = () => {
   const FinalRoute = (props) => {
     console.log('FinalRoute:props:', props)
     const route = props.route
-    // let action, resource
+    let action, resource
 
     // ** Assign vars based on route meta
-    // if (route.meta) {
-    //     action = route.meta.action ? route.meta.action : null
-    //     resource = route.meta.resource ? route.meta.resource : null
-    // }
+    if (route.meta) {
+      action = route.meta.action ? route.meta.action : null
+      resource = route.meta.resource ? route.meta.resource : null
+    }
 
     if (
       (!isUserLoggedIn() && route.meta === undefined) ||
@@ -103,7 +107,7 @@ const Router = () => {
       return <Redirect to='/' />
       // } else if (isUserLoggedIn() && !ability.can(action || 'read', resource)) {
       //     // ** If user is Logged in and doesn't have ability to visit the page redirect the user to Not Authorized
-      //     return <Redirect to='/misc/not-authorized'/>
+      // return <Redirect to='/misc/not-authorized' />
       // }
     } else {
       // ** If none of the above render component

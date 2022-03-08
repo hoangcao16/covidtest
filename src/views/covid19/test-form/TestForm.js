@@ -7,12 +7,12 @@
 // ** React Imports
 import { Fragment, useState, useEffect, memo, useCallback } from 'react'
 // ** Table Columns
-import { statusOptions, disableOptions } from './data'
+import { statusOptions, disableOptions } from '../../components/common/data'
 // ** Invoice List Sidebar
-import TestFormSidebar from './test-form-sidebar'
-import TestFormPreview from './test-form-preview'
-import BillPreview from './bill-preview'
-import TestFromUploadCSV from './test-form-upload-sidebar'
+import TestFormSidebar from '../../components/TestformSidebar/test-form-sidebar'
+import TestFormPreview from '../../components/TestFormPreview/test-form-preview'
+import BillPreview from '../../components/BillPreview/bill-preview'
+import TestFromUploadCSV from '../../components/TestFormUploadSideBar/test-form-upload-sidebar'
 // ** Store & Actions
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'

@@ -7,8 +7,11 @@ import { Provider } from 'react-redux'
 import { store } from './redux/store'
 
 // ** Intl & ThemeColors Context
+import ability from './configs/acl/ability'
+
 import { ToastContainer } from 'react-toastify'
 import { ThemeContext } from './utility/context/ThemeColors'
+import { AbilityContext } from './utility/context/Can'
 
 // ** Spinner (Splash Screen)
 import Spinner from './@core/components/spinner/Fallback-spinner'
@@ -42,10 +45,12 @@ const LazyApp = lazy(() => import('./App'))
 ReactDOM.render(
   <Provider store={store}>
     <Suspense fallback={<Spinner />}>
-      <ThemeContext>
-        <LazyApp />
-        <ToastContainer newestOnTop />
-      </ThemeContext>
+      <AbilityContext.Provider value={ability}>
+        <ThemeContext>
+          <LazyApp />
+          <ToastContainer newestOnTop />
+        </ThemeContext>
+      </AbilityContext.Provider>
     </Suspense>
   </Provider>,
   document.getElementById('root')

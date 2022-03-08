@@ -31,7 +31,7 @@ import {
   Button,
   Col,
 } from 'reactstrap'
-import BillPreview from '../covid19/test-form/bill-preview'
+import BillPreview from '../components/BillPreview/bill-preview'
 
 const TestForm = ({}) => {
   // ** States

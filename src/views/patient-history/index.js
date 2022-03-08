@@ -7,11 +7,11 @@
 // ** React Imports
 import { Fragment, useState, useEffect, memo, useCallback } from 'react'
 // ** Table Columns
-import { statusOptions, disableOptions } from '../covid19/test-form/data'
+import { statusOptions, disableOptions } from '../components/common/data'
 // ** Invoice List Sidebar
-import TestFormSidebar from '../covid19/test-form/test-form-sidebar'
-import TestFormPreview from '../covid19/test-form/test-form-preview'
-import BillPreview from '../covid19/test-form/bill-preview'
+import TestFormSidebar from '../components/TestformSidebar/test-form-sidebar'
+import TestFormPreview from '../components/TestFormPreview/test-form-preview'
+import BillPreview from '../components/BillPreview/bill-preview'
 // ** Store & Actions
 import { useSelector, useDispatch } from 'react-redux'
 import { StyledCard } from '../covid19/test-form/style'
