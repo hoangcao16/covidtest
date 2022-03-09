@@ -1,16 +1,7 @@
 /* eslint-disable comma-dangle */
 // ** React Imports
 // ** Third Party Components
-import Flatpickr from 'react-flatpickr'
-import {
-  User,
-  Mail,
-  Calendar,
-  Lock,
-  X,
-  Compass,
-  Smartphone,
-} from 'react-feather'
+import { User, Mail, Lock, X, Smartphone } from 'react-feather'
 
 // ** Reactstrap Imports
 import {
@@ -24,6 +15,7 @@ import {
   InputGroupText,
   Form,
 } from 'reactstrap'
+import { toast, Slide } from 'react-toastify'
 
 // ** Styles
 import '@styles/react/libs/flatpickr/flatpickr.scss'
@@ -69,6 +61,18 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
         console.log('handleSubmit:response:', r)
         handleModal()
         setRefreshTable()
+      })
+      .then(() => {
+        toast.success('Thêm mới bệnh nhân thành công !', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          transition: Slide,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
       })
   }
 

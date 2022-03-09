@@ -40,6 +40,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     const allParamsSearch = {
       name: nameSearch,
       address: addressSearch,
+      state: 'NOT_PAID',
       code: codeSearch,
       phone: phoneSearch,
       identityNumber: identityNumberSearch,
@@ -97,6 +98,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     const dataSearch = {
       name: nameSearch,
       address: addressSearch,
+      state: 'NOT_PAID',
       code: codeSearch,
       phone: e,
       identityNumber: identityNumberSearch,
@@ -119,6 +121,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     const dataSearch = {
       name: e,
       address: addressSearch,
+      state: 'NOT_PAID',
       code: codeSearch,
       phone: phoneSearch,
       identityNumber: identityNumberSearch,
@@ -140,6 +143,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     const dataSearch = {
       name: nameSearch,
       address: e,
+      state: 'NOT_PAID',
       code: codeSearch,
       phone: phoneSearch,
       identityNumber: identityNumberSearch,
@@ -162,6 +166,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     const dataSearch = {
       name: nameSearch,
       address: addressSearch,
+      state: 'NOT_PAID',
       code: e,
       phone: phoneSearch,
       identityNumber: identityNumberSearch,
@@ -183,6 +188,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     const dataSearch = {
       name: nameSearch,
       address: addressSearch,
+      state: 'NOT_PAID',
       code: codeSearch,
       phone: phoneSearch,
       identityNumber: identityNumberSearch,
@@ -204,6 +210,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     const dataSearch = {
       name: nameSearch,
       address: addressSearch,
+      state: 'NOT_PAID',
       code: codeSearch,
       phone: phoneSearch,
       identityNumber: e,
@@ -226,6 +233,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     const dataSearch = {
       name: nameSearch,
       address: addressSearch,
+      state: 'NOT_PAID',
       code: codeSearch,
       phone: phoneSearch,
       identityNumber: identityNumberSearch,
@@ -244,6 +252,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     const dataSearch = {
       name: nameSearch,
       address: addressSearch,
+      state: 'NOT_PAID',
       code: codeSearch,
       phone: phoneSearch,
       identityNumber: identityNumberSearch,

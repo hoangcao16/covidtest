@@ -39,6 +39,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   useEffect(() => {
     const allParamsSearch = {
       name: nameSearch,
+      state: 'PAID',
       address: addressSearch,
       code: receiptNoSearch,
       phone: phoneSearch,
@@ -96,6 +97,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   const hanldeSearchPhone = (e) => {
     const dataSearch = {
       name: nameSearch,
+      state: 'PAID',
       address: addressSearch,
       receiptNo: receiptNoSearch,
       phone: e,
@@ -117,6 +119,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   const hanldeSearchName = (e) => {
     const dataSearch = {
       name: e,
+      state: 'PAID',
       address: addressSearch,
       receiptNo: receiptNoSearch,
       phone: phoneSearch,
@@ -138,6 +141,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   const hanldeSearchAddress = (e) => {
     const dataSearch = {
       name: nameSearch,
+      state: 'PAID',
       address: e,
       receiptNo: receiptNoSearch,
       phone: phoneSearch,
@@ -159,6 +163,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   const hanldeSearchReceipt = (e) => {
     const dataSearch = {
       name: nameSearch,
+      state: 'PAID',
       address: addressSearch,
       receiptNo: e,
       phone: phoneSearch,
@@ -180,6 +185,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   const hanldeSearchShift = (e) => {
     const dataSearch = {
       name: nameSearch,
+      state: 'PAID',
       address: addressSearch,
       receiptNo: receiptNoSearch,
       phone: phoneSearch,
@@ -201,6 +207,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   const handleSearchidentityNumber = (e) => {
     const dataSearch = {
       name: nameSearch,
+      state: 'PAID',
       address: addressSearch,
       receiptNo: receiptNoSearch,
       phone: phoneSearch,
@@ -223,6 +230,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
     console.log(e)
     const dataSearch = {
       name: nameSearch,
+      state: 'PAID',
       address: addressSearch,
       receiptNo: receiptNoSearch,
       phone: phoneSearch,
@@ -241,6 +249,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   const hanldeSearchAgency2 = (e) => {
     const dataSearch = {
       name: nameSearch,
+      state: 'PAID',
       address: addressSearch,
       receiptNo: receiptNoSearch,
       phone: phoneSearch,

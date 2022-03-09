@@ -1,6 +1,7 @@
 /* eslint-disable comma-dangle */
 import { StyledAddNewCard } from './style'
 import { User, Mail, Lock, Smartphone } from 'react-feather'
+import { toast, Slide } from 'react-toastify'
 
 // ** Reactstrap Imports
 import {
@@ -52,6 +53,18 @@ const AddNewCard = ({ setRefreshTable }) => {
       .then((r) => {
         console.log('handleSubmit:response:', r)
         setRefreshTable()
+      })
+      .then(() => {
+        toast.success('Thêm mới bệnh nhân thành công !', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          transition: Slide,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
       })
   }
 

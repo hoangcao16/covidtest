@@ -60,6 +60,7 @@ const TestForm = ({}) => {
     const params = {
       page: currentPage,
       size: rowsPerPage,
+      state: 'PAID',
       printStatus: printStatus,
       fromDate: moment().startOf('day').valueOf(),
       toDate: moment().valueOf(),
@@ -146,6 +147,7 @@ const TestForm = ({}) => {
     const params = {
       ...allParamsSearch,
       page: 1,
+      state: 'PAID',
       size: parseInt(e.target.value),
       printStatus: printStatus,
       fromDate:
@@ -164,6 +166,7 @@ const TestForm = ({}) => {
     const params = {
       ...allParamsSearch,
       page: page,
+      state: 'PAID',
       size: rowsPerPage,
       printStatus: printStatus,
       fromDate:

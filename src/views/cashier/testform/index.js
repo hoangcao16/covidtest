@@ -49,7 +49,6 @@ const TestForm = ({}) => {
   // ** States
   const [currentPage, setCurrentPage] = useState(1)
   // const [totalPage, setTotalPage] = useState(1)
-  const [totalItem, setTotalItem] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [searchValue, setSearchValue] = useState('')
   const [selectedCertificate, setSelectedCertificate] = useState([])
@@ -77,6 +76,7 @@ const TestForm = ({}) => {
       ...allParamsSearch,
       page: currentPage,
       size: rowsPerPage,
+      state: 'NOT_PAID',
       fromDate: moment().startOf('day').valueOf(),
       toDate: moment().valueOf(),
     }
@@ -279,6 +279,7 @@ const TestForm = ({}) => {
     const params = {
       ...allParamsSearch,
       page: 1,
+      state: 'NOT_PAID',
       size: parseInt(e.target.value),
       fromDate:
         allParamsSearch.fromDate === undefined
@@ -301,6 +302,7 @@ const TestForm = ({}) => {
     const params = {
       ...allParamsSearch,
       page: page,
+      state: 'NOT_PAID',
       size: rowsPerPage,
       fromDate:
         allParamsSearch.fromDate === undefined
