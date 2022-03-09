@@ -396,12 +396,6 @@ const TestForm = ({}) => {
       dataIndex: 'shift',
     },
     {
-      title: 'Kết quả',
-      align: 'center',
-      sorter: (a, b) => a.labResultName.localeCompare(b.labResultName),
-      dataIndex: 'labResultName',
-    },
-    {
       title: 'Đơn vị',
       align: 'center',
       sorter: (a, b) => a.agencyName1.localeCompare(b.agencyName1),
@@ -526,9 +520,11 @@ const TestForm = ({}) => {
           <CardTitle tag='h4'>Danh sách</CardTitle>
         </CardHeader>
         <Row className='mx-0 mt-1 mb-2'>
-          <Col sm='6'>
+          <Col sm='3'>
             <div className='d-flex align-items-center'>
-              <Label for='sort-select'>show</Label>
+              <Label for='sort-select' className='sort-select'>
+                Hiển thị
+              </Label>
               <Input
                 className='dataTable-select'
                 type='select'
@@ -547,7 +543,7 @@ const TestForm = ({}) => {
           </Col>
           <Col
             className='d-flex align-items-center justify-content-sm-end mt-sm-0 mt-1'
-            sm='6'
+            sm={{ size: 8, offset: 1 }}
           >
             <Button
               className='upload-test-form mx-1'
@@ -555,7 +551,7 @@ const TestForm = ({}) => {
               color='danger'
               onClick={() => handleUploadCSV()}
             >
-              Upload CSV
+              Tải CSV
             </Button>
             <Button
               className='print-test-form'
@@ -565,7 +561,7 @@ const TestForm = ({}) => {
               In kết quả
             </Button>
             <Label className='me-1' for='search-input'>
-              Search
+              Tìm kiếm
             </Label>
             <Input
               className='dataTable-filter'

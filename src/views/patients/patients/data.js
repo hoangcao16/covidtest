@@ -12,6 +12,7 @@ export const customizeColumns = (editCallback, deleteCallback) => {
       name: 'Mã code',
       minWidth: '250px',
       selector: (row) => row.code,
+      cell: (row) => <Link to={`/patients/${row.uuid}`}>{row.code}</Link>,
     },
     {
       sortable: true,

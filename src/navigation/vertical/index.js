@@ -8,6 +8,9 @@ import {
   Cpu,
   Dribbble,
   Slack,
+  Briefcase,
+  Monitor,
+  CreditCard,
 } from 'react-feather'
 
 export default [
@@ -16,6 +19,50 @@ export default [
     title: 'Khách Hàng',
     icon: <Home size={20} />,
     navLink: '/patients',
+  },
+  {
+    id: 'cashier',
+    title: 'Thu ngân',
+    icon: <CreditCard size={20} />,
+    navLink: '/cashier',
+    children: [
+      {
+        id: 'cashier-test-form',
+        title: 'Phiếu Xét Nghiệm',
+        icon: <Circle size={12} />,
+        navLink: '/cashier-test-form',
+      },
+      {
+        id: 'cashier-bill',
+        title: 'Phiếu Thu',
+        icon: <Circle size={12} />,
+        navLink: '/cashier-bill',
+      },
+      {
+        id: 'cashier-loans',
+        title: 'Công nợ',
+        icon: <Circle size={20} />,
+        navLink: '/cashier-loans',
+      },
+    ],
+  },
+  {
+    id: 'sampling-unit',
+    title: 'Lấy mẫu',
+    icon: <Command size={20} />,
+    navLink: '/sampling-unit',
+  },
+  {
+    id: 'laboratory',
+    title: 'Phòng xét nghiệm',
+    icon: <Briefcase size={20} />,
+    navLink: '/laboratory',
+  },
+  {
+    id: 'return-result',
+    title: 'Trả kết quả ',
+    icon: <Monitor size={20} />,
+    navLink: '/return-result',
   },
   {
     id: 'covid19',

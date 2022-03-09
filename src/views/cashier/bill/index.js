@@ -6,69 +6,48 @@
 /* eslint-disable comma-dangle */
 // ** React Imports
 import { Fragment, useState, useEffect, memo, useCallback } from 'react'
-// ** Table Columns
-import { statusOptions, disableOptions } from '../components/common/data'
-// ** Invoice List Sidebar
-import TestFormSidebar from '../components/TestformSidebar/test-form-sidebar'
-import TestFormPreview from '../components/TestFormPreview/test-form-preview'
-import BillPreview from '../components/BillPreview/bill-preview'
 // ** Store & Actions
 import { useSelector, useDispatch } from 'react-redux'
-import { StyledCard } from '../covid19/test-form/style'
+import { StyledCard } from './style'
 import {
-  refetchList,
-  selectUuid,
-  editCertificate,
   selectTestFormList,
   fetchListTestForm,
-} from '../../redux/analysisCertificate'
-
+} from '../../../redux/analysisCertificate'
+import BillFilter from './bill-filter'
 // ** Third Party Components
-import {
-  MoreVertical,
-  Edit,
-  FileText,
-  Trash,
-  CornerDownLeft,
-} from 'react-feather'
+import { MoreVertical, FileText } from 'react-feather'
 import { Table, Menu, Dropdown, Pagination } from 'antd'
-import { analysisCertificateService } from '../../services/analysisCertificateCervice'
+import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
 import moment from 'moment'
-import Select from 'react-select'
 import { toast, Slide } from 'react-toastify'
 import { isEmpty, debounce } from 'lodash'
-import { useParams, Link } from 'react-router-dom'
 // ** Reactstrap Imports
 import {
   CardHeader,
   CardTitle,
   Input,
-  Card,
   Label,
   Row,
   Button,
   Col,
 } from 'reactstrap'
-import { patientService } from '../../services/patientService'
-import PatientHistoryFilter from './patient-history-filter'
+import BillPreview from '../../components/BillPreview/bill-preview'
 
 const TestForm = ({}) => {
   // ** States
   const [currentPage, setCurrentPage] = useState(1)
   // const [totalPage, setTotalPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(10)
+  const printStatus = 1
   const [selectedCertificate, setSelectedCertificate] = useState([])
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [openTestFormPreview, setOpenTestFormPreview] = useState(false)
   const [openBillPreview, setOpenBillPreview] = useState(false)
-  const [allParamsSearch, setAllParamsSearch] = useState({})
   const [metadata, setMetadata] = useState({
     page: 1,
     size: 10,
     total: 0,
   })
-  const [patientInfo, setPatientInfo] = useState({})
-  let { patientuuid } = useParams()
+  const [allParamsSearch, setAllParamsSearch] = useState({})
+
   // ** Store Vars
   const dispatch = useDispatch()
   const analysisCertificateState = useSelector(
@@ -81,15 +60,10 @@ const TestForm = ({}) => {
     const params = {
       page: currentPage,
       size: rowsPerPage,
-      patientUuid: patientuuid,
-      // fromDate: moment().startOf('day').valueOf(),
-      // toDate: moment().valueOf(),
+      printStatus: printStatus,
+      fromDate: moment().startOf('day').valueOf(),
+      toDate: moment().valueOf(),
     }
-    patientService.get(patientuuid).then((res) => {
-      if (res.data.code === 600) {
-        setPatientInfo(res.data.payload[0])
-      }
-    })
     analysisCertificateService.list(params).then((res) => {
       // setDataTable(res.data.payload)
       if (res.data.payload !== null) {
@@ -107,98 +81,9 @@ const TestForm = ({}) => {
     }
   }, [analysisCertificateState.dataTable])
   // ** Function to toggle sidebar
-  const toggleTestFormSidebar = () => {
-    setSidebarOpen(!sidebarOpen)
-  }
-  const toggleTestFormPreview = () => {
-    setOpenTestFormPreview(!openTestFormPreview)
-    // dispatch(selectTestFormList([]))
-  }
   const toggleBillPreview = () => {
     setOpenBillPreview(!openBillPreview)
     // dispatch(selectTestFormList([]))
-  }
-  const handleUpdateState = (value, record) => {
-    const dataUpdate = {
-      patientUuids: record.patientUuids,
-      agencyUuid1: record.agencyUuid1,
-      testTypeUuid: record.testTypeUuid,
-      state: value.value,
-    }
-    analysisCertificateService.update(record.uuid, dataUpdate).then((res) => {
-      if (res.data.code === 600) {
-        dispatch(refetchList())
-        toast.success('Cập nhật thành công !', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          transition: Slide,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
-      } else {
-        toast.error('Cập nhật thất bại !', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          transition: Slide,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
-      }
-    })
-  }
-  const handleEdit = (uuid) => {
-    toggleTestFormSidebar()
-    dispatch(editCertificate(true))
-    dispatch(selectUuid(uuid))
-  }
-  const handleDelete = (uuid) => {
-    console.log(uuid)
-    analysisCertificateService.delete(uuid).then((res) => {
-      if (res.data.code === 600) {
-        dispatch(refetchList())
-        toast.success('Xóa thành công !', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          transition: Slide,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
-      } else {
-        toast.error('Xóa thất bại !', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          transition: Slide,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
-      }
-    })
-  }
-  const handlePrintOne = (uuid) => {
-    let Chosenone = []
-    analysisCertificateService
-      .get(uuid)
-      .then((res) => {
-        Chosenone.push(res.data.payload)
-      })
-      .then(() => {
-        if (Chosenone.length > 0) {
-          dispatch(selectTestFormList(Chosenone))
-          toggleTestFormPreview()
-        }
-      })
   }
   const handlePrintBill = (uuid) => {
     let Chosenone = []
@@ -221,41 +106,11 @@ const TestForm = ({}) => {
           key='1'
           onClick={(e) => {
             e.domEvent.stopPropagation()
-            handlePrintOne(props.text.uuid)
-          }}
-        >
-          <FileText size={15} />
-          <span className='align-middle ms-50'>In kết quả</span>
-        </Menu.Item>
-        <Menu.Item
-          key='2'
-          onClick={(e) => {
-            e.domEvent.stopPropagation()
             handlePrintBill(props.text.uuid)
           }}
         >
           <FileText size={15} />
           <span className='align-middle ms-50'>In phiếu thu</span>
-        </Menu.Item>
-        <Menu.Item
-          key='3'
-          onClick={(e) => {
-            e.domEvent.stopPropagation()
-            handleEdit(props.text.uuid)
-          }}
-        >
-          <Edit size={15} />
-          <span className='align-middle ms-50'>Edit</span>
-        </Menu.Item>
-        <Menu.Item
-          key='4'
-          onClick={(e) => {
-            e.domEvent.stopPropagation()
-            handleDelete(props.text.uuid)
-          }}
-        >
-          <Trash size={15} />
-          <span className='align-middle ms-50'>Delete</span>
         </Menu.Item>
       </Menu>
     )
@@ -281,7 +136,7 @@ const TestForm = ({}) => {
   //   debounceSearch({
   //     page: currentPage,
   //     size: rowsPerPage,
-  //     patientUuid: patientuuid,
+  //     printStatus: printStatus,
   //     filter: e,
   //   })
   // }
@@ -292,7 +147,7 @@ const TestForm = ({}) => {
       ...allParamsSearch,
       page: 1,
       size: parseInt(e.target.value),
-      patientUuid: patientuuid,
+      printStatus: printStatus,
       fromDate:
         allParamsSearch.fromDate === undefined
           ? undefined
@@ -310,7 +165,7 @@ const TestForm = ({}) => {
       ...allParamsSearch,
       page: page,
       size: rowsPerPage,
-      patientUuid: patientuuid,
+      printStatus: printStatus,
       fromDate:
         allParamsSearch.fromDate === undefined
           ? undefined
@@ -336,7 +191,7 @@ const TestForm = ({}) => {
       name: record.name,
     }),
   }
-  const handlePrintMultipleTestForm = () => {
+  const handlePrintMultipleBill = () => {
     if (selectedCertificate.length > 0) {
       let AllTestForm = []
       selectedCertificate.map((item) => {
@@ -348,12 +203,12 @@ const TestForm = ({}) => {
           .then(() => {
             if (AllTestForm.length === selectedCertificate.length) {
               dispatch(selectTestFormList(AllTestForm))
-              toggleTestFormPreview()
+              toggleBillPreview()
             }
           })
       })
     } else {
-      toast.error('Hãy chọn phiếu xét nghiệm !', {
+      toast.error('Hãy chọn phiếu thu !', {
         position: 'top-right',
         autoClose: 2000,
         hideProgressBar: false,
@@ -368,10 +223,19 @@ const TestForm = ({}) => {
   // ** Table Server Side Column
   const TestFormColumns = [
     {
-      title: 'Mã',
+      title: 'Mã Phiếu thu',
+      align: 'center',
+      sorter: (a, b) => a.receiptNo.localeCompare(b.receiptNo),
+      dataIndex: 'receiptNo',
+      ellipsis: true,
+    },
+    {
+      title: 'Mã XN',
       align: 'center',
       sorter: (a, b) => a.code.localeCompare(b.code),
       dataIndex: 'code',
+      ellipsis: true,
+      render: (code) => <a href='/covid19/test-form'>{code} </a>,
     },
     {
       title: 'Ngày tạo',
@@ -388,51 +252,28 @@ const TestForm = ({}) => {
       dataIndex: 'testTypeName',
     },
     {
-      title: 'Người thực hiện',
+      title: 'Người nộp tiền',
       align: 'center',
-      sorter: (a, b) => a.staffName2.localeCompare(b.staffName2),
-      dataIndex: 'staffName2',
+      sorter: (a, b) => a.payerName.localeCompare(b.payerName),
+      dataIndex: 'payerName',
     },
     {
-      title: 'Ca',
+      title: 'Lí do nộp tiền',
       align: 'center',
-      sorter: (a, b) => a.shift.localeCompare(b.shift),
-      dataIndex: 'shift',
+      sorter: (a, b) => a.payFor.localeCompare(b.payFor),
+      dataIndex: 'payFor',
     },
     {
-      title: 'Kết quả',
+      title: 'Số tiền',
       align: 'center',
-      sorter: (a, b) => a.labResultName.localeCompare(b.labResultName),
-      dataIndex: 'labResultName',
+      sorter: (a, b) => a.amount - b.amount,
+      dataIndex: 'amount',
     },
     {
-      title: 'Đơn vị',
+      title: 'Người tạo',
       align: 'center',
-      sorter: (a, b) => a.agencyName1.localeCompare(b.agencyName1),
-      dataIndex: 'agencyName1',
-    },
-    {
-      title: 'Trạng thái',
-      align: 'center',
-      sorter: (a, b) => a.state.localeCompare(b.state),
-      dataIndex: 'state',
-      render: (text, record) => {
-        return (
-          <div onClick={(e) => e.stopPropagation()}>
-            <Select
-              isClearable={false}
-              classNamePrefix='select'
-              className='react-select'
-              options={statusOptions}
-              isOptionDisabled={(option, selectValue) =>
-                disableOptions(option, selectValue)
-              }
-              onChange={(value) => handleUpdateState(value, record)}
-              value={statusOptions.find((c) => c.value === text)}
-            ></Select>
-          </div>
-        )
-      },
+      sorter: (a, b) => a.staffName4.localeCompare(b.staffName4),
+      dataIndex: 'staffName4',
     },
     {
       title: 'Actions',
@@ -459,26 +300,15 @@ const TestForm = ({}) => {
   }
   return (
     <Fragment>
-      <Card>
-        <CardHeader className='border-bottom'>
-          <Link to={'/patients'}>
-            <CornerDownLeft size={16} />
-            <span style={{ marginLeft: '4px' }}>Danh sách bệnh nhân</span>
-          </Link>
-        </CardHeader>
-      </Card>
-      <PatientHistoryFilter
+      <BillFilter
         paramsSearch={paramsSearch}
         handleResetFilter={handleResetFilter}
-        patientuuid={patientuuid}
-      ></PatientHistoryFilter>
+      ></BillFilter>
       <StyledCard>
         <CardHeader className='border-bottom'>
-          <CardTitle tag='h4'>
-            Lịch sử xét nghiệm bệnh nhân: {patientInfo?.name}
-          </CardTitle>
+          <CardTitle tag='h4'>Danh sách</CardTitle>
         </CardHeader>
-        <Row className='mx-0 mt-1 mb-2'>
+        <Row className='mx-0 mt-1 mb-2 justify-content-between'>
           <Col sm='3'>
             <div className='d-flex align-items-center'>
               <Label for='sort-select'>show</Label>
@@ -500,14 +330,14 @@ const TestForm = ({}) => {
           </Col>
           <Col
             className='d-flex align-items-center justify-content-sm-end mt-sm-0 mt-1'
-            sm={{ offset: 3, size: 6 }}
+            sm='6'
           >
             <Button
               className='print-test-form'
               color='primary'
-              onClick={() => handlePrintMultipleTestForm()}
+              onClick={() => handlePrintMultipleBill()}
             >
-              In kết quả
+              In phiếu thu
             </Button>
             {/* <Label className='me-1' for='search-input'>
               Search
@@ -528,7 +358,6 @@ const TestForm = ({}) => {
               type: 'checkbox',
               ...rowSelection,
             }}
-            // loading={true}
             pagination={false}
             rowKey='uuid'
             columns={TestFormColumns}
@@ -545,14 +374,6 @@ const TestForm = ({}) => {
           </div>
         </div>
       </StyledCard>
-      <TestFormSidebar
-        openSideBar={sidebarOpen}
-        toggleTestFormSidebar={toggleTestFormSidebar}
-      />
-      <TestFormPreview
-        openTestFormPreview={openTestFormPreview}
-        toggleTestFormPreview={toggleTestFormPreview}
-      />
       <BillPreview
         openBillPreview={openBillPreview}
         toggleBillPreview={toggleBillPreview}

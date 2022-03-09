@@ -7,12 +7,12 @@
 // ** React Imports
 import { Fragment, useState, useEffect, memo, useCallback } from 'react'
 // ** Table Columns
-import { statusOptions, disableOptions } from '../../components/common/data'
+import { statusOptions, disableOptions } from '../components/common/data'
 // ** Invoice List Sidebar
-import TestFormSidebar from '../../components/TestformSidebar/test-form-sidebar'
-import TestFormPreview from '../../components/TestFormPreview/test-form-preview'
-import BillPreview from '../../components/BillPreview/bill-preview'
-import TestFromUploadCSV from '../../components/TestFormUploadSideBar/test-form-upload-sidebar'
+import TestFormSidebar from '../components/TestformSidebar/test-form-sidebar'
+import TestFormPreview from '../components/TestFormPreview/test-form-preview'
+import BillPreview from '../components/BillPreview/bill-preview'
+import TestFromUploadCSV from '../components/TestFormUploadSideBar/test-form-upload-sidebar'
 // ** Store & Actions
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -24,11 +24,11 @@ import {
   addNewCertificate,
   selectTestFormList,
   fetchListTestForm,
-} from '../../../redux/analysisCertificate'
+} from '../../redux/analysisCertificate'
 // ** Third Party Components
 import { MoreVertical, Edit, FileText, Trash } from 'react-feather'
 import { Table, Menu, Dropdown, Pagination } from 'antd'
-import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
+import { analysisCertificateService } from '../../services/analysisCertificateCervice'
 import moment from 'moment'
 import Select from 'react-select'
 import { toast, Slide } from 'react-toastify'
@@ -526,7 +526,7 @@ const TestForm = ({}) => {
           <CardTitle tag='h4'>Danh sách</CardTitle>
         </CardHeader>
         <Row className='mx-0 mt-1 mb-2'>
-          <Col sm='6'>
+          <Col sm='3'>
             <div className='d-flex align-items-center'>
               <Label for='sort-select'>show</Label>
               <Input
@@ -547,16 +547,8 @@ const TestForm = ({}) => {
           </Col>
           <Col
             className='d-flex align-items-center justify-content-sm-end mt-sm-0 mt-1'
-            sm='6'
+            sm={{ size: 6, offset: 3 }}
           >
-            <Button
-              className='upload-test-form mx-1'
-              //   color='error'
-              color='danger'
-              onClick={() => handleUploadCSV()}
-            >
-              Upload CSV
-            </Button>
             <Button
               className='print-test-form'
               color='primary'
