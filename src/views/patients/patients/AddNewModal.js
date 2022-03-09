@@ -109,11 +109,9 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
                 <User size={15} />
               </InputGroupText>
               <Controller
-                rules={
-                  {
-                    // required: true,
-                  }
-                }
+                rules={{
+                  required: true,
+                }}
                 name='name'
                 control={control}
                 render={({ field }) => (
@@ -136,11 +134,9 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
                 <Smartphone size={15} />
               </InputGroupText>
               <Controller
-                rules={
-                  {
-                    // required: true,
-                  }
-                }
+                rules={{
+                  required: true,
+                }}
                 name='phone'
                 control={control}
                 render={({ field }) => (

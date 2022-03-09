@@ -12,7 +12,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import ReactPaginate from 'react-paginate'
 import { ChevronDown, Plus } from 'react-feather'
 import DataTable from 'react-data-table-component'
-
+import AddNewCard from './AddNewCard'
 // ** Reactstrap Imports
 import {
   Card,
@@ -156,6 +156,7 @@ const Patients = () => {
 
   return (
     <Fragment>
+      <AddNewCard setRefreshTable={setRefreshTable} />
       <Card>
         <CardHeader className='border-bottom'>
           <CardTitle tag='h4'>Danh sách</CardTitle>

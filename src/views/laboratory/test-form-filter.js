@@ -25,16 +25,12 @@ import { DatePicker } from 'antd'
 import moment from 'moment'
 
 const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
-  const [labResultTypeOptions, setLabResultTypeOptions] = useState([])
   const [agencyOptions, setAgencyOptions] = useState([])
   const [phoneSearch, setPhoneSearch] = useState('')
   const [nameSearch, setNameSearch] = useState('')
   const [addressSearch, setAddressSearch] = useState('')
-  const [stateSearch, setStateSearch] = useState('')
   const [codeSearch, setCodeSearch] = useState('')
-  const [printStatusSearch, setPrintStatusSearch] = useState(null)
   const [shiftSearch, setShiftSearch] = useState('')
-  const [labResultSearch, setLabResultSearch] = useState('')
   const [identityNumberSearch, setIdentityNumberSearch] = useState('')
   const [startTimeRange, setStartTimeRange] = useState(moment().startOf('day'))
   const [endTimeRange, setEndTimeRange] = useState(moment())
