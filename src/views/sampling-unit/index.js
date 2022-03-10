@@ -26,7 +26,7 @@ import { analysisCertificateService } from '../../services/analysisCertificateCe
 import moment from 'moment'
 import Select from 'react-select'
 import { toast, Slide } from 'react-toastify'
-import TestFormFilter from './test-form-filter'
+import SamplingUnitFilter from './sampling-unit-filter'
 import { isEmpty, debounce } from 'lodash'
 // ** Reactstrap Imports
 import { CardHeader, CardTitle, Input, Label, Row, Col } from 'reactstrap'
@@ -57,6 +57,8 @@ const TestForm = ({}) => {
       ...allParamsSearch,
       page: currentPage,
       size: rowsPerPage,
+      state:
+        'WAITING_TAKEN_SAMPLE,TAKEN_SAMPLE, NOT_ENOUGH_SAMPLE, ENOUGH_SAMPLE',
       fromDate: moment().startOf('day').valueOf(),
       toDate: moment().valueOf(),
     }
@@ -289,10 +291,10 @@ const TestForm = ({}) => {
   }
   return (
     <Fragment>
-      <TestFormFilter
+      <SamplingUnitFilter
         paramsSearch={paramsSearch}
         handleResetFilter={handleResetFilter}
-      ></TestFormFilter>
+      ></SamplingUnitFilter>
       <StyledCard>
         <CardHeader className='border-bottom'>
           <CardTitle tag='h4'>Danh sách</CardTitle>

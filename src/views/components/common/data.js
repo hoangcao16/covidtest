@@ -79,7 +79,7 @@ export const disableOptions = (option, selectValue) => {
       return true
     }
     case 'DEBT': {
-      if (option.value === 'PAID') {
+      if (option.value === 'PAID' || option.value === 'WAITING_TAKEN_SAMPLE') {
         return false
       }
       return true
@@ -116,6 +116,9 @@ export const disableOptions = (option, selectValue) => {
       if (option.value === 'COMPLETED' || option.value === 'RETURN_RESULT') {
         return false
       }
+      return true
+    }
+    case 'COMPLETED': {
       return true
     }
     default:

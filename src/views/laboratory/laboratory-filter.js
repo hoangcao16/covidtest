@@ -24,7 +24,7 @@ import { agencyService } from '../../services/agencyService'
 import { DatePicker } from 'antd'
 import moment from 'moment'
 
-const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
+const LaboratoryFilter = ({ paramsSearch, handleResetFilter }) => {
   const [agencyOptions, setAgencyOptions] = useState([])
   const [phoneSearch, setPhoneSearch] = useState('')
   const [nameSearch, setNameSearch] = useState('')
@@ -42,6 +42,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
       address: addressSearch,
       code: codeSearch,
       phone: phoneSearch,
+      state: 'TAKEN_SAMPLE, ENOUGH_SAMPLE, RETURN_RESULT',
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       agencyUuid2: agency2Search?.value,
@@ -99,6 +100,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
       address: addressSearch,
       code: codeSearch,
       phone: e,
+      state: 'TAKEN_SAMPLE, ENOUGH_SAMPLE, RETURN_RESULT',
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       fromDate:
@@ -120,6 +122,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
       address: addressSearch,
       code: codeSearch,
       phone: phoneSearch,
+      state: 'TAKEN_SAMPLE, ENOUGH_SAMPLE, RETURN_RESULT',
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       fromDate:
@@ -141,6 +144,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
       address: e,
       code: codeSearch,
       phone: phoneSearch,
+      state: 'TAKEN_SAMPLE, ENOUGH_SAMPLE, RETURN_RESULT',
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       fromDate:
@@ -162,6 +166,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
       address: addressSearch,
       code: e,
       phone: phoneSearch,
+      state: 'TAKEN_SAMPLE, ENOUGH_SAMPLE, RETURN_RESULT',
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       fromDate:
@@ -183,6 +188,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
       address: addressSearch,
       code: codeSearch,
       phone: phoneSearch,
+      state: 'TAKEN_SAMPLE, ENOUGH_SAMPLE, RETURN_RESULT',
       identityNumber: identityNumberSearch,
       shift: e?.value,
       fromDate:
@@ -204,6 +210,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
       address: addressSearch,
       code: codeSearch,
       phone: phoneSearch,
+      state: 'TAKEN_SAMPLE, ENOUGH_SAMPLE, RETURN_RESULT',
       identityNumber: e,
       shift: shiftSearch?.value,
       fromDate:
@@ -226,6 +233,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
       address: addressSearch,
       code: codeSearch,
       phone: phoneSearch,
+      state: 'TAKEN_SAMPLE, ENOUGH_SAMPLE, RETURN_RESULT',
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       fromDate: e !== null ? moment(e[0]).valueOf() : undefined,
@@ -244,6 +252,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
       address: addressSearch,
       code: codeSearch,
       phone: phoneSearch,
+      state: 'TAKEN_SAMPLE, ENOUGH_SAMPLE, RETURN_RESULT',
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       fromDate:
@@ -272,6 +281,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     debounceSearch({
       page: 1,
       size: 10,
+      state: 'TAKEN_SAMPLE, ENOUGH_SAMPLE, RETURN_RESULT',
       fromDate: moment().startOf('day').valueOf(),
       toDate: moment().valueOf(),
     })
@@ -435,4 +445,4 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     </StyledFilterList>
   )
 }
-export default TestFormFilter
+export default LaboratoryFilter

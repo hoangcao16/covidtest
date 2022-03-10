@@ -18,6 +18,10 @@ const EntitiesRoutes = [
     path: '/entities/lab-result-type',
     component: lazy(() => import('../../views/entities/lab-result-type')),
   },
+  {
+    path: '/entities/staffs',
+    component: lazy(() => import('../../views/entities/staff')),
+  },
 ]
 
 export default EntitiesRoutes

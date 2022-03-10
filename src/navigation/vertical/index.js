@@ -120,6 +120,12 @@ export default [
         icon: <Circle size={12} />,
         navLink: '/entities/lab-result-type',
       },
+      {
+        id: 'staffs',
+        title: 'Nhân viên',
+        icon: <Circle size={12} />,
+        navLink: '/entities/staffs',
+      },
     ],
   },
   {

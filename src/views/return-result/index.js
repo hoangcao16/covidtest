@@ -32,7 +32,7 @@ import { analysisCertificateService } from '../../services/analysisCertificateCe
 import moment from 'moment'
 import Select from 'react-select'
 import { toast, Slide } from 'react-toastify'
-import TestFormFilter from './test-form-filter'
+import ReturnResultFilter from './return-result-filter'
 import { isEmpty, debounce } from 'lodash'
 // ** Reactstrap Imports
 import {
@@ -76,6 +76,7 @@ const TestForm = ({}) => {
     const params = {
       ...allParamsSearch,
       page: currentPage,
+      state: 'RETURN_RESULT,COMPLETED',
       size: rowsPerPage,
       fromDate: moment().startOf('day').valueOf(),
       toDate: moment().valueOf(),
@@ -517,10 +518,10 @@ const TestForm = ({}) => {
   }
   return (
     <Fragment>
-      <TestFormFilter
+      <ReturnResultFilter
         paramsSearch={paramsSearch}
         handleResetFilter={handleResetFilter}
-      ></TestFormFilter>
+      ></ReturnResultFilter>
       <StyledCard>
         <CardHeader className='border-bottom'>
           <CardTitle tag='h4'>Danh sách</CardTitle>

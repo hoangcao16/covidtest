@@ -15,11 +15,7 @@ import { useDispatch } from 'react-redux'
 import { useEffect, useState, useCallback } from 'react'
 import Select from 'react-select'
 import { selectThemeColors } from '@utils'
-import {
-  statusOptions,
-  printStatusOptions,
-  shiftOptions,
-} from '../components/common/data'
+import { shiftOptions } from '../components/common/data'
 import { analysisCertificateService } from '../../services/analysisCertificateCervice'
 import { fetchListTestForm } from '../../redux/analysisCertificate'
 import { debounce } from 'lodash'
@@ -29,7 +25,7 @@ import { agencyService } from '../../services/agencyService'
 import { DatePicker } from 'antd'
 import moment from 'moment'
 
-const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
+const ReturnResultFilter = ({ paramsSearch, handleResetFilter }) => {
   const [labResultTypeOptions, setLabResultTypeOptions] = useState([])
   const [agencyOptions, setAgencyOptions] = useState([])
   const [phoneSearch, setPhoneSearch] = useState('')
@@ -48,11 +44,11 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
   useEffect(() => {
     const allParamsSearch = {
       name: nameSearch,
-      address: addressSearch,
-      state: stateSearch?.value,
+
       code: codeSearch,
-      printStatus: printStatusSearch?.value,
+
       phone: phoneSearch,
+      state: 'RETURN_RESULT,COMPLETED',
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       labResultUuid: labResultSearch?.value,
@@ -68,10 +64,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
   }, [
     phoneSearch,
     nameSearch,
-    addressSearch,
-    stateSearch,
     codeSearch,
-    printStatusSearch,
     shiftSearch,
     labResultSearch,
     identityNumberSearch,
@@ -120,12 +113,9 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
   const hanldeSearchPhone = (e) => {
     const dataSearch = {
       name: nameSearch,
-      address: addressSearch,
-      state: stateSearch?.value,
       code: codeSearch,
-      printStatus: printStatusSearch?.value,
       phone: e,
-
+      state: 'RETURN_RESULT,COMPLETED',
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       labResultUuid: labResultSearch?.value,
@@ -145,12 +135,9 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
   const hanldeSearchName = (e) => {
     const dataSearch = {
       name: e,
-      address: addressSearch,
-      state: stateSearch?.value,
       code: codeSearch,
-      printStatus: printStatusSearch?.value,
       phone: phoneSearch,
-
+      state: 'RETURN_RESULT,COMPLETED',
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       labResultUuid: labResultSearch?.value,
@@ -167,64 +154,14 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     setNameSearch(e)
     debounceSearch(dataSearch)
   }
-  const hanldeSearchAddress = (e) => {
-    const dataSearch = {
-      name: nameSearch,
-      address: e,
-      state: stateSearch?.value,
-      code: codeSearch,
-      printStatus: printStatusSearch?.value,
-      phone: phoneSearch,
-
-      identityNumber: identityNumberSearch,
-      shift: shiftSearch?.value,
-      labResultUuid: labResultSearch?.value,
-      fromDate:
-        startTimeRange !== undefined
-          ? moment(startTimeRange).valueOf()
-          : undefined,
-      toDate:
-        endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
-      agencyUuid2: agency2Search?.value,
-      page: 1,
-      size: 10,
-    }
-    setAddressSearch(e)
-    debounceSearch(dataSearch)
-  }
-  const hanldeSearchState = (e) => {
-    const dataSearch = {
-      name: nameSearch,
-      address: addressSearch,
-      state: e?.value,
-      code: codeSearch,
-      printStatus: printStatusSearch?.value,
-      phone: phoneSearch,
-
-      identityNumber: identityNumberSearch,
-      shift: shiftSearch?.value,
-      labResultUuid: labResultSearch?.value,
-      fromDate:
-        startTimeRange !== undefined
-          ? moment(startTimeRange).valueOf()
-          : undefined,
-      toDate:
-        endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
-      agencyUuid2: agency2Search?.value,
-      page: 1,
-      size: 10,
-    }
-    setStateSearch(e)
-    debounceSearch(dataSearch)
-  }
   const hanldeSearchCode = (e) => {
     const dataSearch = {
       name: nameSearch,
-      address: addressSearch,
-      state: stateSearch?.value,
+
       code: e,
-      printStatus: printStatusSearch?.value,
+
       phone: phoneSearch,
+      state: 'RETURN_RESULT,COMPLETED',
 
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
@@ -242,39 +179,14 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     setCodeSearch(e)
     debounceSearch(dataSearch)
   }
-  const hanldeSearchPrintStatus = (e) => {
-    const dataSearch = {
-      name: nameSearch,
-      address: addressSearch,
-      status: stateSearch?.value,
-      code: codeSearch,
-      printStatus: e?.value,
-      phone: phoneSearch,
-
-      identityNumber: identityNumberSearch,
-      shift: shiftSearch?.value,
-      labResultUuid: labResultSearch?.value,
-      fromDate:
-        startTimeRange !== undefined
-          ? moment(startTimeRange).valueOf()
-          : undefined,
-      toDate:
-        endTimeRange !== undefined ? moment(endTimeRange).valueOf() : undefined,
-      agencyUuid2: agency2Search?.value,
-      page: 1,
-      size: 10,
-    }
-    setPrintStatusSearch(e)
-    debounceSearch(dataSearch)
-  }
   const hanldeSearchShift = (e) => {
     const dataSearch = {
       name: nameSearch,
-      address: addressSearch,
-      state: stateSearch?.value,
+
       code: codeSearch,
-      printStatus: printStatusSearch?.value,
+
       phone: phoneSearch,
+      state: 'RETURN_RESULT,COMPLETED',
 
       identityNumber: identityNumberSearch,
       shift: e?.value,
@@ -295,11 +207,11 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
   const hanldeSearchLabResult = (e) => {
     const dataSearch = {
       name: nameSearch,
-      address: addressSearch,
-      state: stateSearch?.value,
+
       code: codeSearch,
-      printStatus: printStatusSearch?.value,
+
       phone: phoneSearch,
+      state: 'RETURN_RESULT,COMPLETED',
 
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
@@ -320,11 +232,11 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
   const handleSearchidentityNumber = (e) => {
     const dataSearch = {
       name: nameSearch,
-      address: addressSearch,
-      state: stateSearch?.value,
+
       code: codeSearch,
-      printStatus: printStatusSearch?.value,
+
       phone: phoneSearch,
+      state: 'RETURN_RESULT,COMPLETED',
 
       identityNumber: e,
       shift: shiftSearch?.value,
@@ -346,11 +258,11 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     console.log(e)
     const dataSearch = {
       name: nameSearch,
-      address: addressSearch,
-      state: stateSearch?.value,
+
       code: codeSearch,
-      printStatus: printStatusSearch?.value,
+
       phone: phoneSearch,
+      state: 'RETURN_RESULT,COMPLETED',
 
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
@@ -368,11 +280,11 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
   const hanldeSearchAgency2 = (e) => {
     const dataSearch = {
       name: nameSearch,
-      address: addressSearch,
-      state: stateSearch?.value,
+
       code: codeSearch,
-      printStatus: printStatusSearch?.value,
+
       phone: phoneSearch,
+      state: 'RETURN_RESULT,COMPLETED',
 
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
@@ -393,10 +305,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
   const handleReset = () => {
     setPhoneSearch('')
     setNameSearch('')
-    setAddressSearch('')
-    setStateSearch('')
     setCodeSearch('')
-    setPrintStatusSearch('')
     setShiftSearch('')
     setLabResultSearch('')
     setIdentityNumberSearch('')
@@ -406,6 +315,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     debounceSearch({
       page: 1,
       size: 10,
+      state: 'RETURN_RESULT,COMPLETED',
       fromDate: moment().startOf('day').valueOf(),
       toDate: moment().valueOf(),
     })
@@ -427,7 +337,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
       <Row className='mx-0 mt-1 mb-1'>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='2'
+          sm='3'
         >
           <Label className='me-1' for='search-input'>
             Số điện thoại
@@ -443,7 +353,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
         </Col>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='2'
+          sm='3'
         >
           <Label className='me-1' for='search-input'>
             Họ và tên
@@ -459,40 +369,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
         </Col>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='2'
-        >
-          <Label className='me-1' for='search-input'>
-            Địa chỉ
-          </Label>
-          <Input
-            className='dataTable-filter'
-            type='text'
-            bsSize='sm'
-            id='address-input'
-            value={addressSearch}
-            onChange={(e) => hanldeSearchAddress(e.target.value)}
-          />
-        </Col>
-        <Col
-          className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='2'
-        >
-          <Label className='me-1' for='search-input'>
-            Trạng thái
-          </Label>
-          <Select
-            isClearable={false}
-            classNamePrefix='select'
-            className='dataTable-filter select-filter'
-            options={statusOptions}
-            theme={selectThemeColors}
-            value={stateSearch}
-            onChange={(e) => hanldeSearchState(e)}
-          />
-        </Col>
-        <Col
-          className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='2'
+          sm='3'
         >
           <Label className='me-1' for='search-input'>
             Ca
@@ -509,7 +386,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
         </Col>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='2'
+          sm='3'
         >
           <Label className='me-1' for='search-input'>
             Kết quả
@@ -528,7 +405,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
       <Row className='mx-0 mt-1 mb-1'>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='2'
+          sm='3'
         >
           <Label className='me-1' for='search-input'>
             Mã phiếu
@@ -542,27 +419,9 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
             onChange={(e) => hanldeSearchCode(e.target.value)}
           />
         </Col>
-
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='2'
-        >
-          <Label className='me-1' for='search-input'>
-            Print Status
-          </Label>
-          <Select
-            isClearable={false}
-            classNamePrefix='select'
-            className='dataTable-filter select-filter'
-            options={printStatusOptions}
-            theme={selectThemeColors}
-            value={printStatusSearch}
-            onChange={(e) => hanldeSearchPrintStatus(e)}
-          />
-        </Col>
-        <Col
-          className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='2'
+          sm='3'
         >
           <Label className='me-1' for='search-input'>
             Đơn vị
@@ -579,7 +438,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
         </Col>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='2'
+          sm='3'
         >
           <Label className='me-1' for='search-input'>
             CCCD/CMT
@@ -595,7 +454,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
         </Col>
         <Col
           className='d-flex align-items-start mt-sm-0 mt-1 flex-column'
-          sm='2'
+          sm='3'
         >
           <Label className='me-1' for='search-input'>
             Chọn thời gian
@@ -620,4 +479,4 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     </StyledFilterList>
   )
 }
-export default TestFormFilter
+export default ReturnResultFilter

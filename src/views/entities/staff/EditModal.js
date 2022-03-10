@@ -1,16 +1,7 @@
 /* eslint-disable comma-dangle */
 // ** React Imports
 // ** Third Party Components
-import Flatpickr from 'react-flatpickr'
-import {
-  User,
-  Mail,
-  Calendar,
-  Lock,
-  X,
-  Compass,
-  Smartphone,
-} from 'react-feather'
+import { User, Mail, Lock, X, Smartphone } from 'react-feather'
 
 // ** Reactstrap Imports
 import {
@@ -27,7 +18,7 @@ import {
 
 // ** Styles
 import '@styles/react/libs/flatpickr/flatpickr.scss'
-import { patientService } from '../../../services/patientService'
+import { staffService } from '../../../services/staffService'
 import { Controller, useForm } from 'react-hook-form'
 import { useEffect } from 'react'
 import moment from 'moment'
@@ -35,6 +26,7 @@ import Select from 'react-select'
 import classnames from 'classnames'
 
 const defaultValues = {
+  code: '',
   name: '',
   phone: '',
   address: '',
@@ -68,6 +60,7 @@ const EditModal = ({ open, item, handleModal, setRefreshTable }) => {
   } = useForm({ defaultValues })
   useEffect(() => {
     const dataForm = {
+      code: item?.code,
       name: item?.name,
       phone: item?.phone,
       address: item?.address,
@@ -83,7 +76,7 @@ const EditModal = ({ open, item, handleModal, setRefreshTable }) => {
 
   const onHandleSubmit = (data) => {
     // console.log('handleSubmit:', data, name, email, address, phone, identityNumber, picker)
-    patientService
+    staffService
       .update(item?.uuid, {
         code: item?.code,
         name: data?.name,
@@ -100,7 +93,6 @@ const EditModal = ({ open, item, handleModal, setRefreshTable }) => {
         setRefreshTable()
       })
   }
-
   return (
     <Modal
       isOpen={open}
@@ -119,6 +111,31 @@ const EditModal = ({ open, item, handleModal, setRefreshTable }) => {
       </ModalHeader>
       <ModalBody className='flex-grow-1'>
         <Form onSubmit={handleSubmit(onHandleSubmit)}>
+          <div className='mb-1'>
+            <Label className='form-label' for='code'>
+              Mã nhân viên
+            </Label>
+            <InputGroup>
+              <InputGroupText>
+                <User size={15} />
+              </InputGroupText>
+              <Controller
+                rules={{
+                  required: true,
+                }}
+                name='code'
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    id='code'
+                    placeholder='NV0001'
+                    invalid={errors.code && true}
+                    {...field}
+                  />
+                )}
+              />
+            </InputGroup>
+          </div>
           <div className='mb-1'>
             <Label className='form-label' for='name'>
               Tên

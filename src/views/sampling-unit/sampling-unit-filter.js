@@ -24,7 +24,7 @@ import { agencyService } from '../../services/agencyService'
 import { DatePicker } from 'antd'
 import moment from 'moment'
 
-const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
+const SamplingUnitFilter = ({ paramsSearch, handleResetFilter }) => {
   const [agencyOptions, setAgencyOptions] = useState([])
   const [phoneSearch, setPhoneSearch] = useState('')
   const [nameSearch, setNameSearch] = useState('')
@@ -40,6 +40,8 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     const allParamsSearch = {
       name: nameSearch,
       address: addressSearch,
+      state:
+        'WAITING_TAKEN_SAMPLE,TAKEN_SAMPLE, NOT_ENOUGH_SAMPLE, ENOUGH_SAMPLE',
       code: codeSearch,
       phone: phoneSearch,
       identityNumber: identityNumberSearch,
@@ -97,6 +99,8 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     const dataSearch = {
       name: nameSearch,
       address: addressSearch,
+      state:
+        'WAITING_TAKEN_SAMPLE,TAKEN_SAMPLE, NOT_ENOUGH_SAMPLE, ENOUGH_SAMPLE',
       code: codeSearch,
       phone: e,
       identityNumber: identityNumberSearch,
@@ -118,6 +122,8 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     const dataSearch = {
       name: e,
       address: addressSearch,
+      state:
+        'WAITING_TAKEN_SAMPLE,TAKEN_SAMPLE, NOT_ENOUGH_SAMPLE, ENOUGH_SAMPLE',
       code: codeSearch,
       phone: phoneSearch,
       identityNumber: identityNumberSearch,
@@ -139,6 +145,8 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     const dataSearch = {
       name: nameSearch,
       address: e,
+      state:
+        'WAITING_TAKEN_SAMPLE,TAKEN_SAMPLE, NOT_ENOUGH_SAMPLE, ENOUGH_SAMPLE',
       code: codeSearch,
       phone: phoneSearch,
       identityNumber: identityNumberSearch,
@@ -160,6 +168,8 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     const dataSearch = {
       name: nameSearch,
       address: addressSearch,
+      state:
+        'WAITING_TAKEN_SAMPLE,TAKEN_SAMPLE, NOT_ENOUGH_SAMPLE, ENOUGH_SAMPLE',
       code: e,
       phone: phoneSearch,
       identityNumber: identityNumberSearch,
@@ -181,6 +191,8 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     const dataSearch = {
       name: nameSearch,
       address: addressSearch,
+      state:
+        'WAITING_TAKEN_SAMPLE,TAKEN_SAMPLE, NOT_ENOUGH_SAMPLE, ENOUGH_SAMPLE',
       code: codeSearch,
       phone: phoneSearch,
       identityNumber: identityNumberSearch,
@@ -202,6 +214,8 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     const dataSearch = {
       name: nameSearch,
       address: addressSearch,
+      state:
+        'WAITING_TAKEN_SAMPLE,TAKEN_SAMPLE, NOT_ENOUGH_SAMPLE, ENOUGH_SAMPLE',
       code: codeSearch,
       phone: phoneSearch,
       identityNumber: e,
@@ -224,6 +238,8 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     const dataSearch = {
       name: nameSearch,
       address: addressSearch,
+      state:
+        'WAITING_TAKEN_SAMPLE,TAKEN_SAMPLE, NOT_ENOUGH_SAMPLE, ENOUGH_SAMPLE',
       code: codeSearch,
       phone: phoneSearch,
       identityNumber: identityNumberSearch,
@@ -242,6 +258,8 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     const dataSearch = {
       name: nameSearch,
       address: addressSearch,
+      state:
+        'WAITING_TAKEN_SAMPLE,TAKEN_SAMPLE, NOT_ENOUGH_SAMPLE, ENOUGH_SAMPLE',
       code: codeSearch,
       phone: phoneSearch,
       identityNumber: identityNumberSearch,
@@ -272,6 +290,8 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     debounceSearch({
       page: 1,
       size: 10,
+      state:
+        'WAITING_TAKEN_SAMPLE,TAKEN_SAMPLE, NOT_ENOUGH_SAMPLE, ENOUGH_SAMPLE',
       fromDate: moment().startOf('day').valueOf(),
       toDate: moment().valueOf(),
     })
@@ -435,4 +455,4 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     </StyledFilterList>
   )
 }
-export default TestFormFilter
+export default SamplingUnitFilter

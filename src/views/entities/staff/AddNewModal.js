@@ -1,16 +1,7 @@
 /* eslint-disable comma-dangle */
 // ** React Imports
 // ** Third Party Components
-import Flatpickr from 'react-flatpickr'
-import {
-  User,
-  Mail,
-  Calendar,
-  Lock,
-  X,
-  Compass,
-  Smartphone,
-} from 'react-feather'
+import { User, Mail, Lock, X, Smartphone } from 'react-feather'
 
 // ** Reactstrap Imports
 import {
@@ -24,32 +15,69 @@ import {
   InputGroupText,
   Form,
 } from 'reactstrap'
+import { toast, Slide } from 'react-toastify'
 
 // ** Styles
 import '@styles/react/libs/flatpickr/flatpickr.scss'
-import { patientService } from '../../../services/patientService'
+import { staffService } from '../../../services/staffService'
 import { Controller, useForm } from 'react-hook-form'
-import { useEffect } from 'react'
 import moment from 'moment'
 import Select from 'react-select'
 import classnames from 'classnames'
 
 const defaultValues = {
+  code: '',
   name: '',
   phone: '',
   address: '',
-  email: 'tupa@hstc.com',
-  identityNumber: '1334343434',
+  email: '',
+  identityNumber: '',
   dateOfBirth: moment().format('DD-MM-YYYY'),
   sex: 0,
 }
-const EditModal = ({ open, item, handleModal, setRefreshTable }) => {
-  console.log('item:', item)
+const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
   // ** State
   // ** Custom close btn
   const CloseBtn = (
     <X className='cursor-pointer' size={15} onClick={handleModal} />
   )
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ defaultValues })
+  const onHandleSubmit = (data) => {
+    // console.log('handleSubmit:', data, name, email, address, phone, identityNumber, picker)
+    staffService
+      .create({
+        code: data?.code,
+        name: data?.name,
+        email: data?.email,
+        phone: data?.phone,
+        address: data?.address,
+        identityNumber: data?.identityNumber,
+        dateOfBirth: data?.dateOfBirth,
+        sex: data?.sex?.value,
+      })
+      .then((r) => {
+        console.log('handleSubmit:response:', r)
+        handleModal()
+        setRefreshTable()
+      })
+      .then(() => {
+        toast.success('Thêm mới nhân viên thành công !', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          transition: Slide,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+      })
+  }
+
   const genderOptions = [
     {
       value: 0,
@@ -60,47 +88,6 @@ const EditModal = ({ open, item, handleModal, setRefreshTable }) => {
       label: 'Nữ',
     },
   ]
-  const {
-    control,
-    setValue,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({ defaultValues })
-  useEffect(() => {
-    const dataForm = {
-      name: item?.name,
-      phone: item?.phone,
-      address: item?.address,
-      email: item?.email,
-      identityNumber: item?.identityNumber,
-      dateOfBirth: moment(item?.dateOfBirth).format('DD-MM-YYYY'),
-      sex: genderOptions.find((e) => item?.sex === e.value),
-    }
-    for (const key in dataForm) {
-      setValue(key, dataForm[key])
-    }
-  }, [item])
-
-  const onHandleSubmit = (data) => {
-    // console.log('handleSubmit:', data, name, email, address, phone, identityNumber, picker)
-    patientService
-      .update(item?.uuid, {
-        code: item?.code,
-        name: data?.name,
-        email: data?.email,
-        phone: data?.phone,
-        identityNumber: data?.identityNumber,
-        address: data?.address,
-        dateOfBirth: moment(data?.dateOfBirth).format('DD-MM-YYYY'),
-        sex: data?.sex?.value,
-      })
-      .then((r) => {
-        console.log('handleSubmit:response:', r)
-        handleModal()
-        setRefreshTable()
-      })
-  }
-
   return (
     <Modal
       isOpen={open}
@@ -120,6 +107,31 @@ const EditModal = ({ open, item, handleModal, setRefreshTable }) => {
       <ModalBody className='flex-grow-1'>
         <Form onSubmit={handleSubmit(onHandleSubmit)}>
           <div className='mb-1'>
+            <Label className='form-label' for='code'>
+              Mã nhân viên
+            </Label>
+            <InputGroup>
+              <InputGroupText>
+                <User size={15} />
+              </InputGroupText>
+              <Controller
+                rules={{
+                  required: true,
+                }}
+                name='code'
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    id='code'
+                    placeholder='NV0001'
+                    invalid={errors.code && true}
+                    {...field}
+                  />
+                )}
+              />
+            </InputGroup>
+          </div>
+          <div className='mb-1'>
             <Label className='form-label' for='name'>
               Tên
             </Label>
@@ -128,11 +140,9 @@ const EditModal = ({ open, item, handleModal, setRefreshTable }) => {
                 <User size={15} />
               </InputGroupText>
               <Controller
-                rules={
-                  {
-                    // required: true,
-                  }
-                }
+                rules={{
+                  required: true,
+                }}
                 name='name'
                 control={control}
                 render={({ field }) => (
@@ -273,8 +283,6 @@ const EditModal = ({ open, item, handleModal, setRefreshTable }) => {
                 render={({ field }) => (
                   <Input
                     id='dateOfBirth'
-                    className='date-picker'
-                    name='dateOfBirth'
                     placeholder='Ngày sinh'
                     invalid={errors.dateOfBirth && true}
                     {...field}
@@ -314,7 +322,7 @@ const EditModal = ({ open, item, handleModal, setRefreshTable }) => {
               />
             </InputGroup>
           </div>
-          <Button type='submit' className='me-1' color='primary'>
+          <Button className='me-1' color='primary'>
             Submit
           </Button>
           <Button color='secondary' onClick={handleModal} outline>
@@ -326,4 +334,4 @@ const EditModal = ({ open, item, handleModal, setRefreshTable }) => {
   )
 }
 
-export default EditModal
+export default AddNewModal
