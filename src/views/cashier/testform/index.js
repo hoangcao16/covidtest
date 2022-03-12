@@ -9,7 +9,7 @@ import { Fragment, useState, useEffect, memo, useCallback } from 'react'
 // ** Table Columns
 import { statusOptions, disableOptions } from '../../components/common/data'
 // ** Invoice List Sidebar
-import TestFormSidebar from '../../components/TestformSidebar/test-form-sidebar'
+import TestFormSidebarCasher from '../../components/TestformSidebar/test-form-sidebar-casher'
 import TestFormPreview from '../../components/TestFormPreview/test-form-preview'
 import BillPreview from '../../components/BillPreview/bill-preview'
 import TestFromUploadCSV from '../../components/TestFormUploadSideBar/test-form-upload-sidebar'
@@ -617,7 +617,7 @@ const TestForm = ({}) => {
           </div>
         </div>
       </StyledCard>
-      <TestFormSidebar
+      <TestFormSidebarCasher
         openSideBar={sidebarOpen}
         toggleTestFormSidebar={toggleTestFormSidebar}
       />

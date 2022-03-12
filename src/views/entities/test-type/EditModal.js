@@ -173,7 +173,7 @@ const EditModal = ({open, selecteditem, handleModal, setRefreshTable}) => {
             console.log('handleSubmit:response:', r)
             handleModal()
             setRefreshTable()
-            toast.success('Thêm mới thành công !', {
+            toast.success('Cập nhật thành công !', {
                 position: 'top-right',
                 autoClose: 2000,
                 hideProgressBar: false,
@@ -184,7 +184,7 @@ const EditModal = ({open, selecteditem, handleModal, setRefreshTable}) => {
                 progress: undefined,
             })
         }).catch(err => {
-            toast.error('Thêm mới thất bại!', {
+            toast.error('Cập nhật thất bại!', {
                 position: 'top-right',
                 autoClose: 2000,
                 hideProgressBar: false,

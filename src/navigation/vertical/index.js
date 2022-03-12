@@ -22,7 +22,7 @@ export default [
   },
   {
     id: 'cashier',
-    title: 'Thu ngân',
+    title: 'Thu Ngân',
     icon: <CreditCard size={20} />,
     navLink: '/cashier',
     children: [

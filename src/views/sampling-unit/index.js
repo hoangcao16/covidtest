@@ -9,7 +9,7 @@ import { Fragment, useState, useEffect, memo, useCallback } from 'react'
 // ** Table Columns
 import { statusOptions, disableOptions } from '../components/common/data'
 // ** Invoice List Sidebar
-import TestFormSidebar from '../components/TestformSidebar/test-form-sidebar'
+import TestFormSidebarSampler from '../components/TestformSidebar/test-form-sidebar-sampler'
 // ** Store & Actions
 import { useSelector, useDispatch } from 'react-redux'
 import { StyledCard } from './style'
@@ -354,7 +354,7 @@ const TestForm = ({}) => {
           </div>
         </div>
       </StyledCard>
-      <TestFormSidebar
+      <TestFormSidebarSampler
         openSideBar={sidebarOpen}
         toggleTestFormSidebar={toggleTestFormSidebar}
       />
