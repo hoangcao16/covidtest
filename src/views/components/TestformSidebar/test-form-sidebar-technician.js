@@ -527,6 +527,7 @@ const SidebarNewTestSamplerForm = ({openSideBar, toggleTestFormSidebar}) => {
                                         isMulti
                                         onInputChange={(value) => handleSearchPatients(value)}
                                         classNamePrefix='select'
+                                        isOptionDisabled={true}
                                         options={patientsOptions}
                                         theme={selectThemeColors}
                                         filterOption={filterOption}
@@ -787,36 +788,7 @@ const SidebarNewTestSamplerForm = ({openSideBar, toggleTestFormSidebar}) => {
 
                     <Row></Row>
                     <Row>
-                        <Col md='3'>
-                            <div className='mb-1'>
-                                <Label className='form-label' for='staffUuid4'>
-                                    Người lập phiếu
-                                    {/* <span className='text-danger'>*</span> */}
-                                </Label>
-                                <Controller
-                                    rules={
-                                        {
-                                            // required: true,
-                                        }
-                                    }
-                                    name='staffUuid4'
-                                    control={control}
-                                    render={({field}) => (
-                                        // <Input id='country' placeholder='Australia' invalid={errors.country && true} {...field} />
-                                        <Select
-                                            isClearable={false}
-                                            classNamePrefix='select'
-                                            options={staffOptions}
-                                            theme={selectThemeColors}
-                                            className={classnames('react-select', {
-                                                'is-invalid': errors.staffUuid4,
-                                            })}
-                                            {...field}
-                                        />
-                                    )}
-                                />
-                            </div>
-                        </Col>
+
 
                     </Row>
                     <div className='group-button'>

@@ -528,6 +528,7 @@ const SidebarNewTestSamplerForm = ({openSideBar, toggleTestFormSidebar}) => {
                                         onInputChange={(value) => handleSearchPatients(value)}
                                         classNamePrefix='select'
                                         options={patientsOptions}
+                                        isOptionDisabled={true}
                                         theme={selectThemeColors}
                                         filterOption={filterOption}
                                         className={classnames('react-select', {

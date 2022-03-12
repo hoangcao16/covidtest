@@ -590,6 +590,7 @@ const SidebarNewTestCasherForm = ({openSideBar, toggleTestFormSidebar}) => {
                                 />
                             </div>
                         </Col>
+
                         <Col md='4'>
                             <div className='mb-1 d-flex flex-column'>
                                 <Label className='form-label' for='getSampleAtHome'>
@@ -727,6 +728,36 @@ const SidebarNewTestCasherForm = ({openSideBar, toggleTestFormSidebar}) => {
                                                 Tính tiền
                                             </Button>
                                         </div>
+                                    )}
+                                />
+                            </div>
+                        </Col>
+                        <Col md='4'>
+                            <div className='mb-1'>
+                                <Label className='form-label' for='staffUuid4'>
+                                    Người lập phiếu
+                                    {/* <span className='text-danger'>*</span> */}
+                                </Label>
+                                <Controller
+                                    rules={
+                                        {
+                                            // required: true,
+                                        }
+                                    }
+                                    name='staffUuid4'
+                                    control={control}
+                                    render={({field}) => (
+                                        // <Input id='country' placeholder='Australia' invalid={errors.country && true} {...field} />
+                                        <Select
+                                            isClearable={false}
+                                            classNamePrefix='select'
+                                            options={staffOptions}
+                                            theme={selectThemeColors}
+                                            className={classnames('react-select', {
+                                                'is-invalid': errors.staffUuid4,
+                                            })}
+                                            {...field}
+                                        />
                                     )}
                                 />
                             </div>
