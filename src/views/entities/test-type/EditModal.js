@@ -39,15 +39,15 @@ const defaultValues = {
     sum8: '8',
     sum9: '9',
     sum10: '10',
-    price2: '',
-    price3: '',
-    price4: '',
-    price5: '',
-    price6: '',
-    price7: '',
-    price8: '',
-    price9: '',
-    price10: '',
+    price2: null,
+    price3: null,
+    price4: null,
+    price5: null,
+    price6: null,
+    price7: null,
+    price8: null,
+    price9: null,
+    price10: null,
     getSampleAtHomePrice: '',
 }
 
@@ -110,45 +110,63 @@ const EditModal = ({open, selecteditem, handleModal, setRefreshTable}) => {
             name: data.name,
             price: parseFloat(data.basePrice),
             getSampleAtHomePrice: parseFloat(data.getSampleAtHomePrice),
-            groupPrices: [
-                {
-                    quantity: parseFloat(data.sum2),
-                    price: parseFloat(data.price2),
-                },
-                {
-                    quantity: parseFloat(data.sum3),
-                    price: parseFloat(data.price3),
-                },
-                {
-                    quantity: parseFloat(data.sum4),
-                    price: parseFloat(data.price4),
-                },
-                {
-                    quantity: parseFloat(data.sum5),
-                    price: parseFloat(data.price5),
-                },
-                {
-                    quantity: parseFloat(data.sum6),
-                    price: parseFloat(data.price6),
-                },
-                {
-                    quantity: parseFloat(data.sum7),
-                    price: parseFloat(data.price7),
-                },
-                {
-                    quantity: parseFloat(data.sum8),
-                    price: parseFloat(data.price8),
-                },
-                {
-                    quantity: parseFloat(data.sum9),
-                    price: parseFloat(data.price9),
-                },
-                {
-                    quantity: parseFloat(data.sum10),
-                    price: parseFloat(data.price10),
-                },
-            ],
+            groupPrices: [],
         }
+        if (data.price2 !== 0) {
+            dataSend.groupPrices.push({
+                quantity: parseFloat(data.sum2),
+                price: parseFloat(data.price2),
+            })
+        }
+        if (data.price3 !== 0) {
+            dataSend.groupPrices.push({
+                quantity: parseFloat(data.sum3),
+                price: parseFloat(data.price3),
+            })
+        }
+        if (data.price4 !== 0) {
+            dataSend.groupPrices.push({
+                quantity: parseFloat(data.sum4),
+                price: parseFloat(data.price4),
+            })
+        }
+        if (data.price5 !== 0) {
+            dataSend.groupPrices.push({
+                quantity: parseFloat(data.sum5),
+                price: parseFloat(data.price5),
+            })
+        }
+        if (data.price6 !== 0) {
+            dataSend.groupPrices.push({
+                quantity: parseFloat(data.sum6),
+                price: parseFloat(data.price6),
+            })
+        }
+        if (data.price7 !== 0) {
+            dataSend.groupPrices.push({
+                quantity: parseFloat(data.sum7),
+                price: parseFloat(data.price7),
+            })
+        }
+        if (data.price8 !== 0) {
+            dataSend.groupPrices.push({
+                quantity: parseFloat(data.sum8),
+                price: parseFloat(data.price8),
+            })
+        }
+        if (data.price9 !== 0) {
+            dataSend.groupPrices.push({
+                quantity: parseFloat(data.sum9),
+                price: parseFloat(data.price9),
+            })
+        }
+        if (data.price10 !== 0) {
+            dataSend.groupPrices.push({
+                quantity: parseFloat(data.sum10),
+                price: parseFloat(data.price10),
+            })
+        }
+
         console.log('dataSend:', data)
         console.log('dataSend:', dataSend)
         testTypeService.edit(selecteditem.uuid, dataSend).then((r) => {
