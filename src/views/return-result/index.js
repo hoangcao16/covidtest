@@ -44,7 +44,7 @@ import {
     Button,
     Col,
 } from 'reactstrap'
-import {STATE_TECHNICIAN} from "../../constants/state"
+import {STATE_COMPLETED} from "../../constants/state"
 
 const TestForm = ({}) => {
     // ** States
@@ -77,7 +77,7 @@ const TestForm = ({}) => {
         const params = {
             ...allParamsSearch,
             page: currentPage,
-            state: STATE_TECHNICIAN,
+            state: STATE_COMPLETED,
             size: rowsPerPage,
             fromDate: moment().startOf('day').valueOf(),
             toDate: moment().valueOf(),

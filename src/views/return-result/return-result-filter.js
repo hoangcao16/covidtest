@@ -24,7 +24,7 @@ import {labResultTypeService} from '../../services/labResultTypeService'
 import {agencyService} from '../../services/agencyService'
 import {DatePicker} from 'antd'
 import moment from 'moment'
-import {STATE_TECHNICIAN} from "../../constants/state"
+import {STATE_COMPLETED} from "../../constants/state"
 
 const ReturnResultFilter = ({paramsSearch, handleResetFilter}) => {
     const [labResultTypeOptions, setLabResultTypeOptions] = useState([])
@@ -49,7 +49,7 @@ const ReturnResultFilter = ({paramsSearch, handleResetFilter}) => {
             code: codeSearch,
 
             phone: phoneSearch,
-            state: STATE_TECHNICIAN,
+            state: STATE_COMPLETED,
             identityNumber: identityNumberSearch,
             shift: shiftSearch?.value,
             labResultUuid: labResultSearch?.value,
