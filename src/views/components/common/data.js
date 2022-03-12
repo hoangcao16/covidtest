@@ -106,7 +106,7 @@ export const disableOptions = (option, selectValue) => {
       return true
     }
     case 'NOT_ENOUGH_SAMPLE': {
-      if (option.value === 'ENOUGH_SAMPLE') {
+      if (option.value === 'TAKEN_SAMPLE') {
         return false
       }
       return true

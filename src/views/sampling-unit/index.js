@@ -58,7 +58,7 @@ const TestForm = ({}) => {
       page: currentPage,
       size: rowsPerPage,
       state:
-        'WAITING_TAKEN_SAMPLE,TAKEN_SAMPLE, NOT_ENOUGH_SAMPLE, ENOUGH_SAMPLE',
+        'WAITING_TAKEN_SAMPLE,NOT_ENOUGH_SAMPLE',
       fromDate: moment().startOf('day').valueOf(),
       toDate: moment().valueOf(),
     }
