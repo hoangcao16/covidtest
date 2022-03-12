@@ -511,7 +511,7 @@ const SidebarNewTestCasherForm = ({openSideBar, toggleTestFormSidebar}) => {
                 </Label>
                 <div className='mb-1'>
                     <Label className='form-label' for='patients'>
-                        Chọn khách hàng (Thu ngân)<span className='text-danger'>*</span>
+                        Chọn khách hàng <span className='text-danger'>*</span>
                     </Label>
                     <div className='d-flex'>
                         <Controller
@@ -553,7 +553,7 @@ const SidebarNewTestCasherForm = ({openSideBar, toggleTestFormSidebar}) => {
                         <Col md='4'>
                             <div className='mb-1'>
                                 <Label className='form-label' for='testtype'>
-                                    Yêu cầu xét nghiệm (Thu ngân){' '}
+                                    Yêu cầu xét nghiệm {' '}
                                     <span className='text-danger'>*</span>
                                 </Label>
                                 <Controller
@@ -618,7 +618,7 @@ const SidebarNewTestCasherForm = ({openSideBar, toggleTestFormSidebar}) => {
                         <Col md='4'>
                             <div className='mb-1'>
                                 <Label className='form-label' for='getSampleAtHomePrice'>
-                                    Giá tiền thu tại nhà (Thu ngân)
+                                   Phí thu tại nhà
                                     {/* <span className='text-danger'>*</span> */}
                                 </Label>
                                 <Controller

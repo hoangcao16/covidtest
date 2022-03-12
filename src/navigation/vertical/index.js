@@ -16,31 +16,31 @@ import {
 export default [
   {
     id: 'patients',
-    title: 'Khách Hàng',
+    title: 'Khách hàng',
     icon: <Home size={20} />,
     navLink: '/patients',
   },
   {
     id: 'cashier',
-    title: 'Thu Ngân',
+    title: 'Thu ngân',
     icon: <CreditCard size={20} />,
     navLink: '/cashier',
     children: [
       {
         id: 'cashier-test-form',
-        title: 'Phiếu Xét Nghiệm',
+        title: 'Lập phiếu',
         icon: <Circle size={12} />,
         navLink: '/cashier-test-form',
       },
       {
         id: 'cashier-bill',
-        title: 'Phiếu Thu',
+        title: 'Đã thu tiền',
         icon: <Circle size={12} />,
         navLink: '/cashier-bill',
       },
       {
         id: 'cashier-loans',
-        title: 'Công nợ',
+        title: 'Treo công nợ',
         icon: <Circle size={20} />,
         navLink: '/cashier-loans',
       },
@@ -54,7 +54,7 @@ export default [
   },
   {
     id: 'laboratory',
-    title: 'Phòng xét nghiệm',
+    title: 'Kỹ thuật viên',
     icon: <Briefcase size={20} />,
     navLink: '/laboratory',
   },
@@ -65,30 +65,23 @@ export default [
     navLink: '/return-result',
   },
   {
-    id: 'covid19',
-    title: 'Xét nghiệm Covid-19',
-    icon: <Command size={20} />,
-    navLink: '/covid19',
-    children: [
-      {
-        id: 'test-form',
-        title: 'Phiếu Xét Nghiệm',
-        icon: <Circle size={12} />,
-        navLink: '/covid19/test-form',
-      },
-      {
-        id: 'bill',
-        title: 'Phiếu Thu',
-        icon: <Circle size={12} />,
-        navLink: '/bill',
-      },
-      {
-        id: 'result-form',
-        title: 'Phiếu Trả Kết Quả',
-        icon: <Circle size={12} />,
-        navLink: '/covid19/result-form',
-      },
-    ],
+    id: 'test-form',
+    title: 'Phiếu xét nghiệm',
+    icon: <Circle size={12} />,
+    navLink: '/covid19/test-form',
+  },
+  {
+    id: 'bill',
+    title: 'Phiếu thu',
+    icon: <Circle size={12} />,
+    navLink: '/bill',
+  },
+  {
+    id: 'loans',
+    title: 'Phiếu ghi nợ',
+    icon: <Cpu size={20} />,
+    navLink: '/loans',
+    // children: [],
   },
   {
     id: 'entities',
@@ -116,7 +109,7 @@ export default [
       },
       {
         id: 'lab-result-type',
-        title: 'Loai Kết quả',
+        title: 'Loai kết quả',
         icon: <Circle size={12} />,
         navLink: '/entities/lab-result-type',
       },
@@ -128,13 +121,7 @@ export default [
       },
     ],
   },
-  {
-    id: 'loans',
-    title: 'Công nợ',
-    icon: <Cpu size={20} />,
-    navLink: '/loans',
-    // children: [],
-  },
+
   {
     id: 'reports',
     title: 'Báo cáo',
