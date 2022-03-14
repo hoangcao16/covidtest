@@ -375,7 +375,7 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
             Đơn vị nợ
           </Label>
           <Select
-            isClearable={false}
+            isClearable={true}
             classNamePrefix='select'
             className='dataTable-filter select-filter'
             options={agencyOptions}

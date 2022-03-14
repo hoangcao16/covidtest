@@ -66,6 +66,11 @@ const AddNewCard = ({ setRefreshTable }) => {
           progress: undefined,
         })
       })
+      .then(() => {
+        for (const key in defaultValues) {
+          setValue(key, defaultValues[key])
+        }
+      })
   }
 
   const genderOptions = [

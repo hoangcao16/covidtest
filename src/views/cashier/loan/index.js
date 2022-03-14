@@ -51,7 +51,7 @@ const TestForm = ({}) => {
       ...allParamsSearch,
       page: currentPage,
       size: rowsPerPage,
-      state: 'DEBT',
+      hasDebt: true,
       fromDate: moment().startOf('day').valueOf(),
       toDate: moment().valueOf(),
     }
@@ -126,7 +126,7 @@ const TestForm = ({}) => {
   //   debounceSearch({
   //     page: currentPage,
   //     size: rowsPerPage,
-  //     state: 'DEBT',
+  //     hasDebt: true,
   //     filter: e,
   //   })
   // }
@@ -137,7 +137,7 @@ const TestForm = ({}) => {
       ...allParamsSearch,
       page: 1,
       size: parseInt(e.target.value),
-      state: 'DEBT',
+      hasDebt: true,
       fromDate:
         allParamsSearch.fromDate === undefined
           ? undefined
@@ -155,7 +155,7 @@ const TestForm = ({}) => {
       ...allParamsSearch,
       page: page,
       size: rowsPerPage,
-      state: 'DEBT',
+      hasDebt: true,
       fromDate:
         allParamsSearch.fromDate === undefined
           ? undefined

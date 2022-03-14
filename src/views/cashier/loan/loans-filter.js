@@ -41,7 +41,7 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       phone: phoneSearch,
       name: nameSearch,
       address: addressSearch,
-      state: 'DEBT',
+      hasDebt: true,
       code: codeSearch,
       shift: shiftSearch?.value,
       identityNumber: identityNumberSearch,
@@ -99,7 +99,7 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       phone: e,
       name: nameSearch,
       address: addressSearch,
-      state: 'DEBT',
+      hasDebt: true,
       code: codeSearch,
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
@@ -121,7 +121,7 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       phone: phoneSearch,
       name: e,
       address: addressSearch,
-      state: 'DEBT',
+      hasDebt: true,
       code: codeSearch,
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
@@ -143,7 +143,7 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       phone: phoneSearch,
       name: nameSearch,
       address: e,
-      state: 'DEBT',
+      hasDebt: true,
       code: codeSearch,
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
@@ -165,7 +165,7 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       phone: phoneSearch,
       name: nameSearch,
       address: addressSearch,
-      state: 'DEBT',
+      hasDebt: true,
       code: e,
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
@@ -187,7 +187,7 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       phone: phoneSearch,
       name: nameSearch,
       address: addressSearch,
-      state: 'DEBT',
+      hasDebt: true,
       code: codeSearch,
       identityNumber: identityNumberSearch,
       shift: e?.value,
@@ -209,7 +209,7 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       phone: phoneSearch,
       name: nameSearch,
       address: addressSearch,
-      state: 'DEBT',
+      hasDebt: true,
       code: codeSearch,
       identityNumber: e,
       shift: shiftSearch?.value,
@@ -232,7 +232,7 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       phone: phoneSearch,
       name: nameSearch,
       address: addressSearch,
-      state: 'DEBT',
+      hasDebt: true,
       code: codeSearch,
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
@@ -251,7 +251,7 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       phone: phoneSearch,
       name: nameSearch,
       address: addressSearch,
-      state: 'DEBT',
+      hasDebt: true,
       code: codeSearch,
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
@@ -281,7 +281,7 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
     debounceSearch({
       page: 1,
       size: 10,
-      state: 'DEBT',
+      hasDebt: true,
       fromDate: moment().startOf('day').valueOf(),
       toDate: moment().valueOf(),
     })
@@ -375,7 +375,7 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
             Đơn vị nợ
           </Label>
           <Select
-            isClearable={false}
+            isClearable={true}
             classNamePrefix='select'
             className='dataTable-filter select-filter'
             options={agencyOptions}
