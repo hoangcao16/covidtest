@@ -281,7 +281,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
     debounceSearch({
       page: 1,
       size: 10,
-
+      printStatus: 1,
       fromDate: moment().startOf('day').valueOf(),
       toDate: moment().valueOf(),
     })

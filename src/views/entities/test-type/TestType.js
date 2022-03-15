@@ -28,6 +28,7 @@ import AddNewModal from './AddNewModal'
 import EditModal from './EditModal'
 import { testTypeService } from '../../../services/testTypeService'
 import { customizeColumns } from './data'
+import { toast, Slide } from 'react-toastify'
 
 const TestType = () => {
   // ** Store Vars
@@ -45,8 +46,31 @@ const TestType = () => {
 
   const handleDelete = (item) => {
     console.log('delete testType:item', item)
-    testTypeService.delete(item.uuid).then(() => {
-      setRefreshTable(!refreshTable)
+    testTypeService.delete(item.uuid).then((res) => {
+      if (res.data.code === 600) {
+        toast.success('Xóa thành công !', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          transition: Slide,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+        setRefreshTable(!refreshTable)
+      } else {
+        toast.error('Xóa thất bại !', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          transition: Slide,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+      }
     })
   }
   const handleEditModal = (item) => {

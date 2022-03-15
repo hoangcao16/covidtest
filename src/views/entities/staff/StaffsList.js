@@ -27,6 +27,7 @@ import AddNewModal from './AddNewModal'
 import { customizeColumns } from './data'
 import { staffService } from '../../../services/staffService'
 import EditModal from './EditModal'
+import { toast, Slide } from 'react-toastify'
 
 const StaffsSection = () => {
   // ** Store Vars
@@ -43,7 +44,30 @@ const StaffsSection = () => {
   const [selectedItem, setSelectedItem] = useState(false)
   const handleDelete = (uuid) => {
     staffService.delete(uuid).then(() => {
-      setRefreshTable(!refreshTable)
+      if (res.data.code === 600) {
+        toast.success('Xóa thành công !', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          transition: Slide,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+        setRefreshTable(!refreshTable)
+      } else {
+        toast.error('Xóa thất bại !', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          transition: Slide,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+      }
     })
   }
   const handleModal = () => {

@@ -283,6 +283,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
     debounceSearch({
       page: 1,
       size: 10,
+      state: 'NOT_PAID',
       fromDate: moment().startOf('day').valueOf(),
       toDate: moment().valueOf(),
     })

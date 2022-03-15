@@ -50,8 +50,48 @@ const defaultValues = {
   patients: [],
   payFor: '',
   payerUuid: '',
-  performTime: moment(),
-  receiveSampleTime: moment(),
+  performTime: moment().isBetween(
+    moment().set({ hour: 23, minute: 1, second: 0 }),
+    moment().set({ hour: 23, minute: 59, second: 59 })
+  )
+    ? moment().add(1, 'd').set({ hour: 9, minute: 30 })
+    : moment().isBetween(
+        moment().set({ hour: 0, minute: 0, second: 0 }),
+        moment().set({ hour: 8, minute: 30, second: 59 })
+      )
+    ? moment().set({ hour: 9, minute: 30 })
+    : moment().isBetween(
+        moment().set({ hour: 8, minute: 31, second: 0 }),
+        moment().set({ hour: 15, minute: 30, second: 59 })
+      )
+    ? moment().set({ hour: 16, minute: 0 })
+    : moment().isBetween(
+        moment().set({ hour: 15, minute: 31, second: 0 }),
+        moment().set({ hour: 23, minute: 0, second: 59 })
+      )
+    ? moment().set({ hour: 23, minute: 30 })
+    : '',
+  receiveSampleTime: moment().isBetween(
+    moment().set({ hour: 23, minute: 1, second: 0 }),
+    moment().set({ hour: 23, minute: 59, second: 59 })
+  )
+    ? moment().add(1, 'd').set({ hour: 9, minute: 0 })
+    : moment().isBetween(
+        moment().set({ hour: 0, minute: 0, second: 0 }),
+        moment().set({ hour: 8, minute: 30, second: 59 })
+      )
+    ? moment().set({ hour: 9, minute: 0 })
+    : moment().isBetween(
+        moment().set({ hour: 8, minute: 31, second: 0 }),
+        moment().set({ hour: 15, minute: 30, second: 59 })
+      )
+    ? moment().set({ hour: 15, minute: 30 })
+    : moment().isBetween(
+        moment().set({ hour: 15, minute: 31, second: 0 }),
+        moment().set({ hour: 23, minute: 0, second: 59 })
+      )
+    ? moment().set({ hour: 23, minute: 0 })
+    : '',
   returnTime: moment().isBetween(
     moment().set({ hour: 23, minute: 1, second: 0 }),
     moment().set({ hour: 23, minute: 59, second: 59 })
@@ -451,6 +491,26 @@ const SidebarNewTestCasherForm = ({ openSideBar, toggleTestFormSidebar }) => {
     debounceDropDown(query)
   }
   const handldeSelectShift = (value) => {
+    setValue(
+      'receiveSampleTime',
+      value === 'Ca 1'
+        ? moment().set({ hour: 9, minute: 0 })
+        : value === 'Ca 2'
+        ? moment().set({ hour: 15, minute: 30 })
+        : value === 'Ca 3'
+        ? moment().set({ hour: 23, minute: 0 })
+        : ''
+    )
+    setValue(
+      'performTime',
+      value === 'Ca 1'
+        ? moment().set({ hour: 9, minute: 30 })
+        : value === 'Ca 2'
+        ? moment().set({ hour: 16, minute: 0 })
+        : value === 'Ca 3'
+        ? moment().set({ hour: 23, minute: 30 })
+        : ''
+    )
     setValue(
       'returnTime',
       value === 'Ca 1'

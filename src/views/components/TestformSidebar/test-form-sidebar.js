@@ -50,8 +50,48 @@ const defaultValues = {
   patients: [],
   payFor: '',
   payerUuid: '',
-  performTime: moment(),
-  receiveSampleTime: moment(),
+  performTime: moment().isBetween(
+    moment().set({ hour: 23, minute: 1, second: 0 }),
+    moment().set({ hour: 23, minute: 59, second: 59 })
+  )
+    ? moment().add(1, 'd').set({ hour: 9, minute: 30 })
+    : moment().isBetween(
+        moment().set({ hour: 0, minute: 0, second: 0 }),
+        moment().set({ hour: 8, minute: 30, second: 59 })
+      )
+    ? moment().set({ hour: 9, minute: 30 })
+    : moment().isBetween(
+        moment().set({ hour: 8, minute: 31, second: 0 }),
+        moment().set({ hour: 15, minute: 30, second: 59 })
+      )
+    ? moment().set({ hour: 16, minute: 0 })
+    : moment().isBetween(
+        moment().set({ hour: 15, minute: 31, second: 0 }),
+        moment().set({ hour: 23, minute: 0, second: 59 })
+      )
+    ? moment().set({ hour: 23, minute: 30 })
+    : '',
+  receiveSampleTime: moment().isBetween(
+    moment().set({ hour: 23, minute: 1, second: 0 }),
+    moment().set({ hour: 23, minute: 59, second: 59 })
+  )
+    ? moment().add(1, 'd').set({ hour: 9, minute: 0 })
+    : moment().isBetween(
+        moment().set({ hour: 0, minute: 0, second: 0 }),
+        moment().set({ hour: 8, minute: 30, second: 59 })
+      )
+    ? moment().set({ hour: 9, minute: 0 })
+    : moment().isBetween(
+        moment().set({ hour: 8, minute: 31, second: 0 }),
+        moment().set({ hour: 15, minute: 30, second: 59 })
+      )
+    ? moment().set({ hour: 15, minute: 30 })
+    : moment().isBetween(
+        moment().set({ hour: 15, minute: 31, second: 0 }),
+        moment().set({ hour: 23, minute: 0, second: 59 })
+      )
+    ? moment().set({ hour: 23, minute: 0 })
+    : '',
   returnTime: moment().isBetween(
     moment().set({ hour: 23, minute: 1, second: 0 }),
     moment().set({ hour: 23, minute: 59, second: 59 })
@@ -454,6 +494,26 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
     debounceDropDown(query)
   }
   const handldeSelectShift = (value) => {
+    setValue(
+      'receiveSampleTime',
+      value === 'Ca 1'
+        ? moment().set({ hour: 9, minute: 0 })
+        : value === 'Ca 2'
+        ? moment().set({ hour: 15, minute: 30 })
+        : value === 'Ca 3'
+        ? moment().set({ hour: 23, minute: 0 })
+        : ''
+    )
+    setValue(
+      'performTime',
+      value === 'Ca 1'
+        ? moment().set({ hour: 9, minute: 30 })
+        : value === 'Ca 2'
+        ? moment().set({ hour: 16, minute: 0 })
+        : value === 'Ca 3'
+        ? moment().set({ hour: 23, minute: 30 })
+        : ''
+    )
     setValue(
       'returnTime',
       value === 'Ca 1'
@@ -1002,15 +1062,33 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
           <Row>
             <Col md='3'>
               <div className='mb-1'>
+                <Label className='form-label' for='staffUuid3'>
+                  Người ký phiếu
+                  {/* <span className='text-danger'>*</span> */}
+                </Label>
                 <Controller
-                  rules={{}}
+                  rules={
+                    {
+                      // required: true,
+                    }
+                  }
                   name='staffUuid3'
                   control={control}
-                  render={({ field }) => <Checkbox>Xác nhận Ký phiếu</Checkbox>}
+                  render={({ field }) => (
+                    <Select
+                      isClearable={false}
+                      classNamePrefix='select'
+                      options={staffOptions}
+                      theme={selectThemeColors}
+                      className={classnames('react-select', {
+                        'is-invalid': errors.staffUuid3,
+                      })}
+                      {...field}
+                    />
+                  )}
                 />
               </div>
             </Col>
-
             <Col md='3'>
               <div className='mb-1'>
                 <Label className='form-label' for='labResultUuid'>
@@ -1226,10 +1304,6 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
                 />
               </div>
             </Col>
-          </Row>
-
-          <Row></Row>
-          <Row>
             <Col md='3'>
               <div className='mb-1'>
                 <Label className='form-label' for='staffUuid4'>
@@ -1256,6 +1330,25 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
                       })}
                       {...field}
                     />
+                  )}
+                />
+              </div>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col md='3'>
+              <div className='mb-1'>
+                <Controller
+                  rules={
+                    {
+                      // required: true,
+                    }
+                  }
+                  name='signature'
+                  control={control}
+                  render={({ field }) => (
+                    <Checkbox {...field}>Xác nhận Ký phiếu</Checkbox>
                   )}
                 />
               </div>
