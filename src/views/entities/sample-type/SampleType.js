@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable comma-dangle */
 // ** React Imports
 import { Fragment, useState, useEffect, memo } from 'react'
@@ -28,6 +29,7 @@ import {
 import AddNewModal from './AddNewModal'
 import { sampleTypeService } from '../../../services/sampleTypeService'
 import { customizeColumns } from './data'
+import EditModal from './EditModal'
 
 const SampleType = () => {
   // ** Store Vars
@@ -40,6 +42,9 @@ const SampleType = () => {
   const [rowsPerPage, setRowsPerPage] = useState(7)
   const [searchValue, setSearchValue] = useState('')
   const [refreshTable, setRefreshTable] = useState(false)
+  const [selectedItem, setSelectedItem] = useState(false)
+  const [editModal, setEditModal] = useState(false)
+
   const handleDelete = (item) => {
     console.log('delete agency:item', item)
     sampleTypeService.delete(item.uuid).then((res) => {
@@ -171,7 +176,10 @@ const SampleType = () => {
       />
     )
   }
-
+  const handleEditModal = (item) => {
+    setEditModal(!editModal)
+    setSelectedItem(item)
+  }
   return (
     <Fragment>
       <Card>
@@ -226,7 +234,7 @@ const SampleType = () => {
             pagination
             paginationServer
             className='react-dataTable'
-            columns={customizeColumns(handleDelete)}
+            columns={customizeColumns(handleEditModal, handleDelete)}
             sortIcon={<ChevronDown size={10} />}
             paginationComponent={CustomPagination}
             data={dataToRender()}
@@ -236,6 +244,12 @@ const SampleType = () => {
       <AddNewModal
         open={modal}
         handleModal={handleModal}
+        setRefreshTable={setRefreshTable}
+      />
+      <EditModal
+        open={editModal}
+        selecteditem={selectedItem}
+        handleModal={handleEditModal}
         setRefreshTable={setRefreshTable}
       />
     </Fragment>

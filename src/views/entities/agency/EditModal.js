@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable comma-dangle */
 // ** React Imports
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 // ** Third Party Components
 import { User, Briefcase, X } from 'react-feather'
@@ -16,14 +17,14 @@ import {
   InputGroup,
   InputGroupText,
 } from 'reactstrap'
+import { Slide, toast } from 'react-toastify'
 
 // ** Styles
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 import { agencyService } from '../../../services/agencyService'
 import { Radio } from 'antd'
-import { Slide, toast } from 'react-toastify'
 
-const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
+const EditModal = ({ open, selecteditem, handleModal, setRefreshTable }) => {
   // ** State
   const [code, setCode] = useState()
   const [description, setDescription] = useState()
@@ -32,10 +33,22 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
   const CloseBtn = (
     <X className='cursor-pointer' size={15} onClick={handleModal} />
   )
+  useEffect(() => {
+    if (selecteditem.name) {
+      setDescription(selecteditem.name)
+      setCode(selecteditem.code)
+      setType(selecteditem.type)
+    }
+    return () => {
+      setDescription()
+      setCode()
+      setType()
+    }
+  }, [selecteditem])
   const handleSubmit = () => {
     console.log('handleSubmit:', code, description)
     agencyService
-      .create({
+      .edit(selecteditem.uuid, {
         code,
         name: description,
         type,
@@ -44,9 +57,19 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
         console.log('handleSubmit:response:', r)
         handleModal()
         setRefreshTable()
+        toast.success('Cập nhật thành công !', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          transition: Slide,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
       })
-      .then(() => {
-        toast.success('Thêm mới đơn vị thành công !', {
+      .catch((err) => {
+        toast.error('Cập nhật thất bại!', {
           position: 'top-right',
           autoClose: 2000,
           hideProgressBar: false,
@@ -86,6 +109,7 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
             <Input
               id='full-name'
               placeholder='HSTC'
+              value={code}
               onChange={(e) => setCode(e.target.value)}
             />
           </InputGroup>
@@ -100,6 +124,7 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
             </InputGroupText>
             <Input
               id='description'
+              value={description}
               placeholder='Trung tâm xét nghiệm công nghệ cao HSTC'
               onChange={(e) => setDescription(e.target.value)}
             />
@@ -133,4 +158,4 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
   )
 }
 
-export default AddNewModal
+export default EditModal

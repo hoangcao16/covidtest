@@ -1,9 +1,12 @@
+/* eslint-disable object-shorthand */
+/* eslint-disable no-unused-vars */
 /* eslint-disable comma-dangle */
 // ** React Imports
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 // ** Third Party Components
-import { Briefcase, X } from 'react-feather'
+
+import { User, X } from 'react-feather'
 
 // ** Reactstrap Imports
 import {
@@ -16,32 +19,50 @@ import {
   InputGroup,
   InputGroupText,
 } from 'reactstrap'
-import { Slide, toast } from 'react-toastify'
 
 // ** Styles
 import '@styles/react/libs/flatpickr/flatpickr.scss'
-import { sampleTypeService } from '../../../services/sampleTypeService'
+import { labResultTypeService } from '../../../services/labResultTypeService'
+import { Slide, toast } from 'react-toastify'
 
-const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
+const AddNewModal = ({ open, selecteditem, handleModal, setRefreshTable }) => {
   // ** State
-  const [description, setDescription] = useState()
+  const [name, setName] = useState()
   // ** Custom close btn
   const CloseBtn = (
     <X className='cursor-pointer' size={15} onClick={handleModal} />
   )
+  useEffect(() => {
+    if (selecteditem?.name) {
+      setName(selecteditem?.name)
+    }
+    return () => {
+      setName()
+    }
+  }, [selecteditem])
   const handleSubmit = () => {
-    console.log('handleSubmit:', description)
-    sampleTypeService
-      .create({
-        name: description,
+    console.log('handleSubmit:', name)
+    labResultTypeService
+      .edit(selecteditem.uuid, {
+        name: name,
       })
       .then((r) => {
         console.log('handleSubmit:response:', r)
         handleModal()
         setRefreshTable()
+        toast.success('Cập nhật thành công !', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          transition: Slide,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
       })
-      .then(() => {
-        toast.success('Thêm mới mẫu bệnh phẩm thành công !', {
+      .catch((err) => {
+        toast.error('Cập nhật thất bại!', {
           position: 'top-right',
           autoClose: 2000,
           hideProgressBar: false,
@@ -71,17 +92,18 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
       </ModalHeader>
       <ModalBody className='flex-grow-1'>
         <div className='mb-1'>
-          <Label className='form-label' for='description'>
-            Mô tả
+          <Label className='form-label' for='name'>
+            Mã code
           </Label>
           <InputGroup>
             <InputGroupText>
-              <Briefcase size={15} />
+              <User size={15} />
             </InputGroupText>
             <Input
-              id='description'
-              placeholder='Dịch tỵ Hầu'
-              onChange={(e) => setDescription(e.target.value)}
+              id='name'
+              value={name}
+              placeholder='Dương Tính'
+              onChange={(e) => setName(e.target.value)}
             />
           </InputGroup>
         </div>

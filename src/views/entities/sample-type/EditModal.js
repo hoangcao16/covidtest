@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable comma-dangle */
 // ** React Imports
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 // ** Third Party Components
 import { Briefcase, X } from 'react-feather'
@@ -22,26 +23,44 @@ import { Slide, toast } from 'react-toastify'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 import { sampleTypeService } from '../../../services/sampleTypeService'
 
-const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
+const EditModal = ({ open, selecteditem, handleModal, setRefreshTable }) => {
   // ** State
   const [description, setDescription] = useState()
   // ** Custom close btn
   const CloseBtn = (
     <X className='cursor-pointer' size={15} onClick={handleModal} />
   )
+  useEffect(() => {
+    if (selecteditem.name) {
+      setDescription(selecteditem.name)
+    }
+    return () => {
+      setDescription()
+    }
+  }, [selecteditem])
   const handleSubmit = () => {
     console.log('handleSubmit:', description)
     sampleTypeService
-      .create({
+      .edit(selecteditem.uuid, {
         name: description,
       })
       .then((r) => {
         console.log('handleSubmit:response:', r)
         handleModal()
         setRefreshTable()
+        toast.success('Cập nhật thành công !', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          transition: Slide,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
       })
-      .then(() => {
-        toast.success('Thêm mới mẫu bệnh phẩm thành công !', {
+      .catch((err) => {
+        toast.error('Cập nhật thất bại!', {
           position: 'top-right',
           autoClose: 2000,
           hideProgressBar: false,
@@ -67,7 +86,7 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
         close={CloseBtn}
         tag='div'
       >
-        <h5 className='modal-title'>New Record</h5>
+        <h5 className='modal-title'>Sửa mẫu bệnh phẩm</h5>
       </ModalHeader>
       <ModalBody className='flex-grow-1'>
         <div className='mb-1'>
@@ -81,6 +100,7 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
             <Input
               id='description'
               placeholder='Dịch tỵ Hầu'
+              value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
           </InputGroup>
@@ -96,4 +116,4 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
   )
 }
 
-export default AddNewModal
+export default EditModal

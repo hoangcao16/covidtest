@@ -28,7 +28,7 @@ import AddNewModal from './AddNewModal'
 import { customizeColumns } from './data'
 import { labResultTypeService } from '../../../services/labResultTypeService'
 import { toast, Slide } from 'react-toastify'
-
+import EditModal from './EditModal'
 const LabResultType = () => {
   // ** Store Vars
   const dispatch = useDispatch()
@@ -40,6 +40,8 @@ const LabResultType = () => {
   const [rowsPerPage, setRowsPerPage] = useState(7)
   const [searchValue, setSearchValue] = useState('')
   const [refreshTable, setRefreshTable] = useState(false)
+  const [selectedItem, setSelectedItem] = useState(false)
+  const [editModal, setEditModal] = useState(false)
   const handleDelete = (item) => {
     labResultTypeService.delete(item.uuid).then((res) => {
       if (res.data.code === 600) {
@@ -169,7 +171,10 @@ const LabResultType = () => {
       />
     )
   }
-
+  const handleEditModal = (item) => {
+    setEditModal(!editModal)
+    setSelectedItem(item)
+  }
   return (
     <Fragment>
       <Card>
@@ -224,7 +229,7 @@ const LabResultType = () => {
             pagination
             paginationServer
             className='react-dataTable'
-            columns={customizeColumns(handleDelete)}
+            columns={customizeColumns(handleEditModal, handleDelete)}
             sortIcon={<ChevronDown size={10} />}
             paginationComponent={CustomPagination}
             data={dataToRender()}
@@ -234,6 +239,12 @@ const LabResultType = () => {
       <AddNewModal
         open={modal}
         handleModal={handleModal}
+        setRefreshTable={setRefreshTable}
+      />
+      <EditModal
+        open={editModal}
+        selecteditem={selectedItem}
+        handleModal={handleEditModal}
         setRefreshTable={setRefreshTable}
       />
     </Fragment>

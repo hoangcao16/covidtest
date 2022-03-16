@@ -13,7 +13,7 @@ import ReactPaginate from 'react-paginate'
 import { ChevronDown, Plus } from 'react-feather'
 import DataTable from 'react-data-table-component'
 import { toast, Slide } from 'react-toastify'
-
+import EditModal from './EditModal'
 // ** Reactstrap Imports
 import {
   Card,
@@ -40,6 +40,8 @@ const Agency = () => {
   const [rowsPerPage, setRowsPerPage] = useState(7)
   const [searchValue, setSearchValue] = useState('')
   const [refreshTable, setRefreshTable] = useState(false)
+  const [selectedItem, setSelectedItem] = useState(false)
+  const [editModal, setEditModal] = useState(false)
   const handleDelete = (item) => {
     console.log('delete agency:item', item)
     agencyService.delete(item.uuid).then((res) => {
@@ -171,7 +173,10 @@ const Agency = () => {
       />
     )
   }
-
+  const handleEditModal = (item) => {
+    setEditModal(!editModal)
+    setSelectedItem(item)
+  }
   return (
     <Fragment>
       <Card>
@@ -226,7 +231,7 @@ const Agency = () => {
             pagination
             paginationServer
             className='react-dataTable'
-            columns={customizeColumns(handleDelete)}
+            columns={customizeColumns(handleEditModal, handleDelete)}
             sortIcon={<ChevronDown size={10} />}
             paginationComponent={CustomPagination}
             data={dataToRender()}
@@ -236,6 +241,12 @@ const Agency = () => {
       <AddNewModal
         open={modal}
         handleModal={handleModal}
+        setRefreshTable={setRefreshTable}
+      />
+      <EditModal
+        open={editModal}
+        selecteditem={selectedItem}
+        handleModal={handleEditModal}
         setRefreshTable={setRefreshTable}
       />
     </Fragment>

@@ -2,8 +2,7 @@
 /* eslint-disable comma-dangle */
 // ** React Imports
 // ** Third Party Components
-import Flatpickr from 'react-flatpickr'
-import { User, Briefcase, Mail, Calendar, DollarSign, X } from 'react-feather'
+import { User, X } from 'react-feather'
 import { useState } from 'react'
 // ** Reactstrap Imports
 import {
@@ -151,7 +150,7 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
         console.log('handleSubmit:response:', r)
         handleModal()
         setRefreshTable()
-        toast.success('Cập nhật thành công !', {
+        toast.success('Thêm mới loại xét nghiệm thành công !', {
           position: 'top-right',
           autoClose: 2000,
           hideProgressBar: false,
@@ -163,7 +162,7 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
         })
       })
       .catch((err) => {
-        toast.error('Cập nhật thất bại!', {
+        toast.error('Thêm mới loại xét nghiệm thất bại!', {
           position: 'top-right',
           autoClose: 2000,
           hideProgressBar: false,
