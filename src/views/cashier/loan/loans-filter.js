@@ -16,8 +16,8 @@ import { useEffect, useState, useCallback } from 'react'
 import Select from 'react-select'
 import { selectThemeColors } from '@utils'
 import { shiftOptions } from '../../components/common/data'
-import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
-import { fetchListTestForm } from '../../../redux/analysisCertificate'
+import { debtService } from '../../../services/debtService'
+import { fetchListDebt } from '../../../redux/debt'
 import { debounce } from 'lodash'
 import { StyledFilterList } from './style'
 import { agencyService } from '../../../services/agencyService'
@@ -80,12 +80,12 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
     })
   }, [])
   const fetchList = (params) => {
-    analysisCertificateService.list(params).then((res) => {
+    debtService.list(params).then((res) => {
       if (res.data.code === 600) {
         if (res.data.payload !== null) {
-          dispatch(fetchListTestForm(res.data))
+          dispatch(fetchListDebt(res.data))
         } else {
-          dispatch(fetchListTestForm([]))
+          dispatch(fetchListDebt([]))
         }
       }
     })

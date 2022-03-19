@@ -15,6 +15,8 @@ import patient from './patient'
 import role from './role'
 import permission from './permission'
 import staff from './staff'
+import debt from './debt'
+import receipt from './receipt'
 
 const rootReducer = {
   auth,
@@ -32,6 +34,8 @@ const rootReducer = {
   role,
   permission,
   staff,
+  debt,
+  receipt,
 }
 
 export default rootReducer

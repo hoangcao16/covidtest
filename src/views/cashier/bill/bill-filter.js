@@ -16,8 +16,8 @@ import { useEffect, useState, useCallback } from 'react'
 import Select from 'react-select'
 import { selectThemeColors } from '@utils'
 import { shiftOptions } from '../../components/common/data'
-import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
-import { fetchListTestForm } from '../../../redux/analysisCertificate'
+import { receiptService } from '../../../services/receiptService'
+import { fetchListReceipt } from '../../../redux/receipt'
 import { debounce } from 'lodash'
 import { StyledFilterList } from './style'
 import { agencyService } from '../../../services/agencyService'
@@ -39,7 +39,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   useEffect(() => {
     const allParamsSearch = {
       name: nameSearch,
-      state: 'PAID',
+
       address: addressSearch,
       code: receiptNoSearch,
       phone: phoneSearch,
@@ -80,12 +80,12 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
     })
   }, [])
   const fetchList = (params) => {
-    analysisCertificateService.list(params).then((res) => {
+    receiptService.list(params).then((res) => {
       if (res.data.code === 600) {
         if (res.data.payload !== null) {
-          dispatch(fetchListTestForm(res.data))
+          dispatch(fetchListReceipt(res.data))
         } else {
-          dispatch(fetchListTestForm([]))
+          dispatch(fetchListReceipt([]))
         }
       }
     })
@@ -97,7 +97,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   const hanldeSearchPhone = (e) => {
     const dataSearch = {
       name: nameSearch,
-      state: 'PAID',
+
       address: addressSearch,
       receiptNo: receiptNoSearch,
       phone: e,
@@ -119,7 +119,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   const hanldeSearchName = (e) => {
     const dataSearch = {
       name: e,
-      state: 'PAID',
+
       address: addressSearch,
       receiptNo: receiptNoSearch,
       phone: phoneSearch,
@@ -141,7 +141,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   const hanldeSearchAddress = (e) => {
     const dataSearch = {
       name: nameSearch,
-      state: 'PAID',
+
       address: e,
       receiptNo: receiptNoSearch,
       phone: phoneSearch,
@@ -163,7 +163,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   const hanldeSearchReceipt = (e) => {
     const dataSearch = {
       name: nameSearch,
-      state: 'PAID',
+
       address: addressSearch,
       receiptNo: e,
       phone: phoneSearch,
@@ -185,7 +185,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   const hanldeSearchShift = (e) => {
     const dataSearch = {
       name: nameSearch,
-      state: 'PAID',
+
       address: addressSearch,
       receiptNo: receiptNoSearch,
       phone: phoneSearch,
@@ -207,7 +207,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   const handleSearchidentityNumber = (e) => {
     const dataSearch = {
       name: nameSearch,
-      state: 'PAID',
+
       address: addressSearch,
       receiptNo: receiptNoSearch,
       phone: phoneSearch,
@@ -230,7 +230,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
     console.log(e)
     const dataSearch = {
       name: nameSearch,
-      state: 'PAID',
+
       address: addressSearch,
       receiptNo: receiptNoSearch,
       phone: phoneSearch,
@@ -249,7 +249,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   const hanldeSearchAgency2 = (e) => {
     const dataSearch = {
       name: nameSearch,
-      state: 'PAID',
+
       address: addressSearch,
       receiptNo: receiptNoSearch,
       phone: phoneSearch,

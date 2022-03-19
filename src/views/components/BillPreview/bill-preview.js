@@ -28,13 +28,11 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
     dispatch(selectTestFormList([]))
   }
   const componentRef = useRef()
-  const analysisCertificateState = useSelector(
-    (state) => state.analysisCertificate
-  )
+  const receiptState = useSelector((state) => state.receipt)
   useEffect(() => {
-    if (analysisCertificateState.selectedTestFormList.length > 0) {
-      // console.log(analysisCertificateState.selectedTestFormList)
-      const listDate = analysisCertificateState.selectedTestFormList
+    if (receiptState.selectedReceiptList.length > 0) {
+      // console.log(receiptState.selectedReceiptList)
+      const listDate = receiptState.selectedReceiptList
       // console.log(listDate)
       const selectedItemsFinal = listDate.map((item) => {
         return {
@@ -42,16 +40,15 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
           qrUrl: `${baseURL}/${item?.searchCode}/${item?.password}`,
         }
       })
-      // console.log(selectedItemsFinal)
       setDataView(selectedItemsFinal)
     }
-  }, [analysisCertificateState.selectedTestFormList])
+  }, [receiptState.selectedReceiptList])
   // ** Store Vars
   const handlePrintBill = useReactToPrint({
     content: () => componentRef.current,
   })
   const printBill = () => {
-    analysisCertificateState.selectedTestFormList.map((item) => {
+    receiptState.selectedReceiptList.map((item) => {
       const dataUpdate = {
         patientUuids: item?.patientUuids,
         agencyUuid1: item?.agencyUuid1,
@@ -85,6 +82,7 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
       >
         {dataView.length > 0 &&
           dataView.map((item, index) => {
+            console.log(item)
             return (
               <div id='print-me' key={index}>
                 <table style={{ width: '100%', textAlign: 'center' }}>
@@ -178,7 +176,7 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
                     </tr>
                     <tr>
                       <td style={{ lineHeight: '1.1' }}>
-                        Nơi chỉ định: <span>{item?.agencyName2}</span>
+                        Nơi chỉ định: <span>{item?.agencyName}</span>
                       </td>
                     </tr>
                     <tr>
@@ -228,7 +226,7 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
                       <td style={{ border: '1px solid' }}>{item?.payFor}</td>
                       <td style={{ border: '1px solid' }}>{item?.note}</td>
                       <td style={{ border: '1px solid' }}>
-                        {item?.patients.length}
+                        {item?.patients?.length}
                       </td>
                       <td style={{ border: '1px solid' }}>{item?.amount}</td>
                     </tr>
@@ -252,7 +250,7 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
                   <thead>
                     <tr>
                       <td colSpan='5'>
-                        Danh sách khách hàng gồm kèm : {item?.patients.length}{' '}
+                        Danh sách khách hàng gồm kèm : {item?.patients?.length}{' '}
                         người
                       </td>
                     </tr>

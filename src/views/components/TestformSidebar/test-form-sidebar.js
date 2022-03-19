@@ -153,6 +153,7 @@ const defaultValues = {
   ct: '',
   getSampleAtHome: false,
   getSampleAtHomePrice: '',
+  signed: false,
 }
 
 const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
@@ -376,6 +377,7 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
         ct: parseFloat(data?.ct),
         getSampleAtHome: data?.getSampleAtHome,
         getSampleAtHomePrice: parseFloat(data?.getSampleAtHomePrice),
+        signed: data?.signed,
       }
       analysisCertificateService.update(data?.uuid, newDataEdit).then((res) => {
         if (res.data.code === 600) {
@@ -438,6 +440,7 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
         ct: parseFloat(data?.ct),
         getSampleAtHome: data?.getSampleAtHome,
         getSampleAtHomePrice: parseFloat(data?.getSampleAtHomePrice),
+        signed: data?.signed,
       }
       analysisCertificateService.add(newData).then((res) => {
         if (res.data.code === 600) {
@@ -533,6 +536,8 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
   const handleCountPrice = () => {
     const totalPatient = getValues('patients')?.length
     const testtype = getValues('testtype')
+    const sampleAtHomePrice = getValues('getSampleAtHomePrice')
+    const getSampleAtHome = getValues('getSampleAtHome')
     console.log(testtype.value)
     if (testtype.value === undefined) {
       toast.error('Chọn yêu cầu xét nghiệm !', {
@@ -549,6 +554,8 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
       const data = {
         numberOfPatient: totalPatient,
         uuid: testtype.value,
+        getSampleAtHomePrice: sampleAtHomePrice,
+        getSampleAtHome: getSampleAtHome,
       }
       analysisCertificateService.getPrice(data).then((res) => {
         if (res.data.code === 600) {
@@ -1345,10 +1352,14 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
                       // required: true,
                     }
                   }
-                  name='signature'
+                  name='signed'
                   control={control}
-                  render={({ field }) => (
-                    <Checkbox {...field}>Xác nhận Ký phiếu</Checkbox>
+                  render={({
+                    field: { onChange, onBlur, value, name, ref },
+                  }) => (
+                    <Checkbox onChange={onChange} checked={value}>
+                      Xác nhận Ký phiếu
+                    </Checkbox>
                   )}
                 />
               </div>

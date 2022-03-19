@@ -20,8 +20,8 @@ import {
   printStatusOptions,
   shiftOptions,
 } from '../components/common/data'
-import { analysisCertificateService } from '../../services/analysisCertificateCervice'
-import { fetchListTestForm } from '../../redux/analysisCertificate'
+import { receiptService } from '../../services/receiptService'
+import { fetchListReceipt } from '../../redux/receipt'
 import { debounce } from 'lodash'
 import { StyledFilterList } from '../covid19/test-form/style'
 import { labResultTypeService } from '../../services/labResultTypeService'
@@ -37,7 +37,6 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   const [addressSearch, setAddressSearch] = useState('')
   const [stateSearch, setStateSearch] = useState('')
   const [receiptNoSearch, setReceiptNoSearch] = useState('')
-  const printStatus = 1
   const [shiftSearch, setShiftSearch] = useState('')
   const [labResultSearch, setLabResultSearch] = useState('')
   const [qrcodeSearch, setQrCodeSearch] = useState('')
@@ -53,9 +52,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
       address: addressSearch,
       state: stateSearch?.value,
       code: receiptNoSearch,
-      printStatus: printStatus,
       phone: phoneSearch,
-
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
       labResultUuid: labResultSearch?.value,
@@ -105,12 +102,12 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
     })
   }, [])
   const fetchList = (params) => {
-    analysisCertificateService.list(params).then((res) => {
+    receiptService.list(params).then((res) => {
       if (res.data.code === 600) {
         if (res.data.payload !== null) {
-          dispatch(fetchListTestForm(res.data))
+          dispatch(fetchListReceipt(res.data))
         } else {
-          dispatch(fetchListTestForm([]))
+          dispatch(fetchListReceipt([]))
         }
       }
     })
@@ -125,7 +122,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
       address: addressSearch,
       state: stateSearch?.value,
       receiptNo: receiptNoSearch,
-      printStatus: printStatus,
+
       phone: e,
 
       identityNumber: identityNumberSearch,
@@ -150,7 +147,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
       address: addressSearch,
       state: stateSearch?.value,
       receiptNo: receiptNoSearch,
-      printStatus: printStatus,
+
       phone: phoneSearch,
 
       identityNumber: identityNumberSearch,
@@ -175,7 +172,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
       address: e,
       state: stateSearch?.value,
       receiptNo: receiptNoSearch,
-      printStatus: printStatus,
+
       phone: phoneSearch,
 
       identityNumber: identityNumberSearch,
@@ -200,7 +197,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
       address: addressSearch,
       state: e?.value,
       receiptNo: receiptNoSearch,
-      printStatus: printStatus,
+
       phone: phoneSearch,
 
       identityNumber: identityNumberSearch,
@@ -225,7 +222,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
       address: addressSearch,
       state: stateSearch?.value,
       receiptNo: e,
-      printStatus: printStatus,
+
       phone: phoneSearch,
 
       identityNumber: identityNumberSearch,
@@ -250,7 +247,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
       address: addressSearch,
       state: stateSearch?.value,
       receiptNo: receiptNoSearch,
-      printStatus: printStatus,
+
       phone: phoneSearch,
 
       identityNumber: identityNumberSearch,
@@ -275,7 +272,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
       address: addressSearch,
       state: stateSearch?.value,
       receiptNo: receiptNoSearch,
-      printStatus: printStatus,
+
       phone: phoneSearch,
 
       identityNumber: identityNumberSearch,
@@ -300,7 +297,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
       address: addressSearch,
       state: stateSearch?.value,
       receiptNo: receiptNoSearch,
-      printStatus: printStatus,
+
       phone: phoneSearch,
 
       identityNumber: e,
@@ -326,7 +323,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
       address: addressSearch,
       state: stateSearch?.value,
       receiptNo: receiptNoSearch,
-      printStatus: printStatus,
+
       phone: phoneSearch,
 
       identityNumber: identityNumberSearch,
@@ -348,7 +345,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
       address: addressSearch,
       state: stateSearch?.value,
       receiptNo: receiptNoSearch,
-      printStatus: printStatus,
+
       phone: phoneSearch,
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
@@ -381,7 +378,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
     debounceSearch({
       page: 1,
       size: 10,
-      printStatus: printStatus,
+
       // fromDate: moment().startOf('day').valueOf(),
       // toDate: moment().valueOf(),
     })

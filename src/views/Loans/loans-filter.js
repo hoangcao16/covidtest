@@ -16,8 +16,9 @@ import { useEffect, useState, useCallback } from 'react'
 import Select from 'react-select'
 import { selectThemeColors } from '@utils'
 import { shiftOptions } from '../components/common/data'
-import { analysisCertificateService } from '../../services/analysisCertificateCervice'
-import { fetchListTestForm } from '../../redux/analysisCertificate'
+import { debtService } from '../../services/debtService'
+
+import { fetchListDebt } from '../../redux/debt'
 import { debounce } from 'lodash'
 import { StyledFilterList } from './style'
 import { agencyService } from '../../services/agencyService'
@@ -41,7 +42,6 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       phone: phoneSearch,
       name: nameSearch,
       address: addressSearch,
-      state: 'DEBT',
       code: codeSearch,
       shift: shiftSearch?.value,
       identityNumber: identityNumberSearch,
@@ -80,12 +80,12 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
     })
   }, [])
   const fetchList = (params) => {
-    analysisCertificateService.list(params).then((res) => {
+    debtService.list(params).then((res) => {
       if (res.data.code === 600) {
         if (res.data.payload !== null) {
-          dispatch(fetchListTestForm(res.data))
+          dispatch(fetchListDebt(res.data))
         } else {
-          dispatch(fetchListTestForm([]))
+          dispatch(fetchListDebt([]))
         }
       }
     })
@@ -99,7 +99,6 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       phone: e,
       name: nameSearch,
       address: addressSearch,
-      state: 'DEBT',
       code: codeSearch,
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
@@ -121,7 +120,6 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       phone: phoneSearch,
       name: e,
       address: addressSearch,
-      state: 'DEBT',
       code: codeSearch,
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
@@ -143,7 +141,6 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       phone: phoneSearch,
       name: nameSearch,
       address: e,
-      state: 'DEBT',
       code: codeSearch,
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
@@ -165,7 +162,6 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       phone: phoneSearch,
       name: nameSearch,
       address: addressSearch,
-      state: 'DEBT',
       code: e,
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
@@ -187,7 +183,6 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       phone: phoneSearch,
       name: nameSearch,
       address: addressSearch,
-      state: 'DEBT',
       code: codeSearch,
       identityNumber: identityNumberSearch,
       shift: e?.value,
@@ -209,7 +204,6 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       phone: phoneSearch,
       name: nameSearch,
       address: addressSearch,
-      state: 'DEBT',
       code: codeSearch,
       identityNumber: e,
       shift: shiftSearch?.value,
@@ -232,7 +226,6 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       phone: phoneSearch,
       name: nameSearch,
       address: addressSearch,
-      state: 'DEBT',
       code: codeSearch,
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
@@ -251,7 +244,6 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       phone: phoneSearch,
       name: nameSearch,
       address: addressSearch,
-      state: 'DEBT',
       code: codeSearch,
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
@@ -281,7 +273,6 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
     debounceSearch({
       page: 1,
       size: 10,
-      state: 'DEBT',
       fromDate: moment().startOf('day').valueOf(),
       toDate: moment().valueOf(),
     })

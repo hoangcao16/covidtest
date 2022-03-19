@@ -533,6 +533,8 @@ const SidebarNewTestSamplerForm = ({ openSideBar, toggleTestFormSidebar }) => {
   const handleCountPrice = () => {
     const totalPatient = getValues('patients')?.length
     const testtype = getValues('testtype')
+    const sampleAtHomePrice = getValues('getSampleAtHomePrice')
+    const getSampleAtHome = getValues('getSampleAtHome')
     console.log(testtype.value)
     if (testtype.value === undefined) {
       toast.error('Chọn yêu cầu xét nghiệm !', {
@@ -549,6 +551,8 @@ const SidebarNewTestSamplerForm = ({ openSideBar, toggleTestFormSidebar }) => {
       const data = {
         numberOfPatient: totalPatient,
         uuid: testtype.value,
+        getSampleAtHomePrice: sampleAtHomePrice,
+        getSampleAtHome: getSampleAtHome,
       }
       analysisCertificateService.getPrice(data).then((res) => {
         if (res.data.code === 600) {

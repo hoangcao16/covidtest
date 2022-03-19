@@ -11,13 +11,11 @@ import { statusOptions, disableOptions } from '../../components/common/data'
 // ** Store & Actions
 import { useSelector, useDispatch } from 'react-redux'
 import { StyledCard } from './style'
-import {
-  refetchList,
-  fetchListTestForm,
-} from '../../../redux/analysisCertificate'
+import { refetchList, fetchListDebt } from '../../../redux/debt'
 // ** Third Party Components
 import { Table, Pagination } from 'antd'
-import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
+import { debtService } from '../../../services/debtService'
+
 import moment from 'moment'
 import Select from 'react-select'
 import { toast, Slide } from 'react-toastify'
@@ -40,9 +38,7 @@ const TestForm = ({}) => {
   })
   // ** Store Vars
   const dispatch = useDispatch()
-  const analysisCertificateState = useSelector(
-    (state) => state.analysisCertificate
-  )
+  const debtState = useSelector((state) => state.debt)
   const paramsSearch = (params) => {
     setAllParamsSearch(params)
   }
@@ -51,26 +47,26 @@ const TestForm = ({}) => {
       ...allParamsSearch,
       page: currentPage,
       size: rowsPerPage,
-      hasDebt: true,
+
       fromDate: moment().startOf('day').valueOf(),
       toDate: moment().valueOf(),
     }
-    analysisCertificateService.list(params).then((res) => {
+    debtService.list(params).then((res) => {
       // setDataTable(res.data.payload)
       if (res.data.payload !== null) {
-        dispatch(fetchListTestForm(res.data))
+        dispatch(fetchListDebt(res.data))
       } else {
-        dispatch(fetchListTestForm([]))
+        dispatch(fetchListDebt([]))
       }
     })
-  }, [analysisCertificateState.refetch])
+  }, [debtState.refetch])
   // ** Function to toggle sidebar
   useEffect(() => {
-    if (!isEmpty(analysisCertificateState.dataTable.metadata)) {
-      // setTotalPage(analysisCertificateState.dataTable.metadata.total)
-      setMetadata(analysisCertificateState.dataTable.metadata)
+    if (!isEmpty(debtState.dataTable.metadata)) {
+      // setTotalPage(debtState.dataTable.metadata.total)
+      setMetadata(debtState.dataTable.metadata)
     }
-  }, [analysisCertificateState.dataTable])
+  }, [debtState.dataTable])
   const handleUpdateState = (value, record) => {
     const dataUpdate = {
       patientUuids: record.patientUuids,
@@ -78,7 +74,7 @@ const TestForm = ({}) => {
       testTypeUuid: record.testTypeUuid,
       state: value.value,
     }
-    analysisCertificateService.update(record.uuid, dataUpdate).then((res) => {
+    debtService.update(record.uuid, dataUpdate).then((res) => {
       if (res.data.code === 600) {
         dispatch(refetchList())
         toast.success('Cập nhật thành công !', {
@@ -106,12 +102,12 @@ const TestForm = ({}) => {
     })
   }
   const fetchList = (params) => {
-    analysisCertificateService.list(params).then((res) => {
+    debtService.list(params).then((res) => {
       if (res.data.code === 600) {
         if (res.data.payload !== null) {
-          dispatch(fetchListTestForm(res.data))
+          dispatch(fetchListDebt(res.data))
         } else {
-          dispatch(fetchListTestForm([]))
+          dispatch(fetchListDebt([]))
         }
       }
     })
@@ -126,7 +122,7 @@ const TestForm = ({}) => {
   //   debounceSearch({
   //     page: currentPage,
   //     size: rowsPerPage,
-  //     hasDebt: true,
+  //
   //     filter: e,
   //   })
   // }
@@ -137,7 +133,7 @@ const TestForm = ({}) => {
       ...allParamsSearch,
       page: 1,
       size: parseInt(e.target.value),
-      hasDebt: true,
+
       fromDate:
         allParamsSearch.fromDate === undefined
           ? undefined
@@ -155,7 +151,7 @@ const TestForm = ({}) => {
       ...allParamsSearch,
       page: page,
       size: rowsPerPage,
-      hasDebt: true,
+
       fromDate:
         allParamsSearch.fromDate === undefined
           ? undefined
@@ -296,7 +292,7 @@ const TestForm = ({}) => {
             pagination={false}
             rowKey='uuid'
             columns={TestFormColumns}
-            dataSource={analysisCertificateState.dataTable.payload}
+            dataSource={debtState.dataTable.payload}
           />
           <div className='pagination'>
             <Pagination
