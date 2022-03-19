@@ -32,8 +32,9 @@ import Select from "react-select"
 import classnames from "classnames"
 import {selectThemeColors} from '@utils'
 import {getList} from "../../../../redux/account"
+import {assignedTo} from "../../../../redux/role"
 
-const AssignUserToRoleModal = ({show}) => {
+const AssignUserToRoleModal = ({show, roleUuid}) => {
     const dispatch = useDispatch()
     // ** States
     const [data] = useState(null)
@@ -68,8 +69,23 @@ const AssignUserToRoleModal = ({show}) => {
     const onResetAddNewToRole = () => {
         reset({roleName: ''})
     }
-    const onAddUserToRole = (data) => {
-        console.log('onAddUserToRole:', data)
+    const onAddUserToRole = (data, e) => {
+        e.preventDefault()
+        console.log('onAddUserToRole:', data, e)
+        const user_uuids = []
+        data.accounts?.forEach(item => {
+            user_uuids.push(item.value)
+        })
+        dispatch(assignedTo({
+            role_uuid: roleUuid,
+            user_uuids
+        })).then(() => {
+            const options = store.allData.map((account) => ({
+                label: account.name,
+                value: account.uuid
+            }))
+            setAccountOptions(options)
+        })
     }
 
     const searchUsers = (query) => {
@@ -98,7 +114,9 @@ const AssignUserToRoleModal = ({show}) => {
                         <h1>{modalAddUserToRoleType} tới {name}</h1>
                         <p>Thêm users tới vai trò</p>
                     </div>
-                    <Row tag='form' onSubmit={() => handleSubmit(onAddUserToRole)}>
+                    <Row tag='form' onSubmit={
+                        handleSubmit(onAddUserToRole)
+                    }>
                         <Col xs={12}>
                             <div className='mb-1'>
                                 <Label className='form-label' for='patient'>
@@ -132,7 +150,7 @@ const AssignUserToRoleModal = ({show}) => {
                         </Col>
 
                         <Col className='text-center mt-2' xs={12}>
-                            <Button type='submit' color='primary' className='me-1'>
+                            <Button color='primary' className='me-1'>
                                 Submit
                             </Button>
                             <Button type='reset' outline onClick={onResetAddNewToRole}>

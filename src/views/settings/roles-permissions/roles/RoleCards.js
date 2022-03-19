@@ -55,6 +55,7 @@ const RoleCards = () => {
     const [modalType, setModalType] = useState('Thêm mới')
 
     const [refreshData, setRefreshData] = useState(false)
+    const [roleUuid, setRoleUuid] = useState('')
 
     //modal add new user
     const [showAddUserToRole, setShowAddUserToRole] = useState(false)
@@ -84,13 +85,13 @@ const RoleCards = () => {
             return storeRoles.data
         }
     const onSubmit = data => {
-        console.log('onsubmit:', data)
+        console.log('onsubmit:', data, actions)
         if (data.roleName.length) {
             setShow(false)
-            const actionsTemp = JSON.stringify(actions)
+            // const actionsTemp = JSON.stringify(actions.current)
             dispatch(createData({
                 name: data.roleName,
-                actions: actionsTemp
+                actions: actions.current
             })).then(() => {
                 setRefreshData(!refreshData)
             })
@@ -117,12 +118,13 @@ const RoleCards = () => {
         setModalType('Thêm mới')
         setValue('roleName')
         console.log(' actions.current:', actions)
-        actions.current.splice(0, actions.current.length)
+        actions.current = []
     }
 
     const handleAddUserToRole = (role) => {
         console.log('role:', role)
-        setShowAddUserToRole(true)
+        setRoleUuid(role.uuid)
+        setShowAddUserToRole(!showAddUserToRole)
     }
 
     const handleCheckboxChange = (role, checked) => {
@@ -150,7 +152,7 @@ const RoleCards = () => {
     return (
         <Fragment>
             <Row>
-                {dataToRender().map((item, index) => {
+                {dataToRender()?.map((item, index) => {
                     return (
                         <Col key={index} xl={4} md={6}>
                             <Card>
@@ -301,7 +303,7 @@ const RoleCards = () => {
                     </Row>
                 </ModalBody>
             </Modal>
-            <AssignUserToRoleModal show={showAddUserToRole}/>
+            <AssignUserToRoleModal show={showAddUserToRole} roleUuid={roleUuid}/>
         </Fragment>
     )
 }

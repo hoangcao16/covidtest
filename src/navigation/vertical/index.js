@@ -11,6 +11,8 @@ import {
   Briefcase,
   Monitor,
   CreditCard,
+  Umbrella,
+  LifeBuoy
 } from 'react-feather'
 
 export default [
@@ -67,13 +69,13 @@ export default [
   {
     id: 'test-form',
     title: 'Phiếu xét nghiệm',
-    icon: <Circle size={12} />,
+    icon: <Umbrella size={12} />,
     navLink: '/covid19/test-form',
   },
   {
     id: 'bill',
     title: 'Phiếu thu',
-    icon: <Circle size={12} />,
+    icon: <LifeBuoy size={12} />,
     navLink: '/bill',
   },
   {
