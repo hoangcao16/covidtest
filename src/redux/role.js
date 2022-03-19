@@ -41,8 +41,7 @@ export const updateData = createAsyncThunk('role/updateData', async uuid => {
 })
 
 export const assignedTo = createAsyncThunk('role/assignedTo', async params => {
-    const {roleUuid, userUuid} = params
-    const response = await roleService.assignedTo(roleUuid, userUuid)
+    const response = await roleService.assignedTo(params)
     console.log('role:assignedTo:response:', response)
     return {}
 })

@@ -1,11 +1,11 @@
 
 
 Có 4 role:
-- Đón tiếp
-- Thu ngân
-- Lấy mẫu
-- Kỹ thuật viên
-- Quản trị viên
+- Đón tiếp  (Casher)
+- Thu ngân (Casher)
+- Lấy mẫu (Sampler)
+- Kỹ thuật viên (Techician)
+- Quản trị viên (Admin)
 
 - Đón tiếp: Các quyền
  + Tạo mới bệnh nhận: NHAP_THONG_TIN_BN

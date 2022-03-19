@@ -38,10 +38,11 @@ export const roleService = {
             url: `/api/v0/roles/${uuid}`
         })
     },
-    assignedTo(roleUuid, userUuid) {
+    assignedTo(record) {
         return apiClient.request({
             method: 'POST',
-            url: `/api/v0/roles/${roleUuid}/users/${userUuid}`
+            data: record,
+            url: `/api/v0/roles/set`
         })
     }
 }
