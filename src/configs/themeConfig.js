@@ -4,7 +4,8 @@
 const themeConfig = {
   app: {
     appName: 'HL Hospital',
-    appLogoImage: require('@src/assets/images/logo/logo.svg').default
+    // appLogoImage: require('@src/assets/images/logo/logo.svg').default
+    appLogoImage: require('@src/assets/images/logo/hl-logo.jpg').default
   },
   layout: {
     isRTL: false,
