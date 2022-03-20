@@ -12,7 +12,6 @@ import { StyledSidebar } from './style'
 import { debounce } from 'lodash'
 // ** Utils
 import { selectThemeColors } from '@utils'
-import { statusOptions } from '../../components/common/data'
 // ** Third Party Components
 import Select from 'react-select'
 import classnames from 'classnames'
@@ -20,7 +19,7 @@ import { useForm, Controller } from 'react-hook-form'
 import toVND from '../../components/common/toVND'
 // ** Reactstrap Imports
 import { Button, Label, Form, Input, Row, Col } from 'reactstrap'
-import { refetchList, closeSidebar } from '../../../redux/receipt'
+import { refetchList, closeSidebar } from '../../../redux/debt'
 import moment from 'moment'
 // ** Store & Actions
 // import { addUser } from '../store'
@@ -31,12 +30,11 @@ import { testTypeService } from '../../../services/testTypeService'
 import { patientService } from '../../../services/patientService'
 import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
 import { staffService } from '../../../services/staffService'
-import { receiptService } from '../../../services/receiptService'
+import { debtService } from '../../../services/debtService'
 import { toast, Slide } from 'react-toastify'
-import AddNewModal from '../../patients/patients/AddNewModal'
+// import AddNewModal from '../patients/patients/AddNewModal'
 
 const defaultValues = {
-  patients: [],
   testtype: '',
   agencyUuid: '',
   amount: 500000,
@@ -55,9 +53,9 @@ const SidebarBill = ({ openSideBar, toggleSidebar }) => {
   const [patientsOptions, setPatientsOptions] = useState([])
   const [certificateOptions, setCertificateOptions] = useState([])
   const [staffOptions, setStaffOptions] = useState([])
-  const [modal, setModal] = useState(false)
+  // const [modal, setModal] = useState(false)
 
-  const receiptState = useSelector((state) => state.receipt)
+  const debtState = useSelector((state) => state.debt)
 
   // ** Store Vars
   const dispatch = useDispatch()
@@ -116,8 +114,8 @@ const SidebarBill = ({ openSideBar, toggleSidebar }) => {
     }
   }
   useEffect(() => {
-    if (receiptState.isEdit === true) {
-      receiptService.get(receiptState.selectedUuid).then((res) => {
+    if (debtState.isEdit === true) {
+      debtService.get(debtState.selectedUuid).then((res) => {
         if (res.data.code === 600) {
           const payload = res?.data?.payload
           setTestFormCode(payload.code)
@@ -128,11 +126,11 @@ const SidebarBill = ({ openSideBar, toggleSidebar }) => {
               value: payload?.agency?.uuid,
               label: payload?.agency?.name,
             },
-            patients: payload?.patients?.map((i) => ({
-              ...i,
-              label: i?.name,
-              value: i?.uuid,
-            })),
+            // patients: payload?.patients?.map((i) => ({
+            //   ...i,
+            //   label: i?.name,
+            //   value: i?.uuid,
+            // })),
             staffUuid: {
               ...payload?.staff1,
               label: payload?.staff?.name,
@@ -149,14 +147,17 @@ const SidebarBill = ({ openSideBar, toggleSidebar }) => {
           }
         }
       })
+    } else {
+      for (const key in defaultValues) {
+        setValue(key, defaultValues[key])
+      }
     }
-  }, [receiptState.isEdit])
+  }, [debtState])
   // ** Function to handle form submit
   const onSubmit = (data) => {
-    console.log('submit')
-    if (receiptState.isEdit === true) {
+    if (debtState.isEdit === true) {
       const newDataEdit = {
-        patientUuids: data?.patients?.map((p) => p.value),
+        // patientUuids: data?.patients?.map((p) => p.value),
         analysisCertificateUuid: data?.analysisCertificate?.value,
         testTypeUuid: data?.testtype?.value,
         agencyUuid: data?.agencyUuid?.value,
@@ -167,7 +168,7 @@ const SidebarBill = ({ openSideBar, toggleSidebar }) => {
         payerUuid: data?.payer?.value,
         staffUuid: data?.staffUuid?.value,
       }
-      receiptService.update(data?.uuid, newDataEdit).then((res) => {
+      debtService.update(data?.uuid, newDataEdit).then((res) => {
         if (res.data.code === 600) {
           toast.success('Cập nhật thành công !', {
             position: 'top-right',
@@ -197,9 +198,9 @@ const SidebarBill = ({ openSideBar, toggleSidebar }) => {
           })
         }
       })
-    } else if (receiptState.isAddNew === true) {
+    } else if (debtState.isAddNew === true) {
       const newData = {
-        patientUuids: data?.patients?.map((p) => p.value),
+        // patientUuids: data?.patients?.map((p) => p.value),
         testTypeUuid: data?.testtype?.value,
         analysisCertificateUuid: data?.analysisCertificate?.value,
         agencyUuid: data?.agencyUuid?.value,
@@ -210,7 +211,7 @@ const SidebarBill = ({ openSideBar, toggleSidebar }) => {
         payerUuid: data?.payer?.value,
         staffUuid: data?.staffUuid?.value,
       }
-      receiptService.add(newData).then((res) => {
+      debtService.add(newData).then((res) => {
         if (res.data.code === 600) {
           toast.success('Thêm mới thành công !', {
             position: 'top-right',
@@ -286,10 +287,10 @@ const SidebarBill = ({ openSideBar, toggleSidebar }) => {
   const handleSearchCertificate = (query) => {
     debounceCertificate(query)
   }
-  const handleModal = () => {
-    setModal(!modal)
-  }
-  const setRefreshTable = () => {}
+  // const handleModal = () => {
+  //   setModal(!modal)
+  // }
+  // const setRefreshTable = () => {}
 
   return (
     <StyledSidebar
@@ -302,45 +303,6 @@ const SidebarBill = ({ openSideBar, toggleSidebar }) => {
       onClosed={handleSidebarClosed}
     >
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <div className='mb-1'>
-          <Label className='form-label' for='patients'>
-            Chọn khách hàng <span className='text-danger'>*</span>
-          </Label>
-          <div className='d-flex'>
-            <Controller
-              rules={{
-                required: true,
-              }}
-              name='patients'
-              control={control}
-              render={({ field }) => (
-                <>
-                  <Select
-                    isClearable={false}
-                    isMulti
-                    onInputChange={(value) => handleSearchPatients(value)}
-                    classNamePrefix='select'
-                    options={patientsOptions}
-                    theme={selectThemeColors}
-                    filterOption={filterOption}
-                    className={classnames('react-select', {
-                      'is-invalid': errors.patients,
-                    })}
-                    {...field}
-                  />
-                </>
-              )}
-            />
-            <Button
-              type='button'
-              className='me-1 add-patient-button'
-              color='primary'
-              onClick={handleModal}
-            >
-              +
-            </Button>
-          </div>
-        </div>
         <div className='mb-1'>
           <Label className='form-label' for='analysisCertificate'>
             Chọn phiếu xét nghiệm
@@ -492,7 +454,7 @@ const SidebarBill = ({ openSideBar, toggleSidebar }) => {
                         theme={selectThemeColors}
                         filterOption={filterOption}
                         className={classnames('react-select', {
-                          'is-invalid': errors.patients,
+                          'is-invalid': errors.payer,
                         })}
                         {...field}
                       />
@@ -566,11 +528,11 @@ const SidebarBill = ({ openSideBar, toggleSidebar }) => {
           </Button>
         </div>
       </Form>
-      <AddNewModal
+      {/* <AddNewModal
         open={modal}
         handleModal={handleModal}
         setRefreshTable={setRefreshTable}
-      />
+      /> */}
     </StyledSidebar>
   )
 }

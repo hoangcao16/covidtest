@@ -32,17 +32,17 @@ import { analysisCertificateService } from '../../services/analysisCertificateCe
 import { staffService } from '../../services/staffService'
 import { debtService } from '../../services/debtService'
 import { toast, Slide } from 'react-toastify'
-import AddNewModal from '../patients/patients/AddNewModal'
+// import AddNewModal from '../patients/patients/AddNewModal'
 
 const defaultValues = {
-  testTypeUuid: '',
+  testtype: '',
   agencyUuid: '',
   amount: 500000,
-  analysisCertificateUuid: '',
+  analysisCertificate: '',
   inWords: '',
   note: '',
   payFor: '',
-  payerUuid: '',
+  payer: '',
   staffUuid: '',
 }
 
@@ -53,7 +53,7 @@ const SidebarBill = ({ openSideBar, toggleSidebar }) => {
   const [patientsOptions, setPatientsOptions] = useState([])
   const [certificateOptions, setCertificateOptions] = useState([])
   const [staffOptions, setStaffOptions] = useState([])
-  const [modal, setModal] = useState(false)
+  // const [modal, setModal] = useState(false)
 
   const debtState = useSelector((state) => state.debt)
 
@@ -283,10 +283,10 @@ const SidebarBill = ({ openSideBar, toggleSidebar }) => {
   const handleSearchCertificate = (query) => {
     debounceCertificate(query)
   }
-  const handleModal = () => {
-    setModal(!modal)
-  }
-  const setRefreshTable = () => {}
+  // const handleModal = () => {
+  //   setModal(!modal)
+  // }
+  // const setRefreshTable = () => {}
 
   return (
     <StyledSidebar
@@ -323,7 +323,7 @@ const SidebarBill = ({ openSideBar, toggleSidebar }) => {
                     theme={selectThemeColors}
                     // filterOption={filterOption}
                     className={classnames('react-select', {
-                      'is-invalid': errors.patients,
+                      'is-invalid': errors.analysisCertificate,
                     })}
                     {...field}
                   />
@@ -450,7 +450,7 @@ const SidebarBill = ({ openSideBar, toggleSidebar }) => {
                         theme={selectThemeColors}
                         filterOption={filterOption}
                         className={classnames('react-select', {
-                          'is-invalid': errors.patients,
+                          'is-invalid': errors.payer,
                         })}
                         {...field}
                       />
@@ -524,11 +524,11 @@ const SidebarBill = ({ openSideBar, toggleSidebar }) => {
           </Button>
         </div>
       </Form>
-      <AddNewModal
+      {/* <AddNewModal
         open={modal}
         handleModal={handleModal}
         setRefreshTable={setRefreshTable}
-      />
+      /> */}
     </StyledSidebar>
   )
 }

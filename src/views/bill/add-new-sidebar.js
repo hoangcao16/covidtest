@@ -35,15 +35,15 @@ import { toast, Slide } from 'react-toastify'
 import AddNewModal from '../patients/patients/AddNewModal'
 
 const defaultValues = {
-  patientUuids: [],
-  testTypeUuid: '',
+  patients: [],
+  testtype: '',
   agencyUuid: '',
   amount: 500000,
-  analysisCertificateUuid: '',
+  analysisCertificate: '',
   inWords: '',
   note: '',
   payFor: '',
-  payerUuid: '',
+  payer: '',
   staffUuid: '',
 }
 
