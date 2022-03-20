@@ -65,7 +65,7 @@ export const printStatusOptions = [
   },
 ]
 export const disableOptions = (option, selectValue) => {
-  switch (selectValue[0].value) {
+  switch (selectValue[0]?.value) {
     case 'NOT_PAID': {
       if (option.value === 'PAID' || option.value === 'DEBT') {
         return false

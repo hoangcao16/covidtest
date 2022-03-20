@@ -32,7 +32,7 @@ import {
   Button,
   Col,
 } from 'reactstrap'
-import BillPreview from '../../components/BillPreview/bill-preview'
+import BillPreview from './BillPreview/bill-preview'
 import SidebarBill from './add-new-sidebar'
 
 const TestForm = ({}) => {

@@ -11,7 +11,7 @@ import { statusOptions, disableOptions } from '../components/common/data'
 // ** Store & Actions
 import { useSelector, useDispatch } from 'react-redux'
 import { StyledCard } from './style'
-import { refetchList, fetchListDebt } from '../../redux/debt'
+import { refetchList, fetchListDebt, addNewDebt } from '../../redux/debt'
 // ** Third Party Components
 import { Table, Pagination } from 'antd'
 import { debtService } from '../../services/debtService'
@@ -21,7 +21,16 @@ import { toast, Slide } from 'react-toastify'
 import LoansFilter from './loans-filter'
 import { isEmpty, debounce } from 'lodash'
 // ** Reactstrap Imports
-import { CardHeader, CardTitle, Input, Label, Row, Col } from 'reactstrap'
+import {
+  CardHeader,
+  CardTitle,
+  Input,
+  Label,
+  Row,
+  Col,
+  Button,
+} from 'reactstrap'
+import SidebarLoans from './add-new-sidebar'
 
 const TestForm = ({}) => {
   // ** States
@@ -29,6 +38,7 @@ const TestForm = ({}) => {
   // const [totalPage, setTotalPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [searchValue, setSearchValue] = useState('')
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [allParamsSearch, setAllParamsSearch] = useState({})
   const [metadata, setMetadata] = useState({
     page: 1,
@@ -69,6 +79,7 @@ const TestForm = ({}) => {
   }, [debtState.dataTable])
   const handleUpdateState = (value, record) => {
     const dataUpdate = {
+      ...record,
       patientUuids: record.patientUuids,
       agencyUuid1: record.agencyUuid1,
       testTypeUuid: record.testTypeUuid,
@@ -111,6 +122,9 @@ const TestForm = ({}) => {
         }
       }
     })
+  }
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen)
   }
   const debounceSearch = useCallback(
     debounce((query) => fetchList(query), 500),
@@ -274,6 +288,16 @@ const TestForm = ({}) => {
             className='d-flex align-items-center justify-content-sm-end mt-sm-0 mt-1'
             sm={{ offset: 3, size: 6 }}
           >
+            <Button
+              className='add-new-test-form'
+              color='primary'
+              onClick={() => {
+                toggleSidebar()
+                dispatch(addNewDebt(true))
+              }}
+            >
+              Thêm mới
+            </Button>
             {/* <Label className='me-1' for='search-input'>
               Search
             </Label>
@@ -305,6 +329,7 @@ const TestForm = ({}) => {
           </div>
         </div>
       </StyledCard>
+      <SidebarLoans openSideBar={sidebarOpen} toggleSidebar={toggleSidebar} />
     </Fragment>
   )
 }

@@ -153,6 +153,7 @@ const SidebarBill = ({ openSideBar, toggleSidebar }) => {
   }, [receiptState.isEdit])
   // ** Function to handle form submit
   const onSubmit = (data) => {
+    console.log('submit')
     if (receiptState.isEdit === true) {
       const newDataEdit = {
         patientUuids: data?.patients?.map((p) => p.value),
@@ -347,9 +348,11 @@ const SidebarBill = ({ openSideBar, toggleSidebar }) => {
           </Label>
           <div className='d-flex'>
             <Controller
-              rules={{
-                required: true,
-              }}
+              rules={
+                {
+                  // required: true,
+                }
+              }
               name='analysisCertificate'
               control={control}
               render={({ field }) => (
@@ -362,7 +365,7 @@ const SidebarBill = ({ openSideBar, toggleSidebar }) => {
                     theme={selectThemeColors}
                     // filterOption={filterOption}
                     className={classnames('react-select', {
-                      'is-invalid': errors.patients,
+                      'is-invalid': errors.analysisCertificate,
                     })}
                     {...field}
                   />

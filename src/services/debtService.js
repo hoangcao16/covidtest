@@ -16,7 +16,7 @@ export const debtService = {
       url: `/api/v0/debt/${uuid}`,
     })
   },
-  create(record) {
+  add(record) {
     return apiClient.request({
       method: 'POST',
       url: '/api/v0/debt',
@@ -29,7 +29,7 @@ export const debtService = {
       url: `/api/v0/debt/${uuid}`,
     })
   },
-  edit(uuid, record) {
+  update(uuid, record) {
     return apiClient.request({
       method: 'PUT',
       url: `/api/v0/debt/${uuid}`,
