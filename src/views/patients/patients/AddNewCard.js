@@ -37,6 +37,7 @@ const AddNewCard = ({ setRefreshTable }) => {
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({ defaultValues })
   const onHandleSubmit = (data) => {

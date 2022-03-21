@@ -1,0 +1,8 @@
+@media print {
+  #print-me {
+    height: 297mm;
+  }
+  @page {
+    size: A4;
+  }
+}
