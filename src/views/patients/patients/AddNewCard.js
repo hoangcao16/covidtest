@@ -94,7 +94,7 @@ const AddNewCard = ({ setRefreshTable }) => {
           <Col md={3}>
             <div className='mb-1'>
               <Label className='form-label' for='name'>
-                Tên
+                Tên *
               </Label>
               <InputGroup>
                 <InputGroupText>
@@ -121,7 +121,7 @@ const AddNewCard = ({ setRefreshTable }) => {
           <Col md={3}>
             <div className='mb-1'>
               <Label className='form-label' for='phone'>
-                Điện thoại
+                Điện thoại *
               </Label>
               <InputGroup>
                 <InputGroupText>

@@ -11,7 +11,7 @@ import { statusOptions, disableOptions } from '../../components/common/data'
 // ** Invoice List Sidebar
 import TestFormSidebar from '../../components/TestformSidebar/test-form-sidebar'
 import TestFormPreview from '../../components/TestFormPreview/test-form-preview'
-import BillPreview from '../../components/BillPreview/bill-preview'
+import BillPreview from './BillPreview/bill-preview'
 import TestFromUploadCSV from '../../components/TestFormUploadSideBar/test-form-upload-sidebar'
 // ** Store & Actions
 import { useSelector, useDispatch } from 'react-redux'
