@@ -80,13 +80,12 @@ const Router = () => {
     console.log('FinalRoute:props:', props)
     const route = props.route
     let action, resource
-
+    console.log(ability)
     // ** Assign vars based on route meta
     if (route.meta) {
       action = route.meta.action ? route.meta.action : null
       resource = route.meta.resource ? route.meta.resource : null
     }
-
     if (
       (!isUserLoggedIn() && route.meta === undefined) ||
       (!isUserLoggedIn() &&
@@ -122,7 +121,6 @@ const Router = () => {
       // ? Note: make sure to keep layout and component name equal
 
       const LayoutTag = Layouts[layout]
-
       // ** Get Routes and Paths of the Layout
       const { LayoutRoutes, LayoutPaths } = LayoutRoutesAndPaths(layout)
 
@@ -158,7 +156,6 @@ const Router = () => {
                         ...props,
                         meta: route.meta,
                       })
-
                       return (
                         <Fragment>
                           {/* Layout Wrapper to add classes based on route's layout, appLayout and className */}

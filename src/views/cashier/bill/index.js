@@ -233,10 +233,13 @@ const TestForm = ({}) => {
     {
       title: 'Mã XN',
       align: 'center',
-      sorter: (a, b) => a.code.localeCompare(b.code),
-      dataIndex: 'code',
+      sorter: (a, b) =>
+        a.analysisCertificateCode.localeCompare(b.analysisCertificateCode),
+      dataIndex: 'analysisCertificateCode',
       ellipsis: true,
-      render: (code) => <a href='/covid19/test-form'>{code} </a>,
+      render: (analysisCertificateCode) => (
+        <a href='/covid19/test-form'>{analysisCertificateCode} </a>
+      ),
     },
     {
       title: 'Ngày tạo',
@@ -273,8 +276,8 @@ const TestForm = ({}) => {
     {
       title: 'Người tạo',
       align: 'center',
-      sorter: (a, b) => a.staffName4.localeCompare(b.staffName4),
-      dataIndex: 'staffName4',
+      sorter: (a, b) => a.staffName.localeCompare(b.staffName),
+      dataIndex: 'staffName',
     },
     {
       title: 'Actions',

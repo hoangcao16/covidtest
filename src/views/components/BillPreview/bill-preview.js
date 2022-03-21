@@ -53,7 +53,7 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
         patientUuids: item?.patientUuids,
         agencyUuid1: item?.agencyUuid1,
         testTypeUuid: item?.testTypeUuid,
-        state: 'WAITING_TAKEN_SAMPLE',
+        state: 'PAID',
         printStatus: 1,
       }
       analysisCertificateService

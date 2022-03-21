@@ -12,7 +12,7 @@ import {
   Monitor,
   CreditCard,
   Umbrella,
-  LifeBuoy
+  LifeBuoy,
 } from 'react-feather'
 
 export default [
@@ -21,12 +21,16 @@ export default [
     title: 'Khách hàng',
     icon: <Home size={20} />,
     navLink: '/patients',
+    action: 'read',
+    resource: 'thu_ngan',
   },
   {
     id: 'cashier',
     title: 'Thu ngân',
     icon: <CreditCard size={20} />,
     navLink: '/cashier',
+    action: 'read',
+    resource: 'thu_ngan',
     children: [
       {
         id: 'cashier-test-form',
