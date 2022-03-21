@@ -50,7 +50,10 @@ const TestForm = ({}) => {
   })
   // ** Store Vars
   const dispatch = useDispatch()
-  const debtState = useSelector((state) => state.debt)
+  // const analysisCertificateState = useSelector((state) => state.debt)
+  const analysisCertificateState = useSelector(
+    (state) => state.analysisCertificate
+  )
   const paramsSearch = (params) => {
     setAllParamsSearch(params)
   }
@@ -71,17 +74,17 @@ const TestForm = ({}) => {
         dispatch(fetchListTestForm([]))
       }
     })
-  }, [debtState.refetch])
+  }, [analysisCertificateState.refetch])
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen)
   }
   // ** Function to toggle sidebar
   useEffect(() => {
-    if (!isEmpty(debtState.dataTable.metadata)) {
-      // setTotalPage(debtState.dataTable.metadata.total)
-      setMetadata(debtState.dataTable.metadata)
+    if (!isEmpty(analysisCertificateState.dataTable.metadata)) {
+      // setTotalPage(analysisCertificateState.dataTable.metadata.total)
+      setMetadata(analysisCertificateState.dataTable.metadata)
     }
-  }, [debtState.dataTable])
+  }, [analysisCertificateState.dataTable])
   const handleUpdateState = (value, record) => {
     const dataUpdate = {
       patientUuids: record.patientUuids,
@@ -317,7 +320,7 @@ const TestForm = ({}) => {
             pagination={false}
             rowKey='uuid'
             columns={TestFormColumns}
-            dataSource={debtState.dataTable.payload}
+            dataSource={analysisCertificateState.dataTable.payload}
           />
           <div className='pagination'>
             <Pagination
