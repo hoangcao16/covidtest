@@ -15,10 +15,10 @@ export const statusOptions = [
     label: 'Treo công nợ',
     value: 'DEBT',
   },
-  {
-    label: 'Đã đóng tiền',
-    value: 'PAID',
-  },
+  // {
+  //   label: 'Đã đóng tiền',
+  //   value: 'PAID',
+  // },
   {
     label: 'Chờ lấy mẫu',
     value: 'WAITING_TAKEN_SAMPLE',
