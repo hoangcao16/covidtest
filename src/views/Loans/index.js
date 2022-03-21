@@ -217,29 +217,29 @@ const TestForm = ({}) => {
       sorter: (a, b) => a.agencyName3.localeCompare(b.agencyName3),
       dataIndex: 'agencyName3',
     },
-    {
-      title: 'Trạng thái',
-      align: 'center',
-      sorter: (a, b) => a.state.localeCompare(b.state),
-      dataIndex: 'state',
-      render: (text, record) => {
-        return (
-          <div onClick={(e) => e.stopPropagation()}>
-            <Select
-              isClearable={false}
-              classNamePrefix='select'
-              className='react-select'
-              options={statusOptions}
-              isOptionDisabled={(option, selectValue) =>
-                disableOptions(option, selectValue)
-              }
-              onChange={(value) => handleUpdateState(value, record)}
-              value={statusOptions.find((c) => c.value === text)}
-            ></Select>
-          </div>
-        )
-      },
-    },
+    // {
+    //   title: 'Trạng thái',
+    //   align: 'center',
+    //   sorter: (a, b) => a.state.localeCompare(b.state),
+    //   dataIndex: 'state',
+    //   render: (text, record) => {
+    //     return (
+    //       <div onClick={(e) => e.stopPropagation()}>
+    //         <Select
+    //           isClearable={false}
+    //           classNamePrefix='select'
+    //           className='react-select'
+    //           options={statusOptions}
+    //           isOptionDisabled={(option, selectValue) =>
+    //             disableOptions(option, selectValue)
+    //           }
+    //           onChange={(value) => handleUpdateState(value, record)}
+    //           value={statusOptions.find((c) => c.value === text)}
+    //         ></Select>
+    //       </div>
+    //     )
+    //   },
+    // },
     {
       title: 'Số tiền',
       align: 'center',

@@ -16,11 +16,11 @@ import { useEffect, useState, useCallback } from 'react'
 import Select from 'react-select'
 import { selectThemeColors } from '@utils'
 import { shiftOptions } from '../../components/common/data'
-import { debtService } from '../../../services/debtService'
-import { fetchListDebt } from '../../../redux/debt'
+import { fetchListTestForm } from '../../../redux/analysisCertificate'
 import { debounce } from 'lodash'
 import { StyledFilterList } from './style'
 import { agencyService } from '../../../services/agencyService'
+import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
 import { DatePicker } from 'antd'
 import moment from 'moment'
 
@@ -42,6 +42,7 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       name: nameSearch,
       address: addressSearch,
       hasDebt: true,
+      state: 'DEBT',
       code: codeSearch,
       shift: shiftSearch?.value,
       identityNumber: identityNumberSearch,
@@ -80,12 +81,12 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
     })
   }, [])
   const fetchList = (params) => {
-    debtService.list(params).then((res) => {
+    analysisCertificateService.list(params).then((res) => {
       if (res.data.code === 600) {
         if (res.data.payload !== null) {
-          dispatch(fetchListDebt(res.data))
+          dispatch(fetchListTestForm(res.data))
         } else {
-          dispatch(fetchListDebt([]))
+          dispatch(fetchListTestForm([]))
         }
       }
     })
@@ -100,6 +101,7 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       name: nameSearch,
       address: addressSearch,
       hasDebt: true,
+      state: 'DEBT',
       code: codeSearch,
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
@@ -122,6 +124,7 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       name: e,
       address: addressSearch,
       hasDebt: true,
+      state: 'DEBT',
       code: codeSearch,
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
@@ -144,6 +147,7 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       name: nameSearch,
       address: e,
       hasDebt: true,
+      state: 'DEBT',
       code: codeSearch,
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
@@ -166,6 +170,7 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       name: nameSearch,
       address: addressSearch,
       hasDebt: true,
+      state: 'DEBT',
       code: e,
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
@@ -188,6 +193,7 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       name: nameSearch,
       address: addressSearch,
       hasDebt: true,
+      state: 'DEBT',
       code: codeSearch,
       identityNumber: identityNumberSearch,
       shift: e?.value,
@@ -210,6 +216,7 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       name: nameSearch,
       address: addressSearch,
       hasDebt: true,
+      state: 'DEBT',
       code: codeSearch,
       identityNumber: e,
       shift: shiftSearch?.value,
@@ -233,6 +240,7 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       name: nameSearch,
       address: addressSearch,
       hasDebt: true,
+      state: 'DEBT',
       code: codeSearch,
       identityNumber: identityNumberSearch,
       shift: shiftSearch?.value,
@@ -282,6 +290,7 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
       page: 1,
       size: 10,
       hasDebt: true,
+      state: 'DEBT',
       fromDate: moment().startOf('day').valueOf(),
       toDate: moment().valueOf(),
     })

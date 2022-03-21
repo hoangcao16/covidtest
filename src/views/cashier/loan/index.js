@@ -11,11 +11,13 @@ import { statusOptions, disableOptions } from '../../components/common/data'
 // ** Store & Actions
 import { useSelector, useDispatch } from 'react-redux'
 import { StyledCard } from './style'
-import { refetchList, fetchListDebt, addNewDebt } from '../../../redux/debt'
+import {
+  refetchList,
+  fetchListTestForm,
+} from '../../../redux/analysisCertificate'
 // ** Third Party Components
 import { Table, Pagination } from 'antd'
-import { debtService } from '../../../services/debtService'
-
+import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
 import moment from 'moment'
 import Select from 'react-select'
 import { toast, Slide } from 'react-toastify'
@@ -57,16 +59,16 @@ const TestForm = ({}) => {
       ...allParamsSearch,
       page: currentPage,
       size: rowsPerPage,
-
+      state: 'DEBT',
       fromDate: moment().startOf('day').valueOf(),
       toDate: moment().valueOf(),
     }
-    debtService.list(params).then((res) => {
+    analysisCertificateService.list(params).then((res) => {
       // setDataTable(res.data.payload)
       if (res.data.payload !== null) {
-        dispatch(fetchListDebt(res.data))
+        dispatch(fetchListTestForm(res.data))
       } else {
-        dispatch(fetchListDebt([]))
+        dispatch(fetchListTestForm([]))
       }
     })
   }, [debtState.refetch])
@@ -87,7 +89,7 @@ const TestForm = ({}) => {
       testTypeUuid: record.testTypeUuid,
       state: value.value,
     }
-    debtService.update(record.uuid, dataUpdate).then((res) => {
+    analysisCertificateService.update(record.uuid, dataUpdate).then((res) => {
       if (res.data.code === 600) {
         dispatch(refetchList())
         toast.success('Cập nhật thành công !', {
@@ -115,12 +117,12 @@ const TestForm = ({}) => {
     })
   }
   const fetchList = (params) => {
-    debtService.list(params).then((res) => {
+    analysisCertificateService.list(params).then((res) => {
       if (res.data.code === 600) {
         if (res.data.payload !== null) {
-          dispatch(fetchListDebt(res.data))
+          dispatch(fetchListTestForm(res.data))
         } else {
-          dispatch(fetchListDebt([]))
+          dispatch(fetchListTestForm([]))
         }
       }
     })
@@ -146,7 +148,7 @@ const TestForm = ({}) => {
       ...allParamsSearch,
       page: 1,
       size: parseInt(e.target.value),
-
+      state: 'DEBT',
       fromDate:
         allParamsSearch.fromDate === undefined
           ? undefined
@@ -164,7 +166,7 @@ const TestForm = ({}) => {
       ...allParamsSearch,
       page: page,
       size: rowsPerPage,
-
+      state: 'DEBT',
       fromDate:
         allParamsSearch.fromDate === undefined
           ? undefined
@@ -287,7 +289,7 @@ const TestForm = ({}) => {
             className='d-flex align-items-center justify-content-sm-end mt-sm-0 mt-1'
             sm={{ offset: 3, size: 6 }}
           >
-            <Button
+            {/* <Button
               className='add-new-test-form'
               color='primary'
               onClick={() => {
@@ -296,7 +298,7 @@ const TestForm = ({}) => {
               }}
             >
               Thêm mới
-            </Button>
+            </Button> */}
             {/* <Label className='me-1' for='search-input'>
               Search
             </Label>
