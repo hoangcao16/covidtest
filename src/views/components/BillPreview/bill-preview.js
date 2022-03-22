@@ -31,9 +31,7 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
   const receiptState = useSelector((state) => state.receipt)
   useEffect(() => {
     if (receiptState.selectedReceiptList.length > 0) {
-      // console.log(receiptState.selectedReceiptList)
       const listDate = receiptState.selectedReceiptList
-      // console.log(listDate)
       const selectedItemsFinal = listDate.map((item) => {
         return {
           ...item,

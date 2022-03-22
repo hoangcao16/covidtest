@@ -30,7 +30,6 @@ const App = () => {
       }
     })
   }
-  console.log('ability:', ability)
   return <Router />
 }
 

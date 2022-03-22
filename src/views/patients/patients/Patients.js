@@ -33,7 +33,6 @@ const Patients = () => {
   // ** Store Vars
   const dispatch = useDispatch()
   const store = useSelector((state) => state.patient)
-  console.log('patient:', store)
   // ** States
   const [modal, setModal] = useState(false)
   const [editModal, setEditModal] = useState(false)
@@ -43,7 +42,6 @@ const Patients = () => {
   const [refreshTable, setRefreshTable] = useState(false)
   const [selectedItem, setSelectedItem] = useState(false)
   const handleDelete = (uuid) => {
-    console.log('delete patient:item', uuid)
     patientService.delete(uuid).then(() => {
       setRefreshTable(!refreshTable)
     })
@@ -100,7 +98,6 @@ const Patients = () => {
 
   // ** Function to handle Pagination and get data
   const handlePagination = (page) => {
-    console.log('handlePagination', page.selected + 1)
     dispatch(
       getList({
         page: page.selected + 1,

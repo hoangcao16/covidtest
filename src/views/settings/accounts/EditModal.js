@@ -26,7 +26,6 @@ import { accountService } from '../../../services/accountService'
 import { staffService } from '../../../services/staffService'
 
 const EditModal = ({ open, item, handleModal, setRefreshTable }) => {
-  console.log('item:', item)
   // ** State
   const [name, setName] = useState(item?.name)
   const [email, setEmail] = useState(item?.email)
@@ -68,7 +67,6 @@ const EditModal = ({ open, item, handleModal, setRefreshTable }) => {
     setPhone(item?.phone)
   }, [item])
   const handleSubmit = () => {
-    console.log('handleSubmit:', name, email, password, phone)
     accountService
       .update(item.uuid, {
         name,
@@ -78,7 +76,6 @@ const EditModal = ({ open, item, handleModal, setRefreshTable }) => {
         staffUuid: staff?.value,
       })
       .then((r) => {
-        console.log('handleSubmit:response:', r)
         handleModal()
         setRefreshTable()
       })

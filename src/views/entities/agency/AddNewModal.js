@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable comma-dangle */
 // ** React Imports
 import { useState } from 'react'
@@ -33,7 +34,6 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
     <X className='cursor-pointer' size={15} onClick={handleModal} />
   )
   const handleSubmit = () => {
-    console.log('handleSubmit:', code, description)
     agencyService
       .create({
         code,
@@ -41,7 +41,6 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
         type,
       })
       .then((r) => {
-        console.log('handleSubmit:response:', r)
         handleModal()
         setRefreshTable()
       })

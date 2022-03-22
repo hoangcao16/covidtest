@@ -34,7 +34,6 @@ const TestType = () => {
   // ** Store Vars
   const dispatch = useDispatch()
   const store = useSelector((state) => state.testType)
-  console.log('testType:', store)
   // ** States
   const [modal, setModal] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
@@ -45,7 +44,6 @@ const TestType = () => {
   const [selectedItem, setSelectedItem] = useState(false)
 
   const handleDelete = (item) => {
-    console.log('delete testType:item', item)
     testTypeService.delete(item.uuid).then((res) => {
       if (res.data.code === 600) {
         toast.success('Xóa thành công !', {
@@ -79,7 +77,6 @@ const TestType = () => {
   }
   const handleModal = () => {
     setModal(!modal)
-    console.log('submit')
   }
   // ** Table data to render
   const dataToRender = () => {
@@ -91,7 +88,6 @@ const TestType = () => {
       return filters[k].length > 0
     })
 
-    console.log('testTypeService:dataToRender:', store.data)
     if (store && store.allData?.length > 0) {
       return store.allData.slice(currentPage - 1, rowsPerPage)
     } else if (store.allData?.length === 0 && isFiltered) {

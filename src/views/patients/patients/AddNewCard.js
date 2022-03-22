@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable comma-dangle */
 import { StyledAddNewCard } from './style'
 import { User, Mail, Lock, Smartphone } from 'react-feather'
@@ -52,7 +53,6 @@ const AddNewCard = ({ setRefreshTable }) => {
         sex: data?.sex?.value,
       })
       .then((r) => {
-        console.log('handleSubmit:response:', r)
         setRefreshTable()
       })
       .then(() => {

@@ -30,7 +30,6 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
     <X className='cursor-pointer' size={15} onClick={handleModal} />
   )
   const handleSubmit = () => {
-    console.log('handleSubmit:', name)
     labResultTypeService
       .create({
         name,

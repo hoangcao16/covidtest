@@ -61,7 +61,6 @@ const TestForm = ({}) => {
       // toDate: moment().valueOf(),
     }
     debtService.list(params).then((res) => {
-      console.log(params)
       // setDataTable(res.data.payload)
       if (res.data.payload !== null) {
         dispatch(fetchListDebt(res.data))

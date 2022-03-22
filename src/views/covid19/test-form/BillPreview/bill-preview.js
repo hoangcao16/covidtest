@@ -33,9 +33,7 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
   )
   useEffect(() => {
     if (analysisCertificateState?.selectedTestFormList?.length > 0) {
-      // console.log(analysisCertificateState.selectedTestFormList)
       const listDate = analysisCertificateState?.selectedTestFormList
-      // console.log(listDate)
       const selectedItemsFinal = listDate.map((item) => {
         return {
           ...item,

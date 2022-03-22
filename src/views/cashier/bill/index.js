@@ -180,11 +180,6 @@ const TestForm = ({}) => {
   }
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        'selectedRows: ',
-        selectedRows
-      )
       setSelectedCertificate(selectedRows)
     },
     getCheckboxProps: (record) => ({

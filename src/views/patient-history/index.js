@@ -158,7 +158,6 @@ const TestForm = ({}) => {
     dispatch(selectUuid(uuid))
   }
   const handleDelete = (uuid) => {
-    console.log(uuid)
     analysisCertificateService.delete(uuid).then((res) => {
       if (res.data.code === 600) {
         dispatch(refetchList())
@@ -324,11 +323,6 @@ const TestForm = ({}) => {
   }
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        'selectedRows: ',
-        selectedRows
-      )
       setSelectedCertificate(selectedRows)
     },
     getCheckboxProps: (record) => ({

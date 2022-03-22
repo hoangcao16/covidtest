@@ -31,9 +31,7 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
   const receiptState = useSelector((state) => state.receipt)
   useEffect(() => {
     if (receiptState.selectedReceiptList.length > 0) {
-      // console.log(receiptState.selectedReceiptList)
       const listDate = receiptState.selectedReceiptList
-      // console.log(listDate)
       const selectedItemsFinal = listDate.map((item) => {
         return {
           ...item,
@@ -64,7 +62,6 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
     dispatch(refetchList())
     handlePrintBill()
   }
-  console.log(dataView)
   return (
     <StyledBillPreview
       size='lg'
@@ -83,7 +80,6 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
       >
         {dataView.length > 0 &&
           dataView.map((item, index) => {
-            console.log(item)
             return (
               <div id='print-me' key={index}>
                 <table style={{ width: '100%', textAlign: 'center' }}>

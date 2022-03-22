@@ -36,7 +36,6 @@ const defaultValues = {
   sex: 0,
 }
 const EditModal = ({ open, item, handleModal, setRefreshTable }) => {
-  console.log('item:', item)
   // ** State
   // ** Custom close btn
   const CloseBtn = (

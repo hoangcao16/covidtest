@@ -46,7 +46,6 @@ const EditModal = ({ open, selecteditem, handleModal, setRefreshTable }) => {
     }
   }, [selecteditem])
   const handleSubmit = () => {
-    console.log('handleSubmit:', code, description)
     agencyService
       .edit(selecteditem.uuid, {
         code,

@@ -50,7 +50,6 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
     })
   }, [])
   const handleSubmit = () => {
-    console.log('handleSubmit:', name, email, password, phone)
     accountService
       .create({
         name,
@@ -60,7 +59,6 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
         staffUuid: staff?.value,
       })
       .then((r) => {
-        console.log('handleSubmit:response:', r)
         handleModal()
         setRefreshTable()
       })

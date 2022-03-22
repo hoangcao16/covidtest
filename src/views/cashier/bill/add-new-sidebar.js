@@ -153,7 +153,6 @@ const SidebarBill = ({ openSideBar, toggleSidebar }) => {
   }, [receiptState.isEdit])
   // ** Function to handle form submit
   const onSubmit = (data) => {
-    console.log('submit')
     if (receiptState.isEdit === true) {
       const newDataEdit = {
         patientUuids: data?.patients?.map((p) => p.value),
@@ -398,7 +397,6 @@ const SidebarBill = ({ openSideBar, toggleSidebar }) => {
                           'getSampleAtHomePrice',
                           val.getSampleAtHomePrice
                         )
-                        console.log(val)
                         onChange(val)
                       }}
                       isClearable={false}

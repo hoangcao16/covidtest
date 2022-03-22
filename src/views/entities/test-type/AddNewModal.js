@@ -81,7 +81,6 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
     setTotalSumary((prevState) => prevState.slice(0, -1))
   }
   // }
-  //   console.log(totalSumary)
   const onSubmit = (data) => {
     const dataSend = {
       code: data.code,
@@ -147,7 +146,6 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
     testTypeService
       .create(dataSend)
       .then((r) => {
-        console.log('handleSubmit:response:', r)
         handleModal()
         setRefreshTable()
         toast.success('Thêm mới loại xét nghiệm thành công !', {

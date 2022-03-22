@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable comma-dangle */
 // ** React Imports
 // ** Third Party Components
@@ -44,7 +45,6 @@ const defaultValues = {
   sex: 0,
 }
 const EditModal = ({ open, item, handleModal, setRefreshTable }) => {
-  console.log('item:', item)
   // ** State
   // ** Custom close btn
   const CloseBtn = (
@@ -82,7 +82,6 @@ const EditModal = ({ open, item, handleModal, setRefreshTable }) => {
   }, [item])
 
   const onHandleSubmit = (data) => {
-    // console.log('handleSubmit:', data, name, email, address, phone, identityNumber, picker)
     patientService
       .update(item?.uuid, {
         code: item?.code,
@@ -95,7 +94,6 @@ const EditModal = ({ open, item, handleModal, setRefreshTable }) => {
         sex: data?.sex?.value,
       })
       .then((r) => {
-        console.log('handleSubmit:response:', r)
         handleModal()
         setRefreshTable()
       })

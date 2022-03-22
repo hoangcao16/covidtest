@@ -18,10 +18,8 @@ const labResultQrcode = () => {
     (state) => state.analysisCertificate
   )
   const baseURL = process.env.REACT_APP_BASE_QR_URL
-  console.log(code, password)
   useEffect(() => {
     analysisCertificateService.qrcode(code, password).then((res) => {
-      console.log(res)
       if (res.data.code === 600 && res.data.payload !== null) {
         let selectedItemsFinal = []
         const fullCustomers = res?.data?.payload?.patients
@@ -34,7 +32,6 @@ const labResultQrcode = () => {
             partners: partners,
           })
         })
-        // console.log(selectedItemsFinal)
         setDataView(selectedItemsFinal)
       }
     })

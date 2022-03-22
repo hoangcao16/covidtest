@@ -196,7 +196,6 @@ const SidebarNewTestCasherForm = ({ openSideBar, toggleTestFormSidebar }) => {
           value: sampleType.uuid,
         }))
         setSampleTypeOptions(options)
-        // console.log(options)
         setValue('sampleType', options[0].value)
       }
     })
@@ -532,7 +531,6 @@ const SidebarNewTestCasherForm = ({ openSideBar, toggleTestFormSidebar }) => {
     const testtype = getValues('testtype')
     const sampleAtHomePrice = getValues('getSampleAtHomePrice')
     const getSampleAtHome = getValues('getSampleAtHome')
-    console.log(testtype.value)
     if (testtype.value === undefined) {
       toast.error('Chọn yêu cầu xét nghiệm !', {
         position: 'top-right',
@@ -636,7 +634,6 @@ const SidebarNewTestCasherForm = ({ openSideBar, toggleTestFormSidebar }) => {
                             'getSampleAtHomePrice',
                             val.getSampleAtHomePrice
                           )
-                          console.log(val)
                           onChange(val)
                         }}
                         isClearable={false}

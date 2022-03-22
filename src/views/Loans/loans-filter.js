@@ -221,7 +221,6 @@ const LoansFilter = ({ paramsSearch, handleResetFilter }) => {
     debounceSearch(dataSearch)
   }
   const handleSearchTime = (e) => {
-    console.log(e)
     const dataSearch = {
       phone: phoneSearch,
       name: nameSearch,

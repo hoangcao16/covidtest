@@ -45,7 +45,6 @@ export const customizeColumns = (editCallback, deleteCallback) => {
           <a
             onClick={(e) => {
               e.stopPropagation()
-              console.log('row:', row)
               deleteCallback(row.uuid)
             }}
           >

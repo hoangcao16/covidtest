@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable comma-dangle */
 // ** React Imports
 // ** Third Party Components
@@ -46,7 +47,6 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
     formState: { errors },
   } = useForm({ defaultValues })
   const onHandleSubmit = (data) => {
-    // console.log('handleSubmit:', data, name, email, address, phone, identityNumber, picker)
     patientService
       .create({
         name: data?.name,
@@ -58,7 +58,6 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
         sex: data?.sex?.value,
       })
       .then((r) => {
-        console.log('handleSubmit:response:', r)
         handleModal()
         setRefreshTable()
       })

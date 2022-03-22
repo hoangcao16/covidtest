@@ -36,7 +36,6 @@ const Router = () => {
 
   // ** ACL Ability Context
   const ability = useContext(AbilityContext)
-  console.log('ability', ability)
   // ** Default Layout
   const DefaultLayout =
     layout === 'horizontal' ? 'HorizontalLayout' : 'VerticalLayout'
@@ -59,7 +58,6 @@ const Router = () => {
           route.layout === layout ||
           (route.layout === undefined && DefaultLayout === layout)
         ) {
-          // console.log('route:', route)
           LayoutRoutes.push(route)
           LayoutPaths.push(route.path)
         }
@@ -78,10 +76,8 @@ const Router = () => {
    ** Final Route Component Checks for Login & User Role and then redirects to the route
    */
   const FinalRoute = (props) => {
-    console.log('FinalRoute:props:', props)
     const route = props.route
     let action, resource
-    console.log(ability)
     // ** Assign vars based on route meta
     if (route.meta) {
       action = route.meta.action ? route.meta.action : null

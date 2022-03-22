@@ -46,7 +46,6 @@ const TestFormPreview = ({ openTestFormPreview, toggleTestFormPreview }) => {
           })
         })
       })
-      console.log('selectedItemsFinal:', selectedItemsFinal)
       setDataView(selectedItemsFinal)
     }
   }, [analysisCertificateState.selectedTestFormList])
@@ -55,19 +54,6 @@ const TestFormPreview = ({ openTestFormPreview, toggleTestFormPreview }) => {
     content: () => componentRef.current,
   })
   const printTestForm = () => {
-    // analysisCertificateState.selectedTestFormList.map((item) => {
-    //   const dataUpdate = {
-    //     patientUuids: item.patientUuids,
-    //     agencyUuid1: item.agencyUuid1,
-    //     testTypeUuid: item.testTypeUuid,
-    //     state: item.state,
-    //     printStatus: 1,
-    //   }
-    //   analysisCertificateService
-    //     .update(item.uuid, dataUpdate)
-    //     .then((res) => console.log(res))
-    //     .catch((error) => console.log(error))
-    // })
     handlePrintTestForm()
   }
   return (

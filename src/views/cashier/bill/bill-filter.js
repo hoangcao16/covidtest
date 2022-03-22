@@ -227,7 +227,6 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
     debounceSearch(dataSearch)
   }
   const handleSearchTime = (e) => {
-    console.log(e)
     const dataSearch = {
       name: nameSearch,
 

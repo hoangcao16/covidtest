@@ -67,7 +67,6 @@ const EditModal = ({ open, selecteditem, handleModal, setRefreshTable }) => {
     formState: { errors },
   } = useForm({ defaultValues })
   useEffect(() => {
-    console.log('selecteditem:', selecteditem)
     const dataForm = {
       code: selecteditem?.code,
       name: selecteditem?.name,
@@ -104,7 +103,6 @@ const EditModal = ({ open, selecteditem, handleModal, setRefreshTable }) => {
     setTotalSumary((prevState) => prevState.slice(0, -1))
   }
   // }
-  //   console.log(totalSumary)
   const onSubmit = (data) => {
     const dataSend = {
       code: data.code,
@@ -168,12 +166,9 @@ const EditModal = ({ open, selecteditem, handleModal, setRefreshTable }) => {
       })
     }
 
-    console.log('dataSend:', data)
-    console.log('dataSend:', dataSend)
     testTypeService
       .edit(selecteditem.uuid, dataSend)
       .then((r) => {
-        console.log('handleSubmit:response:', r)
         handleModal()
         setRefreshTable()
         toast.success('Cập nhật thành công !', {

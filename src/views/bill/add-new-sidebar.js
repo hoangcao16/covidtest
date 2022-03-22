@@ -396,7 +396,6 @@ const SidebarBill = ({ openSideBar, toggleSidebar }) => {
                           'getSampleAtHomePrice',
                           val.getSampleAtHomePrice
                         )
-                        console.log(val)
                         onChange(val)
                       }}
                       isClearable={false}
