@@ -183,6 +183,8 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
     register,
     formState: { errors },
   } = useForm({ defaultValues })
+  const stateValue = getValues('state')
+
   useEffect(() => {
     agencyService.list({ page: 1, perPage: 40, q: '' }).then((res) => {
       if (res.data.payload !== null) {
@@ -736,15 +738,15 @@ const SidebarNewTestForm = ({ openSideBar, toggleTestFormSidebar }) => {
             <Col md='4'>
               <div className='mb-1'>
                 <Label className='form-label' for='agencyUuid3'>
-                  Đơn vị nợ (Thu ngân)
-                  {/* <span className='text-danger'>*</span> */}
+                  Đơn vị nợ (Thu ngân){' '}
+                  {stateValue.value === 'DEBT' && (
+                    <span className='text-danger'>*</span>
+                  )}
                 </Label>
                 <Controller
-                  rules={
-                    {
-                      // required: true,
-                    }
-                  }
+                  rules={{
+                    required: stateValue.value === 'DEBT' ? true : false,
+                  }}
                   name='agencyUuid3'
                   control={control}
                   render={({ field }) => (

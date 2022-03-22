@@ -142,6 +142,10 @@ export const StyledCard = styled(Card)`
     margin: 2rem 1rem;
     float: right;
   }
+  .state {
+    color: #28c76f;
+    font-weight: bold;
+  }
 `
 export const StyledFilterList = styled(Card)`
   .select-filter {

@@ -18,6 +18,7 @@ const App = () => {
             subject: 'all',
           },
         ]
+        localStorage.setItem('ability', JSON.stringify(roles))
         ability.update(roles)
       } else {
         const roles = [
@@ -26,6 +27,7 @@ const App = () => {
             subject: response.data.payload.code,
           },
         ]
+        localStorage.setItem('ability', JSON.stringify(roles))
         ability.update(roles)
       }
     })

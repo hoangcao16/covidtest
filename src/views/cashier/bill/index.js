@@ -10,18 +10,20 @@ import { Fragment, useState, useEffect, memo, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { StyledCard } from './style'
 import {
-  selectReceiptList,
-  fetchListReceipt,
-  addNewReceipt,
-} from '../../../redux/receipt'
+  selectTestFormList,
+  fetchListTestForm,
+  refetchList,
+} from '../../../redux/analysisCertificate'
 import BillFilter from './bill-filter'
 // ** Third Party Components
 import { MoreVertical, FileText } from 'react-feather'
 import { Table, Menu, Dropdown, Pagination } from 'antd'
-import { receiptService } from '../../../services/receiptService'
+import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
 import moment from 'moment'
 import { toast, Slide } from 'react-toastify'
 import { isEmpty, debounce } from 'lodash'
+import Select from 'react-select'
+
 // ** Reactstrap Imports
 import {
   CardHeader,
@@ -32,8 +34,8 @@ import {
   Button,
   Col,
 } from 'reactstrap'
+import { statusfullOptions, disableOptions } from '../../components/common/data'
 import BillPreview from './BillPreview/bill-preview'
-import SidebarBill from './add-new-sidebar'
 
 const TestForm = ({}) => {
   // ** States
@@ -42,7 +44,6 @@ const TestForm = ({}) => {
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [selectedCertificate, setSelectedCertificate] = useState([])
   const [openBillPreview, setOpenBillPreview] = useState(false)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [metadata, setMetadata] = useState({
     page: 1,
     size: 10,
@@ -52,7 +53,9 @@ const TestForm = ({}) => {
 
   // ** Store Vars
   const dispatch = useDispatch()
-  const receiptState = useSelector((state) => state.receipt)
+  const analysisCertificateState = useSelector(
+    (state) => state.analysisCertificate
+  )
 
   const paramsSearch = (params) => {
     setAllParamsSearch(params)
@@ -61,44 +64,78 @@ const TestForm = ({}) => {
     const params = {
       page: currentPage,
       size: rowsPerPage,
-
+      state: 'PAID',
       fromDate: moment().startOf('day').valueOf(),
       toDate: moment().valueOf(),
     }
-    receiptService.list(params).then((res) => {
+    analysisCertificateService.list(params).then((res) => {
       // setDataTable(res.data.payload)
       if (res.data.payload !== null) {
-        dispatch(fetchListReceipt(res.data))
+        dispatch(fetchListTestForm(res.data))
       } else {
-        dispatch(fetchListReceipt([]))
+        dispatch(fetchListTestForm([]))
       }
     })
-  }, [receiptState.refetch])
+  }, [analysisCertificateState.refetch])
   // ** Function to toggle sidebar
   useEffect(() => {
-    if (!isEmpty(receiptState.dataTable.metadata)) {
-      // setTotalPage(receiptState.dataTable.metadata.total)
-      setMetadata(receiptState.dataTable.metadata)
+    if (!isEmpty(analysisCertificateState.dataTable.metadata)) {
+      // setTotalPage(analysisCertificateState.dataTable.metadata.total)
+      setMetadata(analysisCertificateState.dataTable.metadata)
     }
-  }, [receiptState.dataTable])
+  }, [analysisCertificateState.dataTable])
   // ** Function to toggle sidebar
   const toggleBillPreview = () => {
     setOpenBillPreview(!openBillPreview)
-    // dispatch(selectReceiptList([]))
+    // dispatch(selectTestFormList([]))
   }
   const handlePrintBill = (uuid) => {
     let Chosenone = []
-    receiptService
+    analysisCertificateService
       .get(uuid)
       .then((res) => {
         Chosenone.push(res.data.payload)
       })
       .then(() => {
         if (Chosenone.length > 0) {
-          dispatch(selectReceiptList(Chosenone))
+          dispatch(selectTestFormList(Chosenone))
           toggleBillPreview()
         }
       })
+  }
+  const handleUpdateState = (value, record) => {
+    const dataUpdate = {
+      patientUuids: record.patientUuids,
+      agencyUuid1: record.agencyUuid1,
+      testTypeUuid: record.testTypeUuid,
+      state: value.value,
+    }
+    analysisCertificateService.update(record.uuid, dataUpdate).then((res) => {
+      if (res.data.code === 600) {
+        dispatch(refetchList())
+        toast.success('Cập nhật thành công !', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          transition: Slide,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+      } else {
+        toast.error('Cập nhật thất bại !', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          transition: Slide,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+      }
+    })
   }
   const ActionsMenu = (props) => {
     return (
@@ -117,12 +154,12 @@ const TestForm = ({}) => {
     )
   }
   const fetchList = (params) => {
-    receiptService.list(params).then((res) => {
+    analysisCertificateService.list(params).then((res) => {
       if (res.data.code === 600) {
         if (res.data.payload !== null) {
-          dispatch(fetchListReceipt(res.data))
+          dispatch(fetchListTestForm(res.data))
         } else {
-          dispatch(fetchListReceipt([]))
+          dispatch(fetchListTestForm([]))
         }
       }
     })
@@ -147,7 +184,7 @@ const TestForm = ({}) => {
     const params = {
       ...allParamsSearch,
       page: 1,
-
+      state: 'PAID',
       size: parseInt(e.target.value),
       fromDate:
         allParamsSearch.fromDate === undefined
@@ -165,7 +202,7 @@ const TestForm = ({}) => {
     const params = {
       ...allParamsSearch,
       page: page,
-
+      state: 'PAID',
       size: rowsPerPage,
       fromDate:
         allParamsSearch.fromDate === undefined
@@ -191,14 +228,14 @@ const TestForm = ({}) => {
     if (selectedCertificate.length > 0) {
       let AllTestForm = []
       selectedCertificate.map((item) => {
-        receiptService
+        analysisCertificateService
           .get(item.uuid)
           .then((res) => {
             AllTestForm.push(res.data.payload)
           })
           .then(() => {
             if (AllTestForm.length === selectedCertificate.length) {
-              dispatch(selectReceiptList(AllTestForm))
+              dispatch(selectTestFormList(AllTestForm))
               toggleBillPreview()
             }
           })
@@ -275,6 +312,29 @@ const TestForm = ({}) => {
       dataIndex: 'staffName',
     },
     {
+      title: 'Trạng thái',
+      align: 'center',
+      sorter: (a, b) => a.state.localeCompare(b.state),
+      dataIndex: 'state',
+      render: (text, record) => {
+        return (
+          <div onClick={(e) => e.stopPropagation()}>
+            <Select
+              isClearable={false}
+              classNamePrefix='select'
+              className='react-select'
+              options={statusfullOptions}
+              isOptionDisabled={(option, selectValue) =>
+                disableOptions(option, selectValue)
+              }
+              onChange={(value) => handleUpdateState(value, record)}
+              value={statusfullOptions.find((c) => c.value === text)}
+            ></Select>
+          </div>
+        )
+      },
+    },
+    {
       title: 'Actions',
       align: 'center',
       fixed: 'right',
@@ -297,9 +357,9 @@ const TestForm = ({}) => {
     setRowsPerPage(10)
     setCurrentPage(1)
   }
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen)
-  }
+  // const toggleSidebar = () => {
+  //   setSidebarOpen(!sidebarOpen)
+  // }
   return (
     <Fragment>
       <BillFilter
@@ -341,7 +401,7 @@ const TestForm = ({}) => {
             >
               In phiếu thu
             </Button>
-            <Button
+            {/* <Button
               className='add-new-test-form'
               color='primary'
               onClick={() => {
@@ -350,7 +410,7 @@ const TestForm = ({}) => {
               }}
             >
               Thêm mới
-            </Button>
+            </Button> */}
             {/* <Label className='me-1' for='search-input'>
               Search
             </Label>
@@ -373,7 +433,7 @@ const TestForm = ({}) => {
             pagination={false}
             rowKey='uuid'
             columns={TestFormColumns}
-            dataSource={receiptState.dataTable.payload}
+            dataSource={analysisCertificateState.dataTable.payload}
           />
           <div className='pagination'>
             <Pagination
@@ -390,7 +450,6 @@ const TestForm = ({}) => {
         openBillPreview={openBillPreview}
         toggleBillPreview={toggleBillPreview}
       />
-      <SidebarBill openSideBar={sidebarOpen} toggleSidebar={toggleSidebar} />
     </Fragment>
   )
 }

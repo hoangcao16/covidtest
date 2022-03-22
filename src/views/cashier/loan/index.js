@@ -228,8 +228,9 @@ const TestForm = ({}) => {
       dataIndex: 'state',
       render: (text, record) => {
         return (
-          <div onClick={(e) => e.stopPropagation()}>
-            <Select
+          <div onClick={(e) => e.stopPropagation()} className='state'>
+            {record.hasDebt ? 'CÓ NỢ' : 'KHÔNG NỢ'}
+            {/* <Select
               isClearable={false}
               classNamePrefix='select'
               className='react-select'
@@ -239,7 +240,7 @@ const TestForm = ({}) => {
               }
               onChange={(value) => handleUpdateState(value, record)}
               value={statusOptions.find((c) => c.value === text)}
-            ></Select>
+            ></Select> */}
           </div>
         )
       },

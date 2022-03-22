@@ -44,6 +44,44 @@ export const statusOptions = [
     value: 'COMPLETED',
   },
 ]
+export const statusfullOptions = [
+  {
+    label: 'Chưa đóng tiền',
+    value: 'NOT_PAID',
+  },
+  {
+    label: 'Treo công nợ',
+    value: 'DEBT',
+  },
+  {
+    label: 'Đã đóng tiền',
+    value: 'PAID',
+  },
+  {
+    label: 'Chờ lấy mẫu',
+    value: 'WAITING_TAKEN_SAMPLE',
+  },
+  {
+    label: 'Đã lấy mẫu',
+    value: 'TAKEN_SAMPLE',
+  },
+  {
+    label: 'Không đủ mẫu',
+    value: 'NOT_ENOUGH_SAMPLE',
+  },
+  {
+    label: 'Đủ mẫu',
+    value: 'ENOUGH_SAMPLE',
+  },
+  {
+    label: 'Có kết quả',
+    value: 'RETURN_RESULT',
+  },
+  {
+    label: 'Đã trả kết quả',
+    value: 'COMPLETED',
+  },
+]
 export const samplestateOptions = [
   {
     label: 'Đạt',

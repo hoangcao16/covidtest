@@ -113,38 +113,53 @@ const TestForm = ({}) => {
     setOpenTestFormUploadCSV(!openTestFormUploadCSV)
   }
   const handleUpdateState = (value, record) => {
-    const dataUpdate = {
-      patientUuids: record.patientUuids,
-      agencyUuid1: record.agencyUuid1,
-      testTypeUuid: record.testTypeUuid,
-      state: value.value,
-    }
-    analysisCertificateService.update(record.uuid, dataUpdate).then((res) => {
-      if (res.data.code === 600) {
-        dispatch(refetchList())
-        toast.success('Cập nhật thành công !', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          transition: Slide,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
-      } else {
-        toast.error('Cập nhật thất bại !', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          transition: Slide,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
+    console.log(value)
+    console.log(record)
+    if (record.agencyUuid3) {
+      const dataUpdate = {
+        patientUuids: record.patientUuids,
+        agencyUuid1: record.agencyUuid1,
+        testTypeUuid: record.testTypeUuid,
+        state: value.value,
       }
-    })
+      analysisCertificateService.update(record.uuid, dataUpdate).then((res) => {
+        if (res.data.code === 600) {
+          dispatch(refetchList())
+          toast.success('Cập nhật thành công !', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            transition: Slide,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          })
+        } else {
+          toast.error('Cập nhật thất bại !', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            transition: Slide,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          })
+        }
+      })
+    } else {
+      toast.error('Chọn đơn vị nợ !', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        transition: Slide,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    }
   }
   const handleEdit = (uuid) => {
     toggleTestFormSidebar()
@@ -210,7 +225,7 @@ const TestForm = ({}) => {
   const ActionsMenu = (props) => {
     return (
       <Menu>
-        <Menu.Item
+        {/* <Menu.Item
           key='1'
           onClick={(e) => {
             e.domEvent.stopPropagation()
@@ -219,7 +234,7 @@ const TestForm = ({}) => {
         >
           <FileText size={15} />
           <span className='align-middle ms-50'>In kết quả</span>
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item
           key='2'
           onClick={(e) => {
@@ -551,13 +566,13 @@ const TestForm = ({}) => {
             >
               Tải CSV
             </Button>
-            <Button
+            {/* <Button
               className='print-test-form'
               color='primary'
               onClick={() => handlePrintMultipleTestForm()}
             >
               In kết quả
-            </Button>
+            </Button> */}
             <Label className='me-1' for='search-input'>
               Tìm kiếm
             </Label>

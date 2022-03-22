@@ -16,8 +16,8 @@ import { useEffect, useState, useCallback } from 'react'
 import Select from 'react-select'
 import { selectThemeColors } from '@utils'
 import { shiftOptions } from '../../components/common/data'
-import { receiptService } from '../../../services/receiptService'
-import { fetchListReceipt } from '../../../redux/receipt'
+import { analysisCertificateService } from '../../../services/analysisCertificateCervice'
+import { fetchListTestForm } from '../../../redux/analysisCertificate'
 import { debounce } from 'lodash'
 import { StyledFilterList } from './style'
 import { agencyService } from '../../../services/agencyService'
@@ -39,7 +39,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   useEffect(() => {
     const allParamsSearch = {
       name: nameSearch,
-
+      state: 'PAID',
       address: addressSearch,
       code: receiptNoSearch,
       phone: phoneSearch,
@@ -80,12 +80,12 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
     })
   }, [])
   const fetchList = (params) => {
-    receiptService.list(params).then((res) => {
+    analysisCertificateService.list(params).then((res) => {
       if (res.data.code === 600) {
         if (res.data.payload !== null) {
-          dispatch(fetchListReceipt(res.data))
+          dispatch(fetchListTestForm(res.data))
         } else {
-          dispatch(fetchListReceipt([]))
+          dispatch(fetchListTestForm([]))
         }
       }
     })
@@ -97,6 +97,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   const hanldeSearchPhone = (e) => {
     const dataSearch = {
       name: nameSearch,
+      state: 'PAID',
 
       address: addressSearch,
       receiptNo: receiptNoSearch,
@@ -119,7 +120,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   const hanldeSearchName = (e) => {
     const dataSearch = {
       name: e,
-
+      state: 'PAID',
       address: addressSearch,
       receiptNo: receiptNoSearch,
       phone: phoneSearch,
@@ -141,6 +142,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   const hanldeSearchAddress = (e) => {
     const dataSearch = {
       name: nameSearch,
+      state: 'PAID',
 
       address: e,
       receiptNo: receiptNoSearch,
@@ -163,6 +165,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   const hanldeSearchReceipt = (e) => {
     const dataSearch = {
       name: nameSearch,
+      state: 'PAID',
 
       address: addressSearch,
       receiptNo: e,
@@ -185,6 +188,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   const hanldeSearchShift = (e) => {
     const dataSearch = {
       name: nameSearch,
+      state: 'PAID',
 
       address: addressSearch,
       receiptNo: receiptNoSearch,
@@ -207,6 +211,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   const handleSearchidentityNumber = (e) => {
     const dataSearch = {
       name: nameSearch,
+      state: 'PAID',
 
       address: addressSearch,
       receiptNo: receiptNoSearch,
@@ -229,6 +234,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   const handleSearchTime = (e) => {
     const dataSearch = {
       name: nameSearch,
+      state: 'PAID',
 
       address: addressSearch,
       receiptNo: receiptNoSearch,
@@ -248,6 +254,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   const hanldeSearchAgency2 = (e) => {
     const dataSearch = {
       name: nameSearch,
+      state: 'PAID',
 
       address: addressSearch,
       receiptNo: receiptNoSearch,
@@ -280,7 +287,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
     debounceSearch({
       page: 1,
       size: 10,
-      printStatus: 1,
+      state: 'PAID',
       fromDate: moment().startOf('day').valueOf(),
       toDate: moment().valueOf(),
     })

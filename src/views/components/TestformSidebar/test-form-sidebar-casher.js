@@ -120,7 +120,10 @@ const defaultValues = {
   staffUuid2: '',
   staffUuid3: '',
   staffUuid4: '',
-  state: 'NOT_PAID',
+  state: {
+    label: 'Chưa đóng tiền',
+    value: 'NOT_PAID',
+  },
   takeSampleTime: moment(),
   technicaltype: '',
   testNumber: 1,
@@ -179,6 +182,7 @@ const SidebarNewTestCasherForm = ({ openSideBar, toggleTestFormSidebar }) => {
     register,
     formState: { errors },
   } = useForm({ defaultValues })
+  const stateValue = getValues('state')
   useEffect(() => {
     agencyService.list({ page: 1, perPage: 40, q: '' }).then((res) => {
       if (res.data.payload !== null) {
@@ -351,6 +355,7 @@ const SidebarNewTestCasherForm = ({ openSideBar, toggleTestFormSidebar }) => {
         diagnosisEng: data?.diagnosisEng,
         inWords: to_vietnamese(data?.amount),
         labResultUuid: data?.labResultUuid?.value,
+        hasDebt: data?.state?.value === 'DEBT' ? true : false,
         patientUuids: data?.patients?.map((p) => p.value),
         payFor: data?.testtype?.label,
         payerUuid: data?.patients[0]?.value,
@@ -413,6 +418,7 @@ const SidebarNewTestCasherForm = ({ openSideBar, toggleTestFormSidebar }) => {
         diagnosisEng: data?.diagnosisEng,
         inWords: to_vietnamese(data?.amount),
         labResultUuid: data?.labResultUuid?.value,
+        hasDebt: data?.state?.value === 'DEBT' ? true : false,
         patientUuids: data?.patients?.map((p) => p.value),
         payFor: data?.testtype?.label,
         payerUuid: data?.patients[0]?.value,
@@ -649,7 +655,66 @@ const SidebarNewTestCasherForm = ({ openSideBar, toggleTestFormSidebar }) => {
                 />
               </div>
             </Col>
-
+            <Col md='4'>
+              <div className='mb-1'>
+                <Label className='form-label' for='agencyUuid1'>
+                  Đơn vị xét nghiệm (Thu ngân)
+                  <span className='text-danger'>*</span>
+                </Label>
+                <Controller
+                  rules={{
+                    required: true,
+                  }}
+                  name='agencyUuid1'
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      isClearable={false}
+                      classNamePrefix='select'
+                      options={agencyOptions}
+                      theme={selectThemeColors}
+                      className={classnames('react-select', {
+                        'is-invalid': errors.agencyUuid1,
+                      })}
+                      {...field}
+                    />
+                  )}
+                />
+              </div>
+            </Col>
+            <Col md='4'>
+              <div className='mb-1'>
+                <Label className='form-label' for='amount'>
+                  Giá tiền (Thu ngân)
+                  <span className='text-danger'>*</span>
+                </Label>
+                <Controller
+                  rules={{
+                    required: true,
+                  }}
+                  name='amount'
+                  control={control}
+                  render={({ field }) => (
+                    <div className='d-flex'>
+                      <Input
+                        id='amount'
+                        placeholder='50000'
+                        invalid={errors.amount && true}
+                        {...field}
+                      />{' '}
+                      <Button
+                        type='button'
+                        className='me-1 countPrice'
+                        color='primary'
+                        onClick={handleCountPrice}
+                      >
+                        Tính tiền
+                      </Button>
+                    </div>
+                  )}
+                />
+              </div>
+            </Col>
             <Col md='4'>
               <div className='mb-1 d-flex flex-column'>
                 <Label className='form-label' for='getSampleAtHome'>
@@ -699,98 +764,6 @@ const SidebarNewTestCasherForm = ({ openSideBar, toggleTestFormSidebar }) => {
                 />
               </div>
             </Col>
-
-            <Col md='4'>
-              <div className='mb-1'>
-                <Label className='form-label' for='agencyUuid1'>
-                  Đơn vị xét nghiệm (Thu ngân)
-                  <span className='text-danger'>*</span>
-                </Label>
-                <Controller
-                  rules={{
-                    required: true,
-                  }}
-                  name='agencyUuid1'
-                  control={control}
-                  render={({ field }) => (
-                    <Select
-                      isClearable={false}
-                      classNamePrefix='select'
-                      options={agencyOptions}
-                      theme={selectThemeColors}
-                      className={classnames('react-select', {
-                        'is-invalid': errors.agencyUuid1,
-                      })}
-                      {...field}
-                    />
-                  )}
-                />
-              </div>
-            </Col>
-            <Col md='4'>
-              <div className='mb-1'>
-                <Label className='form-label' for='agencyUuid3'>
-                  Đơn vị nợ (Thu ngân)
-                  {/* <span className='text-danger'>*</span> */}
-                </Label>
-                <Controller
-                  rules={
-                    {
-                      // required: true,
-                    }
-                  }
-                  name='agencyUuid3'
-                  control={control}
-                  render={({ field }) => (
-                    <Select
-                      isClearable={true}
-                      classNamePrefix='select'
-                      options={agencyOptions}
-                      theme={selectThemeColors}
-                      className={classnames('react-select', {
-                        'is-invalid': errors.agencyUuid3,
-                      })}
-                      {...field}
-                    />
-                  )}
-                />
-              </div>
-            </Col>
-            <Col md='4'>
-              <div className='mb-1'>
-                <Label className='form-label' for='amount'>
-                  Giá tiền (Thu ngân)
-                  {/* <span className='text-danger'>*</span> */}
-                </Label>
-                <Controller
-                  rules={
-                    {
-                      // required: true,
-                    }
-                  }
-                  name='amount'
-                  control={control}
-                  render={({ field }) => (
-                    <div className='d-flex'>
-                      <Input
-                        id='amount'
-                        placeholder='50000'
-                        invalid={errors.amount && true}
-                        {...field}
-                      />{' '}
-                      <Button
-                        type='button'
-                        className='me-1 countPrice'
-                        color='primary'
-                        onClick={handleCountPrice}
-                      >
-                        Tính tiền
-                      </Button>
-                    </div>
-                  )}
-                />
-              </div>
-            </Col>
             <Col md='4'>
               <div className='mb-1'>
                 <Label className='form-label' for='staffUuid4'>
@@ -814,6 +787,66 @@ const SidebarNewTestCasherForm = ({ openSideBar, toggleTestFormSidebar }) => {
                       theme={selectThemeColors}
                       className={classnames('react-select', {
                         'is-invalid': errors.staffUuid4,
+                      })}
+                      {...field}
+                    />
+                  )}
+                />
+              </div>
+            </Col>
+            <Col md='4'>
+              <div className='mb-1'>
+                <Label className='form-label' for='agencyUuid3'>
+                  Đơn vị nợ (Thu ngân){' '}
+                  {stateValue.value === 'DEBT' && (
+                    <span className='text-danger'>*</span>
+                  )}
+                </Label>
+                <Controller
+                  rules={{
+                    required: stateValue.value === 'DEBT' ? true : false,
+                  }}
+                  name='agencyUuid3'
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      isClearable={true}
+                      classNamePrefix='select'
+                      options={agencyOptions}
+                      theme={selectThemeColors}
+                      className={classnames('react-select', {
+                        'is-invalid': errors.agencyUuid3,
+                      })}
+                      {...field}
+                    />
+                  )}
+                />
+              </div>
+            </Col>
+
+            <Col md='4'>
+              <div className='mb-1'>
+                <Label className='form-label' for='state'>
+                  Trạng thái
+                  {/* <span className='text-danger'>*</span> */}
+                </Label>
+                <Controller
+                  rules={
+                    {
+                      // required: true,
+                    }
+                  }
+                  name='state'
+                  control={control}
+                  render={({ field }) => (
+                    // <Input id='country' placeholder='Australia' invalid={errors.country && true} {...field} />
+                    <Select
+                      isClearable={false}
+                      classNamePrefix='select'
+                      options={statusOptions}
+                      theme={selectThemeColors}
+                      className={classnames('react-select', {
+                        'is-invalid': errors.state,
                       })}
                       {...field}
                     />

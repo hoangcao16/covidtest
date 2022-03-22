@@ -3,7 +3,7 @@
 /* eslint-disable prefer-const */
 /* eslint-disable comma-dangle */
 /* eslint-disable no-unused-vars */
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 // ** Custom Components
 import { StyledBillPreview } from './style'
 import './index.css'
@@ -28,10 +28,12 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
     dispatch(selectTestFormList([]))
   }
   const componentRef = useRef()
-  const receiptState = useSelector((state) => state.receipt)
+  const analysisCertificateState = useSelector(
+    (state) => state.analysisCertificate
+  )
   useEffect(() => {
-    if (receiptState.selectedReceiptList.length > 0) {
-      const listDate = receiptState.selectedReceiptList
+    if (analysisCertificateState.selectedTestFormList.length > 0) {
+      const listDate = analysisCertificateState.selectedTestFormList
       const selectedItemsFinal = listDate.map((item) => {
         return {
           ...item,
@@ -40,18 +42,18 @@ const BillPreview = ({ openBillPreview, toggleBillPreview }) => {
       })
       setDataView(selectedItemsFinal)
     }
-  }, [receiptState.selectedReceiptList])
+  }, [analysisCertificateState.selectedTestFormList])
   // ** Store Vars
   const handlePrintBill = useReactToPrint({
     content: () => componentRef.current,
   })
   const printBill = () => {
-    receiptState.selectedReceiptList.map((item) => {
+    analysisCertificateState.selectedTestFormList.map((item) => {
       const dataUpdate = {
         patientUuids: item?.patientUuids,
         agencyUuid1: item?.agencyUuid1,
         testTypeUuid: item?.testTypeUuid,
-        state: 'PAID',
+        state: 'WAITING_TAKEN_SAMPLE',
         printStatus: 1,
       }
       analysisCertificateService
