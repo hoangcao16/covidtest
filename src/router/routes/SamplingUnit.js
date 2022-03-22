@@ -5,6 +5,10 @@ const SamplingUnitRoutes = [
   {
     path: '/sampling-unit',
     component: lazy(() => import('../../views/sampling-unit/index')),
+    meta: {
+      action: 'read',
+      resource: 'lay_mau',
+    },
   },
 ]
 

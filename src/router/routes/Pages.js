@@ -6,6 +6,10 @@ const PagesRoutes = [
   {
     path: '/patients',
     component: lazy(() => import('../../views/patients/patients')),
+    meta: {
+      action: 'read',
+      resource: 'thu_ngan',
+    },
   },
   {
     path: '/covid19/test-form',
@@ -17,6 +21,8 @@ const PagesRoutes = [
     layout: 'BlankLayout',
     meta: {
       authRoute: true,
+      action: 'read',
+      subject: 'auth',
     },
   },
   {

@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable comma-dangle */
 import { useSkin } from '@hooks/useSkin'
+
 import { Link, useHistory } from 'react-router-dom'
 import { Facebook, Twitter, Mail, GitHub, Coffee } from 'react-feather'
 import InputPasswordToggle from '@components/input-password-toggle'
@@ -14,17 +16,18 @@ import {
   Button,
 } from 'reactstrap'
 import '@styles/react/pages/page-authentication.scss'
-import { useState, Fragment } from 'react'
+import { useState, Fragment, useContext } from 'react'
 import { useDispatch } from 'react-redux'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
+import { AbilityContext } from '@src/utility/context/Can'
 
-import { handleLogin, handleMe } from '../redux/authentication'
+import { handleLogin, handleMe, handlesetRole } from '../redux/authentication'
 import { toast, Slide } from 'react-toastify'
 import Avatar from '@components/avatar'
 import { ToastContent } from '@utils'
 import { authService } from '../services/authService'
 import { meService } from '../services/meService'
-
+import { getHomeRouteForLoggedInUser } from '../views/components/common/getHomeRouteForLoggedInUser'
 const ToastContent1 = ({ name, role }) => (
   <Fragment>
     <div className='toastify-header'>
@@ -52,7 +55,7 @@ const LoginCover = () => {
   const [email, setEmail] = useState('admin@hospital-project.com')
   const [password, setPassword] = useState('snake@@$2a$10$DsJh')
   const { handleSubmit } = useForm({ defaultValues })
-
+  const ability = useContext(AbilityContext)
   const illustration = skin === 'dark' ? 'login-v2-dark.svg' : 'login-v2.svg',
     source = require(`@src/assets/images/pages/${illustration}`).default
   const onLoginSubmit = () => {
@@ -62,9 +65,6 @@ const LoginCover = () => {
       .then((response) => {
         console.log('handleLoginSubmit:success:', response)
         const data = response.data
-        if (data?.data?.roleUuids?.length > 0) {
-          dispatch(handlesetRole(data?.data?.roleUuids[0]))
-        }
         if (data.code !== 600) {
           toast.error(
             <ToastContent name='Login' description='Đăng nhập thất bại' />
@@ -72,24 +72,57 @@ const LoginCover = () => {
           return
         }
         dispatch(handleLogin(data))
-
-        meService.me().then((response1) => {
-          console.log('response1:', response1)
-          toast.success(
-            <ToastContent1
-              name={response1.data.payload.name || data.username || 'Phùng Tú'}
-              role={data.role || 'admin'}
-            />,
-            {
-              icon: false,
-              transition: Slide,
-              hideProgressBar: true,
-              autoClose: 2000,
+        meService
+          .me()
+          .then((response1) => {
+            console.log('response1:', response1)
+            return response1
+          })
+          .then((response1) => {
+            if (data?.roleUuids?.length > 0) {
+              dispatch(handlesetRole(data?.roleUuids[0]))
+              meService.getRole(data?.roleUuids[0]).then((response) => {
+                console.log('handleLoginSubmit:success:', response)
+                if (response.data.payload.code === 'superadmin') {
+                  const roles = [
+                    {
+                      action: 'manage',
+                      subject: 'all',
+                    },
+                  ]
+                  localStorage.setItem('ability', JSON.stringify(roles))
+                  ability.update(roles)
+                } else {
+                  const roles = [
+                    {
+                      action: 'read',
+                      subject: response.data.payload.code,
+                    },
+                  ]
+                  localStorage.setItem('ability', JSON.stringify(roles))
+                  ability.update(roles)
+                }
+                history.push(
+                  getHomeRouteForLoggedInUser(response.data.payload.code)
+                )
+                toast.success(
+                  <ToastContent1
+                    name={
+                      response1.data.payload.name || data.username || 'Phùng Tú'
+                    }
+                    role={data.role || 'admin'}
+                  />,
+                  {
+                    icon: false,
+                    transition: Slide,
+                    hideProgressBar: true,
+                    autoClose: 2000,
+                  }
+                )
+                dispatch(handleMe(response1.data.payload))
+              })
             }
-          )
-          dispatch(handleMe(response1.data.payload))
-          history.push('/')
-        })
+          })
       })
       .catch((err) => {
         console.log('handleLoginSubmit:err:', err)
