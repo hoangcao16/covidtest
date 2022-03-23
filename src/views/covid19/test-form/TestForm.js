@@ -22,6 +22,7 @@ import {
   selectUuid,
   editCertificate,
   addNewCertificate,
+  detailCertificate,
   selectTestFormList,
   fetchListTestForm,
 } from '../../../redux/analysisCertificate'
@@ -44,7 +45,7 @@ import {
   Button,
   Col,
 } from 'reactstrap'
-
+import DetailPreview from './DetailPreview'
 const TestForm = ({}) => {
   // ** States
   const [currentPage, setCurrentPage] = useState(1)
@@ -57,6 +58,7 @@ const TestForm = ({}) => {
   const [openTestFormUploadCSV, setOpenTestFormUploadCSV] = useState(false)
   const [openTestFormPreview, setOpenTestFormPreview] = useState(false)
   const [openBillPreview, setOpenBillPreview] = useState(false)
+  const [openDetailPreview, setOpenDetailPreview] = useState(false)
   const [dataExpanded, setDataExpanded] = useState([])
   const [allParamsSearch, setAllParamsSearch] = useState({})
   const [metadata, setMetadata] = useState({
@@ -99,6 +101,9 @@ const TestForm = ({}) => {
   // ** Function to toggle sidebar
   const toggleTestFormSidebar = () => {
     setSidebarOpen(!sidebarOpen)
+  }
+  const toggleDetail = () => {
+    setOpenDetailPreview(!openDetailPreview)
   }
   const toggleTestFormPreview = () => {
     setOpenTestFormPreview(!openTestFormPreview)
@@ -192,6 +197,11 @@ const TestForm = ({}) => {
         }
       })
   }
+  const handleViewDetail = (uuid) => {
+    toggleDetail()
+    dispatch(detailCertificate(true))
+    dispatch(selectUuid(uuid))
+  }
   const handlePrintBill = (uuid) => {
     let Chosenone = []
     analysisCertificateService
@@ -213,6 +223,16 @@ const TestForm = ({}) => {
           key='1'
           onClick={(e) => {
             e.domEvent.stopPropagation()
+            handleViewDetail(props.text.uuid)
+          }}
+        >
+          <FileText size={15} />
+          <span className='align-middle ms-50'>Xem chi tiết</span>
+        </Menu.Item>
+        <Menu.Item
+          key='2'
+          onClick={(e) => {
+            e.domEvent.stopPropagation()
             handlePrintOne(props.text.uuid)
           }}
         >
@@ -220,7 +240,7 @@ const TestForm = ({}) => {
           <span className='align-middle ms-50'>In kết quả</span>
         </Menu.Item>
         <Menu.Item
-          key='2'
+          key='3'
           onClick={(e) => {
             e.domEvent.stopPropagation()
             handlePrintBill(props.text.uuid)
@@ -230,7 +250,7 @@ const TestForm = ({}) => {
           <span className='align-middle ms-50'>In phiếu thu</span>
         </Menu.Item>
         <Menu.Item
-          key='3'
+          key='4'
           onClick={(e) => {
             e.domEvent.stopPropagation()
             handleEdit(props.text.uuid)
@@ -240,7 +260,7 @@ const TestForm = ({}) => {
           <span className='align-middle ms-50'>Edit</span>
         </Menu.Item>
         <Menu.Item
-          key='4'
+          key='5'
           onClick={(e) => {
             e.domEvent.stopPropagation()
             handleDelete(props.text.uuid)
@@ -623,6 +643,10 @@ const TestForm = ({}) => {
       <BillPreview
         openBillPreview={openBillPreview}
         toggleBillPreview={toggleBillPreview}
+      />
+      <DetailPreview
+        openDetailPreview={openDetailPreview}
+        toggleDetail={toggleDetail}
       />
       <TestFromUploadCSV
         openSideBar={openTestFormUploadCSV}

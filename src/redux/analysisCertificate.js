@@ -4,6 +4,7 @@ const initialState = {
   refetch: false,
   isAddNew: false,
   isEdit: false,
+  isDetail: false,
   selectedUuid: '',
   selectedTestFormList: [],
   dataTable: [],
@@ -24,12 +25,16 @@ export const AnalysisCertificateSlice = createSlice({
     editCertificate: (state, payload) => {
       state.isEdit = payload.payload
     },
+    detailCertificate: (state, payload) => {
+      state.isDetail = payload.payload
+    },
     selectUuid: (state, payload) => {
       state.selectedUuid = payload.payload
     },
     closeSidebar: (state) => {
       state.isAddNew = false
       state.isEdit = false
+      state.isDetail = false
       state.selectedUuid = ''
     },
     selectTestFormList: (state, payload) => {
@@ -41,6 +46,7 @@ export const {
   refetchList,
   addNewCertificate,
   editCertificate,
+  detailCertificate,
   selectUuid,
   closeSidebar,
   selectTestFormList,

@@ -43,8 +43,8 @@ const defaultValues = {
   agencyUuid2: '',
   agencyUuid3: '',
   amount: '',
-  diagnosis: 'Âm tính',
-  diagnosisEng: 'Negative',
+  diagnosis: '',
+  diagnosisEng: '',
   inWords: '',
   labResultUuid: '',
   patients: [],
@@ -120,7 +120,10 @@ const defaultValues = {
   staffUuid2: '',
   staffUuid3: '',
   staffUuid4: '',
-  state: 'NOT_PAID',
+  state: {
+    label: 'Chưa đóng tiền',
+    value: 'NOT_PAID',
+  },
   takeSampleTime: moment(),
   technicaltype: '',
   testNumber: 1,
@@ -813,17 +816,21 @@ const SidebarNewTestSamplerForm = ({ openSideBar, toggleTestFormSidebar }) => {
                   }
                   name='state'
                   control={control}
-                  render={({ field }) => (
-                    // <Input id='country' placeholder='Australia' invalid={errors.country && true} {...field} />
+                  render={({ field: { onChange, value, ref } }) => (
                     <Select
+                      inputRef={ref}
                       isClearable={false}
+                      value={statusOptions.find((c) => c.value === value.value)}
                       classNamePrefix='select'
+                      onChange={(val) => {
+                        setValue('state', val, { shouldValidate: true })
+                        onChange(val)
+                      }}
                       options={statusOptions}
                       theme={selectThemeColors}
                       className={classnames('react-select', {
                         'is-invalid': errors.state,
                       })}
-                      {...field}
                     />
                   )}
                 />
