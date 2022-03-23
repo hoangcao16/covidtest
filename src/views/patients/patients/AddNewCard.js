@@ -298,7 +298,7 @@ const AddNewCard = ({ setRefreshTable }) => {
           </Col>
           <Col md={3} className='submit-btn'>
             <Button className='me-1' color='primary'>
-              Submit
+              Xác nhận
             </Button>
           </Col>
         </Row>

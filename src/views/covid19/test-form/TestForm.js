@@ -79,8 +79,8 @@ const TestForm = ({}) => {
       ...allParamsSearch,
       page: currentPage,
       size: rowsPerPage,
-      fromDate: moment().startOf('day').valueOf(),
-      toDate: moment().valueOf(),
+      // fromDate: moment().startOf('day').valueOf(),
+      // toDate: moment().valueOf(),
     }
     analysisCertificateService.list(params).then((res) => {
       // setDataTable(res.data.payload)
@@ -301,11 +301,11 @@ const TestForm = ({}) => {
       size: parseInt(e.target.value),
       fromDate:
         allParamsSearch.fromDate === undefined
-          ? moment().startOf('day').valueOf()
+          ? undefined
           : allParamsSearch.fromDate,
       toDate:
         allParamsSearch.toDate === undefined
-          ? moment().valueOf()
+          ? undefined
           : allParamsSearch.toDate,
     }
     analysisCertificateService.list(params).then((res) => {
@@ -323,11 +323,11 @@ const TestForm = ({}) => {
       size: rowsPerPage,
       fromDate:
         allParamsSearch.fromDate === undefined
-          ? moment().startOf('day').valueOf()
+          ? undefined
           : allParamsSearch.fromDate,
       toDate:
         allParamsSearch.toDate === undefined
-          ? moment().valueOf()
+          ? undefined
           : allParamsSearch.toDate,
     }
     analysisCertificateService.list(params).then((res) => {
@@ -541,7 +541,7 @@ const TestForm = ({}) => {
         <Row className='mx-0 mt-1 mb-2'>
           <Col sm='6'>
             <div className='d-flex align-items-center'>
-              <Label for='sort-select'>show</Label>
+              <Label for='sort-select'>Hiển thị</Label>
               <Input
                 className='dataTable-select'
                 type='select'
@@ -555,7 +555,7 @@ const TestForm = ({}) => {
                 <option value={75}>75</option>
                 <option value={100}>100</option>
               </Input>
-              <Label for='sort-select'>entries</Label>
+              <Label for='sort-select'>kết quả</Label>
             </div>
           </Col>
           <Col
@@ -578,7 +578,7 @@ const TestForm = ({}) => {
               In kết quả
             </Button>
             <Label className='me-1' for='search-input'>
-              Search
+              Tìm kiếm
             </Label>
             <Input
               className='dataTable-filter'
@@ -627,6 +627,7 @@ const TestForm = ({}) => {
               pageSize={metadata?.size}
               current={metadata?.page}
               total={metadata?.total}
+              showSizeChanger={false}
               onChange={(page) => handlePageChange(page)}
             />
           </div>

@@ -894,7 +894,7 @@ const SidebarNewTestSamplerForm = ({ openSideBar, toggleTestFormSidebar }) => {
         </Card>
         <div className='group-button'>
           <Button type='submit' className='me-1' color='primary'>
-            Submit
+            Xác nhận
           </Button>
           <Button
             type='reset'
@@ -902,7 +902,7 @@ const SidebarNewTestSamplerForm = ({ openSideBar, toggleTestFormSidebar }) => {
             outline
             onClick={toggleTestFormSidebar}
           >
-            Cancel
+            Hủy
           </Button>
         </div>
       </Form>

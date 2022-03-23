@@ -113,7 +113,7 @@ const EditModal = ({ open, item, handleModal, setRefreshTable }) => {
         close={CloseBtn}
         tag='div'
       >
-        <h5 className='modal-title'>Edit Record</h5>
+        <h5 className='modal-title'>Sửa bệnh nhân</h5>
       </ModalHeader>
       <ModalBody className='flex-grow-1'>
         <Form onSubmit={handleSubmit(onHandleSubmit)}>

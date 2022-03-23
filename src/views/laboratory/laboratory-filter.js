@@ -296,7 +296,7 @@ const LaboratoryFilter = ({ paramsSearch, handleResetFilter }) => {
           color='primary'
           onClick={() => handleReset()}
         >
-          Reset
+          Làm mới
         </Button>
       </CardHeader>
 

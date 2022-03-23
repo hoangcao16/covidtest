@@ -27,12 +27,12 @@ import Select from 'react-select'
 import classnames from 'classnames'
 
 const defaultValues = {
-  name: 'Phùng Anh Tú',
-  phone: '09444148485',
+  name: '',
+  phone: '',
   address: '',
-  email: 'tupa@hstc.com.vn',
-  identityNumber: '1234343434343',
-  dateOfBirth: moment().format('DD-MM-YYYY'),
+  email: '',
+  identityNumber: '',
+  dateOfBirth: '',
   sex: 0,
 }
 const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
@@ -99,7 +99,7 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
         close={CloseBtn}
         tag='div'
       >
-        <h5 className='modal-title'>Edit Record</h5>
+        <h5 className='modal-title'>Thêm mới bệnh nhân</h5>
       </ModalHeader>
       <ModalBody className='flex-grow-1'>
         <Form onSubmit={handleSubmit(onHandleSubmit)}>
@@ -293,10 +293,10 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
             </InputGroup>
           </div>
           <Button className='me-1' color='primary'>
-            Submit
+            Xác nhận
           </Button>
           <Button color='secondary' onClick={handleModal} outline>
-            Cancel
+            Hủy
           </Button>
         </Form>
       </ModalBody>

@@ -330,7 +330,7 @@ const ReturnResultFilter = ({ paramsSearch, handleResetFilter }) => {
           color='primary'
           onClick={() => handleReset()}
         >
-          Reset
+          Làm mới
         </Button>
       </CardHeader>
 

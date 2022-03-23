@@ -41,8 +41,8 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
   const [shiftSearch, setShiftSearch] = useState('')
   const [labResultSearch, setLabResultSearch] = useState('')
   const [identityNumberSearch, setIdentityNumberSearch] = useState('')
-  const [startTimeRange, setStartTimeRange] = useState(moment().startOf('day'))
-  const [endTimeRange, setEndTimeRange] = useState(moment())
+  const [startTimeRange, setStartTimeRange] = useState()
+  const [endTimeRange, setEndTimeRange] = useState()
   const [agency2Search, setAgency2Search] = useState('')
 
   useEffect(() => {
@@ -420,7 +420,7 @@ const TestFormFilter = ({ paramsSearch, handleResetFilter }) => {
           color='primary'
           onClick={() => handleReset()}
         >
-          Reset
+          Làm mới
         </Button>
       </CardHeader>
 

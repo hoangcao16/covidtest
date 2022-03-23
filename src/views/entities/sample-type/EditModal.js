@@ -106,10 +106,10 @@ const EditModal = ({ open, selecteditem, handleModal, setRefreshTable }) => {
           </InputGroup>
         </div>
         <Button className='me-1' color='primary' onClick={handleSubmit}>
-          Submit
+          Xác nhận
         </Button>
         <Button color='secondary' onClick={handleModal} outline>
-          Cancel
+          Hủy
         </Button>
       </ModalBody>
     </Modal>

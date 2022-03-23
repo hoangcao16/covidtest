@@ -1,3 +1,4 @@
+/* eslint-disable comma-dangle */
 // ** React Imports
 import { Link } from 'react-router-dom'
 
@@ -14,48 +15,65 @@ import { Slack, User, Settings, Database, Edit2, Eye } from 'react-feather'
 import { Badge } from 'reactstrap'
 
 // ** Renders Client Columns
-const renderClient = row => {
+const renderClient = (row) => {
   const stateNum = Math.floor(Math.random() * 6),
-    states = ['light-success', 'light-danger', 'light-warning', 'light-info', 'light-primary', 'light-secondary'],
+    states = [
+      'light-success',
+      'light-danger',
+      'light-warning',
+      'light-info',
+      'light-primary',
+      'light-secondary',
+    ],
     color = states[stateNum]
 
   if (row.avatar?.length) {
     return <Avatar className='me-1' img={row.avatar} width='32' height='32' />
   } else {
-    return <Avatar color={color || 'primary'} className='me-1' content={row.fullName || 'John Doe'} initials />
+    return (
+      <Avatar
+        color={color || 'primary'}
+        className='me-1'
+        content={row.fullName || 'John Doe'}
+        initials
+      />
+    )
   }
 }
 
 // ** Renders Role Columns
-const renderRole = row => {
+const renderRole = (row) => {
   const roleObj = {
     subscriber: {
       class: 'text-primary',
-      icon: User
+      icon: User,
     },
     maintainer: {
       class: 'text-success',
-      icon: Database
+      icon: Database,
     },
     editor: {
       class: 'text-info',
-      icon: Edit2
+      icon: Edit2,
     },
     author: {
       class: 'text-warning',
-      icon: Settings
+      icon: Settings,
     },
     admin: {
       class: 'text-danger',
-      icon: Slack
-    }
+      icon: Slack,
+    },
   }
 
   const Icon = roleObj[row.role] ? roleObj[row.role].icon : Edit2
 
   return (
     <span className='text-truncate text-capitalize align-middle'>
-      <Icon size={18} className={`${roleObj[row.role] ? roleObj[row.role].class : ''} me-50`} />
+      <Icon
+        size={18}
+        className={`${roleObj[row.role] ? roleObj[row.role].class : ''} me-50`}
+      />
       {row.role}
     </span>
   )
@@ -64,17 +82,17 @@ const renderRole = row => {
 const statusObj = {
   pending: 'light-warning',
   active: 'light-success',
-  inactive: 'light-secondary'
+  inactive: 'light-secondary',
 }
 
 export const columns = [
   {
-    name: 'Name',
+    name: 'Tên',
     sortable: true,
     minWidth: '297px',
     sortField: 'fullName',
-    selector: row => row.fullName,
-    cell: row => (
+    selector: (row) => row.fullName,
+    cell: (row) => (
       <div className='d-flex justify-content-left align-items-center'>
         {renderClient(row)}
         <div className='d-flex flex-column'>
@@ -88,51 +106,51 @@ export const columns = [
           <small className='text-truncate text-muted mb-0'>{row.email}</small>
         </div>
       </div>
-    )
+    ),
   },
   {
-    name: 'Role',
+    name: 'Vai trò',
     sortable: true,
     minWidth: '172px',
     sortField: 'role',
-    selector: row => row.role,
-    cell: row => renderRole(row)
+    selector: (row) => row.role,
+    cell: (row) => renderRole(row),
   },
   {
-    name: 'Plan',
+    name: 'Email',
     sortable: true,
     minWidth: '138px',
-    sortField: 'currentPlan',
-    selector: row => row.currentPlan,
-    cell: row => <span className='text-capitalize'>{row.currentPlan}</span>
+    sortField: 'email',
+    selector: (row) => row.email,
+    cell: (row) => <span className='text-capitalize'>{row.email}</span>,
   },
   {
-    name: 'Billing',
+    name: 'Điện thoại',
     sortable: true,
     minWidth: '230px',
-    sortField: 'billing',
-    selector: row => row.billing,
-    cell: row => <span className='text-capitalize'>{row.billing}</span>
+    sortField: 'phone',
+    selector: (row) => row.phone,
+    cell: (row) => <span className='text-capitalize'>{row.phone}</span>,
   },
   {
-    name: 'Status',
+    name: 'Trạng thái',
     sortable: true,
     minWidth: '138px',
     sortField: 'status',
-    selector: row => row.status,
-    cell: row => (
+    selector: (row) => row.status,
+    cell: (row) => (
       <Badge className='text-capitalize' color={statusObj[row.status]} pill>
         {row.status}
       </Badge>
-    )
+    ),
   },
   {
     name: 'Actions',
     minWidth: '100px',
-    cell: row => (
+    cell: (row) => (
       <Link to={`/apps/user/view/${row.id}`}>
         <Eye className='font-medium-3 text-body' />
       </Link>
-    )
-  }
+    ),
+  },
 ]

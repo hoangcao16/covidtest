@@ -302,7 +302,7 @@ const TestForm = ({}) => {
         <Row className='mx-0 mt-1 mb-2'>
           <Col sm='3'>
             <div className='d-flex align-items-center'>
-              <Label for='sort-select'>show</Label>
+              <Label for='sort-select'>Hiển thị</Label>
               <Input
                 className='dataTable-select'
                 type='select'
@@ -316,7 +316,7 @@ const TestForm = ({}) => {
                 <option value={75}>75</option>
                 <option value={100}>100</option>
               </Input>
-              <Label for='sort-select'>entries</Label>
+              <Label for='sort-select'>kết quả</Label>
             </div>
           </Col>
           <Col
@@ -324,7 +324,7 @@ const TestForm = ({}) => {
             sm={{ size: 5, offset: 4 }}
           >
             <Label className='me-1' for='search-input'>
-              Search
+              Tìm kiếm
             </Label>
             <Input
               className='dataTable-filter'
@@ -348,6 +348,7 @@ const TestForm = ({}) => {
               // defaultPageSize={rowsPerPage}
               pageSize={metadata?.size}
               current={metadata?.page}
+              showSizeChanger={false}
               total={metadata?.total}
               onChange={(page) => handlePageChange(page)}
             />

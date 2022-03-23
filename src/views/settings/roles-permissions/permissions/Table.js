@@ -1,3 +1,4 @@
+/* eslint-disable comma-dangle */
 // ** React Imports
 import { useEffect, useState, Fragment } from 'react'
 
@@ -5,11 +6,29 @@ import { useEffect, useState, Fragment } from 'react'
 import { columns } from './columns'
 
 // ** Reactstrap Imports
-import { Alert, Row, Col, Label, Form, Input, Button, Modal, ModalHeader, ModalBody, FormFeedback } from 'reactstrap'
+import {
+  Alert,
+  Row,
+  Col,
+  Label,
+  Form,
+  Input,
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  FormFeedback,
+} from 'reactstrap'
 
 // ** Store & Actions
 import { useDispatch, useSelector } from 'react-redux'
-import { getData, addPermission, deletePermission, selectPermission, updatePermission } from '../store'
+import {
+  getData,
+  addPermission,
+  deletePermission,
+  selectPermission,
+  updatePermission,
+} from '../store'
 
 // ** Third party Components
 import classnames from 'classnames'
@@ -28,13 +47,13 @@ const CustomHeader = ({
   rowsPerPage,
   handlePerPage,
   handleFilter,
-  handleAssignedToChange
+  handleAssignedToChange,
 }) => {
   return (
     <Row className='text-nowrap w-100 my-75 g-0 permission-header'>
       <Col xs={12} lg={4} className='d-flex align-items-center'>
         <div className='d-flex align-items-center justify-content-center justify-content-lg-start'>
-          <label htmlFor='rows-per-page'>Show</label>
+          <label htmlFor='rows-per-page'>Hiển thị</label>
           <Input
             className='mx-50'
             type='select'
@@ -47,35 +66,44 @@ const CustomHeader = ({
             <option value='25'>25</option>
             <option value='50'>50</option>
           </Input>
-          <label htmlFor='rows-per-page'>Entries</label>
+          <label htmlFor='rows-per-page'>kết quả</label>
         </div>
       </Col>
       <Col xs={12} lg={8}>
         <div className='d-flex align-items-center justify-content-lg-end justify-content-start flex-md-nowrap flex-wrap mt-lg-0 mt-1'>
           <div className='d-flex align-items-center me-1'>
             <label className='mb-0' htmlFor='search-permission'>
-              Search:
+              Tìm kiếm:
             </label>
             <Input
               type='text'
               value={searchTerm}
               id='search-permission'
               className='ms-50 w-100'
-              onChange={e => handleFilter(e.target.value)}
+              onChange={(e) => handleFilter(e.target.value)}
             />
           </div>
           <div className='mt-50 width-200 me-1 mt-sm-0 mt-1'>
-            <Input type='select' name='select' value={role} onChange={e => handleAssignedToChange(e.target.value)}>
-              <option value=''>Select Role</option>
+            <Input
+              type='select'
+              name='select'
+              value={role}
+              onChange={(e) => handleAssignedToChange(e.target.value)}
+            >
+              <option value=''>Chọn quyền</option>
               <option value='administrator'>Administrator</option>
-              <option value='manager'>Manager</option>
-              <option value='user'>User</option>
-              <option value='support'>Support</option>
+              <option value='manager'>Quản lý</option>
+              <option value='user'>Người dùng</option>
+              <option value='support'>Hỗ trợ</option>
               <option value='restricted-user'>Restricted User</option>
             </Input>
           </div>
-          <Button className='add-permission mt-sm-0 mt-1' color='primary' onClick={() => setShow(true)}>
-            Add Permission
+          <Button
+            className='add-permission mt-sm-0 mt-1'
+            color='primary'
+            onClick={() => setShow(true)}
+          >
+            Thêm quyền
           </Button>
         </div>
       </Col>
@@ -86,14 +114,14 @@ const CustomHeader = ({
 const Table = () => {
   // ** Store Vars & Hooks
   const dispatch = useDispatch()
-  const store = useSelector(state => state.permission)
+  const store = useSelector((state) => state.permission)
   const {
     reset,
     control,
     setError,
     setValue,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = useForm({ defaultValues: { permissionName: '' } })
 
   // ** States
@@ -110,60 +138,60 @@ const Table = () => {
         assignedTo,
         q: searchTerm,
         page: currentPage,
-        perPage: rowsPerPage
+        perPage: rowsPerPage,
       })
     )
   }, [dispatch, store.data.length])
 
   // ** Function in get data on page change
-  const handlePagination = page => {
+  const handlePagination = (page) => {
     dispatch(
       getData({
         assignedTo,
         q: searchTerm,
         perPage: rowsPerPage,
-        page: page.selected + 1
+        page: page.selected + 1,
       })
     )
     setCurrentPage(page.selected + 1)
   }
 
   // ** Function in get data on rows per page
-  const handlePerPage = e => {
+  const handlePerPage = (e) => {
     const value = parseInt(e.currentTarget.value)
     dispatch(
       getData({
         assignedTo,
         q: searchTerm,
         perPage: value,
-        page: currentPage
+        page: currentPage,
       })
     )
     setRowsPerPage(value)
   }
 
   // ** Function in get data on search query change
-  const handleFilter = val => {
+  const handleFilter = (val) => {
     setSearchTerm(val)
     dispatch(
       getData({
         q: val,
         assignedTo,
         page: currentPage,
-        perPage: rowsPerPage
+        perPage: rowsPerPage,
       })
     )
   }
 
   // ** Function to filter Roles
-  const handleAssignedToChange = val => {
+  const handleAssignedToChange = (val) => {
     setAssignedTo(val)
     dispatch(
       getData({
         q: searchTerm,
         assignedTo: val,
         page: currentPage,
-        perPage: rowsPerPage
+        perPage: rowsPerPage,
       })
     )
   }
@@ -179,14 +207,16 @@ const Table = () => {
         pageCount={count || 1}
         activeClassName='active'
         forcePage={currentPage !== 0 ? currentPage - 1 : 0}
-        onPageChange={page => handlePagination(page)}
+        onPageChange={(page) => handlePagination(page)}
         pageClassName={'page-item'}
         nextLinkClassName={'page-link'}
         nextClassName={'page-item next'}
         previousClassName={'page-item prev'}
         previousLinkClassName={'page-link'}
         pageLinkClassName={'page-link'}
-        containerClassName={'pagination react-paginate justify-content-end my-2 pe-1'}
+        containerClassName={
+          'pagination react-paginate justify-content-end my-2 pe-1'
+        }
       />
     )
   }
@@ -194,7 +224,7 @@ const Table = () => {
   // ** Table data to render
   const dataToRender = () => {
     const filters = {
-      q: searchTerm
+      q: searchTerm,
     }
 
     const isFiltered = Object.keys(filters).some(function (k) {
@@ -210,7 +240,7 @@ const Table = () => {
     }
   }
 
-  const handleEditClick = data => {
+  const handleEditClick = (data) => {
     dispatch(selectPermission(data))
     setValue('permissionName', data.name)
     setShow(true)
@@ -221,17 +251,19 @@ const Table = () => {
     setValue('permissionName', '')
   }
 
-  const onSubmit = data => {
+  const onSubmit = (data) => {
     if (data.permissionName.length) {
       if (store.selected !== null) {
-        dispatch(updatePermission({ name: data.permissionName, id: store.selected.id }))
+        dispatch(
+          updatePermission({ name: data.permissionName, id: store.selected.id })
+        )
       } else {
         dispatch(addPermission({ name: data.permissionName }))
       }
       setShow(false)
     } else {
       setError('permissionName', {
-        type: 'manual'
+        type: 'manual',
       })
     }
   }
@@ -240,10 +272,15 @@ const Table = () => {
     ...columns,
     {
       name: 'Actions',
-      cell: row => {
+      cell: (row) => {
         return (
           <div className='d-flex align-items-center permissions-actions'>
-            <Button size='sm' color='transparent' className='btn btn-icon' onClick={() => handleEditClick(row)}>
+            <Button
+              size='sm'
+              color='transparent'
+              className='btn btn-icon'
+              onClick={() => handleEditClick(row)}
+            >
               <Edit className='font-medium-2' />
             </Button>
             <Button
@@ -256,8 +293,8 @@ const Table = () => {
             </Button>
           </div>
         )
-      }
-    }
+      },
+    },
   ]
 
   const handleDiscard = () => {
@@ -286,10 +323,16 @@ const Table = () => {
               id='permissionName'
               name='permissionName'
               render={({ field }) => (
-                <Input placeholder='Permission Name' invalid={errors.permissionName && true} {...field} />
+                <Input
+                  placeholder='Permission Name'
+                  invalid={errors.permissionName && true}
+                  {...field}
+                />
               )}
             />
-            {errors && errors.permissionName && <FormFeedback>Please enter a valid Permission Name</FormFeedback>}
+            {errors && errors.permissionName && (
+              <FormFeedback>Please enter a valid Permission Name</FormFeedback>
+            )}
           </Col>
           <Col xs={12} className='mt-75'>
             <div className='form-check'>
@@ -315,8 +358,9 @@ const Table = () => {
           <Alert color='warning'>
             <h6 className='alert-heading'>Warning!</h6>
             <div className='alert-body'>
-              By editing the permission name, you might break the system permissions functionality. Please ensure you're
-              absolutely certain before proceeding.
+              By editing the permission name, you might break the system
+              permissions functionality. Please ensure you're absolutely certain
+              before proceeding.
             </div>
           </Alert>
           <Row tag={Form} onSubmit={handleSubmit(onSubmit)}>
@@ -329,10 +373,18 @@ const Table = () => {
                 id='permissionName'
                 name='permissionName'
                 render={({ field }) => (
-                  <Input placeholder='Permission Name' invalid={errors.permissionName && true} {...field} />
+                  <Input
+                    placeholder='Permission Name'
+                    invalid={errors.permissionName && true}
+                    {...field}
+                  />
                 )}
               />
-              {errors && errors.permissionName && <FormFeedback>Please enter a valid Permission Name</FormFeedback>}
+              {errors && errors.permissionName && (
+                <FormFeedback>
+                  Please enter a valid Permission Name
+                </FormFeedback>
+              )}
             </Col>
             <Col xs={12} sm={3} className='p-sm-0'>
               <Button className='mt-2' color='primary'>
@@ -381,16 +433,26 @@ const Table = () => {
           }
         />
       </div>
-      <Modal isOpen={show} onClosed={handleModalClosed} toggle={() => setShow(!show)} className='modal-dialog-centered'>
-        <ModalHeader className='bg-transparent' toggle={() => setShow(!show)}></ModalHeader>
+      <Modal
+        isOpen={show}
+        onClosed={handleModalClosed}
+        toggle={() => setShow(!show)}
+        className='modal-dialog-centered'
+      >
+        <ModalHeader
+          className='bg-transparent'
+          toggle={() => setShow(!show)}
+        ></ModalHeader>
         <ModalBody
           className={classnames({
             'p-3 pt-0': store.selected !== null,
-            'px-sm-5 pb-5': store.selected === null
+            'px-sm-5 pb-5': store.selected === null,
           })}
         >
           <div className='text-center mb-2'>
-            <h1 className='mb-1'>{store.selected !== null ? 'Edit' : 'Add New'} Permission</h1>
+            <h1 className='mb-1'>
+              {store.selected !== null ? 'Edit' : 'Add New'} Permission
+            </h1>
             <p>{renderModalSubtitle()}</p>
           </div>
 

@@ -185,7 +185,7 @@ const TechincalType = () => {
         <Row className='mx-0 mt-1 mb-50'>
           <Col sm='6'>
             <div className='d-flex align-items-center'>
-              <Label for='sort-select'>show</Label>
+              <Label for='sort-select'>Hiển thị</Label>
               <Input
                 className='dataTable-select'
                 type='select'
@@ -200,7 +200,7 @@ const TechincalType = () => {
                 <option value={75}>75</option>
                 <option value={100}>100</option>
               </Input>
-              <Label for='sort-select'>entries</Label>
+              <Label for='sort-select'>kết quả</Label>
             </div>
           </Col>
           <Col

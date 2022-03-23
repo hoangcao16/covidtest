@@ -102,7 +102,7 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
         close={CloseBtn}
         tag='div'
       >
-        <h5 className='modal-title'>Edit Record</h5>
+        <h5 className='modal-title'>Thêm nhân viên</h5>
       </ModalHeader>
       <ModalBody className='flex-grow-1'>
         <Form onSubmit={handleSubmit(onHandleSubmit)}>
@@ -323,10 +323,10 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
             </InputGroup>
           </div>
           <Button className='me-1' color='primary'>
-            Submit
+            Xác nhận
           </Button>
           <Button color='secondary' onClick={handleModal} outline>
-            Cancel
+            Hủy
           </Button>
         </Form>
       </ModalBody>

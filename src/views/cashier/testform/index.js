@@ -551,7 +551,7 @@ const TestForm = ({}) => {
                 <option value={75}>75</option>
                 <option value={100}>100</option>
               </Input>
-              <Label for='sort-select'>entries</Label>
+              <Label for='sort-select'>kết quả</Label>
             </div>
           </Col>
           <Col
@@ -622,6 +622,7 @@ const TestForm = ({}) => {
               // defaultPageSize={rowsPerPage}
               pageSize={metadata?.size}
               current={metadata?.page}
+              showSizeChanger={false}
               total={metadata?.total}
               onChange={(page) => handlePageChange(page)}
             />

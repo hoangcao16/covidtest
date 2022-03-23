@@ -186,7 +186,7 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
         close={CloseBtn}
         tag='div'
       >
-        <h5 className='modal-title'>New Record</h5>
+        <h5 className='modal-title'>Thêm loại xét nghiệm</h5>
       </ModalHeader>
       <ModalBody className='flex-grow-1'>
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -660,10 +660,10 @@ const AddNewModal = ({ open, handleModal, setRefreshTable }) => {
           </div>
           <div>{/*<MixTestType mixArr={mix}/>*/}</div>
           <Button className='me-1' color='primary' type='submit'>
-            Submit
+            Xác nhận
           </Button>
           <Button color='secondary' onClick={handleModal} outline>
-            Cancel
+            Hủy
           </Button>
         </Form>
       </ModalBody>

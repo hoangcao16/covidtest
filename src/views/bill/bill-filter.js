@@ -15,11 +15,7 @@ import { useDispatch } from 'react-redux'
 import { useEffect, useState, useCallback } from 'react'
 import Select from 'react-select'
 import { selectThemeColors } from '@utils'
-import {
-  statusOptions,
-  printStatusOptions,
-  shiftOptions,
-} from '../components/common/data'
+import { statusOptions, shiftOptions } from '../components/common/data'
 import { receiptService } from '../../services/receiptService'
 import { fetchListReceipt } from '../../redux/receipt'
 import { debounce } from 'lodash'
@@ -39,8 +35,6 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
   const [receiptNoSearch, setReceiptNoSearch] = useState('')
   const [shiftSearch, setShiftSearch] = useState('')
   const [labResultSearch, setLabResultSearch] = useState('')
-  const [qrcodeSearch, setQrCodeSearch] = useState('')
-  const [passwordSearch, setPasswordSearch] = useState('')
   const [identityNumberSearch, setIdentityNumberSearch] = useState('')
   const [startTimeRange, setStartTimeRange] = useState()
   const [endTimeRange, setEndTimeRange] = useState()
@@ -392,7 +386,7 @@ const BillFilter = ({ paramsSearch, handleResetFilter }) => {
           color='primary'
           onClick={() => handleReset()}
         >
-          Reset
+          Làm mới
         </Button>
       </CardHeader>
 

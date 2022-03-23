@@ -182,13 +182,13 @@ const LabResultType = () => {
           <CardTitle tag='h4'>Danh sách</CardTitle>
           <Button className='ms-2' color='primary' onClick={handleModal}>
             <Plus size={15} />
-            <span className='align-middle ms-50'>Add Record</span>
+            <span className='align-middle ms-50'>Thêm loại kết quả</span>
           </Button>
         </CardHeader>
         <Row className='mx-0 mt-1 mb-50'>
           <Col sm='6'>
             <div className='d-flex align-items-center'>
-              <Label for='sort-select'>show</Label>
+              <Label for='sort-select'>Hiển thị</Label>
               <Input
                 className='dataTable-select'
                 type='select'
@@ -203,7 +203,7 @@ const LabResultType = () => {
                 <option value={75}>75</option>
                 <option value={100}>100</option>
               </Input>
-              <Label for='sort-select'>entries</Label>
+              <Label for='sort-select'>kết quả</Label>
             </div>
           </Col>
           <Col

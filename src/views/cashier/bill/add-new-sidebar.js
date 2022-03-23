@@ -12,7 +12,6 @@ import { StyledSidebar } from './style'
 import { debounce } from 'lodash'
 // ** Utils
 import { selectThemeColors } from '@utils'
-import { statusOptions } from '../../components/common/data'
 // ** Third Party Components
 import Select from 'react-select'
 import classnames from 'classnames'
@@ -552,7 +551,7 @@ const SidebarBill = ({ openSideBar, toggleSidebar }) => {
         </Row>
         <div className='group-button'>
           <Button type='submit' className='me-1' color='primary'>
-            Submit
+            Xác nhận
           </Button>
           <Button
             type='reset'
@@ -560,7 +559,7 @@ const SidebarBill = ({ openSideBar, toggleSidebar }) => {
             outline
             onClick={toggleSidebar}
           >
-            Cancel
+            Hủy
           </Button>
         </div>
       </Form>
