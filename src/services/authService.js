@@ -1,3 +1,4 @@
+/* eslint-disable comma-dangle */
 import apiClient from './apiService'
 import jwtDecode, { JwtPayload } from 'jwt-decode'
 // @ts-ignore
@@ -10,8 +11,8 @@ export const authService = {
       url: '/register',
       data: {
         email,
-        password
-      }
+        password,
+      },
     })
   },
   verifyEmailRegister(email, code) {
@@ -20,8 +21,8 @@ export const authService = {
       url: '/account-svc/users/auth/check-email-code',
       data: {
         email,
-        code
-      }
+        code,
+      },
     })
   },
   login(email, password) {
@@ -30,8 +31,8 @@ export const authService = {
       url: '/login',
       data: {
         email,
-        password
-      }
+        password,
+      },
     })
   },
   setAccessToken(token) {
@@ -49,8 +50,12 @@ export const authService = {
   getUserId() {
     return localStorage.getItem('userId')
   },
-  removeUserId() {
-    return localStorage.removeItem('userId')
+  logout() {
+    localStorage.removeItem('ability')
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('roleUuid')
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('userData')
   },
   getDecodedAccessToken() {
     const token = this.getAccessToken()
@@ -78,7 +83,7 @@ export const authService = {
       moment().isAfter(moment(decodedAccessToken.exp * 1000))
     ) {
       this.removeAccessToken()
-      this.removeUserId()
+      this.logout()
       window.location.href = '/'
     }
   },
@@ -100,10 +105,10 @@ export const authService = {
         moment().isAfter(moment(decodedAccessToken.exp * 1000))
       ) {
         this.removeAccessToken()
-        this.removeUserId()
+        this.logout()
         clearInterval(intervalId)
         window.location.href = '/'
       }
     }, 60000)
-  }
+  },
 }

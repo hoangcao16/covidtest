@@ -29,7 +29,7 @@ apiClient.interceptors.response.use(
     console.log('response:', response)
     if (response.data.error === 'Token is expired') {
       console.log('response:expired', response)
-      authService.removeAccessToken()
+      authService.logout()
       window.location.href = '/'
     }
     return response
@@ -39,7 +39,7 @@ apiClient.interceptors.response.use(
     // eslint-disable-next-line eqeqeq
     console.log(error)
     if (error !== null && error.response?.status === 401) {
-      authService.removeAccessToken()
+      authService.logout()
       window.location.href = '/'
     }
 
