@@ -12,7 +12,7 @@ import { StyledTestFormSidebar } from './style'
 import { debounce } from 'lodash'
 // ** Utils
 import { selectThemeColors } from '@utils'
-import { samplestateOptions, statusOptions } from '../common/data'
+import { disableOptions, statusOptions } from '../common/data'
 // ** Third Party Components
 import Select from 'react-select'
 import classnames from 'classnames'
@@ -822,6 +822,9 @@ const SidebarNewTestSamplerForm = ({ openSideBar, toggleTestFormSidebar }) => {
                       isClearable={false}
                       value={statusOptions.find((c) => c.value === value.value)}
                       classNamePrefix='select'
+                      isOptionDisabled={(option, selectValue) =>
+                        disableOptions(option, selectValue)
+                      }
                       onChange={(val) => {
                         setValue('state', val, { shouldValidate: true })
                         onChange(val)

@@ -595,8 +595,8 @@ const SidebarNewTestSamplerForm = ({ openSideBar, toggleTestFormSidebar }) => {
                     onInputChange={(value) => handleSearchPatients(value)}
                     classNamePrefix='select'
                     options={patientsOptions}
-                    isOptionDisabled={true}
                     theme={selectThemeColors}
+                    isDisabled={true}
                     filterOption={filterOption}
                     className={classnames('react-select', {
                       'is-invalid': errors.patients,
@@ -606,14 +606,6 @@ const SidebarNewTestSamplerForm = ({ openSideBar, toggleTestFormSidebar }) => {
                 </>
               )}
             />
-            <Button
-              type='button'
-              className='me-1 add-patient-button'
-              color='primary'
-              onClick={handleModal}
-            >
-              +
-            </Button>
           </div>
         </div>
         <Card title='Lấy mẫu'>

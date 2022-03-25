@@ -12,7 +12,7 @@ import { StyledTestFormSidebar } from './style'
 import { debounce } from 'lodash'
 // ** Utils
 import { selectThemeColors } from '@utils'
-import { samplestateOptions, statusOptions } from '../common/data'
+import { statusOptionsCashier } from '../common/data'
 // ** Third Party Components
 import Select from 'react-select'
 import classnames from 'classnames'
@@ -322,7 +322,9 @@ const SidebarNewTestCasherForm = ({ openSideBar, toggleTestFormSidebar }) => {
                 label: payload?.staff4?.name,
                 value: payload?.staff4?.uuid,
               },
-              state: statusOptions.find((i) => i.value === payload?.state),
+              state: statusOptionsCashier.find(
+                (i) => i.value === payload?.state
+              ),
               takeSampleTime: moment(payload?.takeSampleTime),
               // testNumber: payload?.testNumber,
               testtype: {
@@ -842,13 +844,15 @@ const SidebarNewTestCasherForm = ({ openSideBar, toggleTestFormSidebar }) => {
                     <Select
                       inputRef={ref}
                       isClearable={false}
-                      value={statusOptions.find((c) => c.value === value.value)}
+                      value={statusOptionsCashier.find(
+                        (c) => c.value === value.value
+                      )}
                       classNamePrefix='select'
                       onChange={(val) => {
                         setValue('state', val, { shouldValidate: true })
                         onChange(val)
                       }}
-                      options={statusOptions}
+                      options={statusOptionsCashier}
                       theme={selectThemeColors}
                       className={classnames('react-select', {
                         'is-invalid': errors.state,

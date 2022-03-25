@@ -44,6 +44,20 @@ export const statusOptions = [
     value: 'COMPLETED',
   },
 ]
+export const statusOptionsCashier = [
+  {
+    label: 'Chưa đóng tiền',
+    value: 'NOT_PAID',
+  },
+  {
+    label: 'Treo công nợ',
+    value: 'DEBT',
+  },
+  {
+    label: 'Đã đóng tiền',
+    value: 'PAID',
+  },
+]
 export const statusfullOptions = [
   {
     label: 'Chưa đóng tiền',
